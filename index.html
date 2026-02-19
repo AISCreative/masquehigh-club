@@ -194,7 +194,7 @@
       display: block;
     }
 
-    /* ===== GÉNERO ===== */
+    /* ===== GÉNERO (sin cambios) ===== */
     .catalogo-grid {
       display: flex;
       flex-direction: column;
@@ -255,7 +255,106 @@
       text-shadow: 0 0 5px #00ff9f;
     }
 
-    /* ===== EVENTOS (SOLO CARTELES, SIN TEXTO) ===== */
+    /* ===== MUNCHIES (nuevo estilo tipo carta) ===== */
+    .munchies-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+    }
+
+    .munchies-categoria {
+      background: rgba(20, 5, 25, 0.7);
+      border: 2px solid #ff18d0;
+      border-radius: 30px;
+      padding: 1.5rem 1.2rem;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 0 20px #ff18d055;
+    }
+
+    .categoria-titulo {
+      font-size: 2.6rem;
+      font-weight: 800;
+      color: #ff18d0;
+      text-shadow: 0 0 15px #ff18d0, 0 0 30px #00ff9f;
+      letter-spacing: 2px;
+      margin-bottom: 1.5rem;
+      border-bottom: 3px dotted #00ff9f;
+      padding-bottom: 0.5rem;
+      display: inline-block;
+    }
+
+    .items-lista {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1.2rem 1.5rem;
+    }
+
+    .item-munchi {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 0.8rem 1.2rem;
+      border-radius: 60px;
+      border: 1px solid #00ff9f;
+      box-shadow: 0 0 12px #00ff9f33;
+      transition: all 0.15s;
+    }
+
+    .item-munchi:active {
+      transform: scale(0.98);
+      background: #0f0c1a;
+      border-color: #ff18d0;
+    }
+
+    .item-nombre {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .item-precio {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #00ff9f;
+      text-shadow: 0 0 8px #00ff9f;
+      white-space: nowrap;
+      margin-left: 0.5rem;
+    }
+
+    .item-precio::before {
+      content: '·';
+      color: #ff18d0;
+      margin-right: 0.5rem;
+      font-size: 2rem;
+      vertical-align: middle;
+    }
+
+    /* Ajuste especial para monster y redbull que tienen 2.50€ */
+    .item-precio span {
+      font-size: 1.3rem;
+    }
+
+    /* Pie con la cuenta de instagram */
+    .munchies-footer {
+      margin-top: 2rem;
+      text-align: center;
+      font-size: 1.4rem;
+      color: #ccccff;
+      border-top: 1px dashed #ff18d0;
+      padding-top: 1rem;
+    }
+
+    .munchies-footer a {
+      color: #00ff9f;
+      text-decoration: none;
+      font-weight: bold;
+      text-shadow: 0 0 8px #00ff9f;
+    }
+
+    /* ===== EVENTOS (carteles sin texto) ===== */
     .eventos-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -273,7 +372,7 @@
       align-items: center;
       box-shadow: 0 10px 20px rgba(0,0,0,0.7);
       transition: transform 0.2s ease;
-      aspect-ratio: 1 / 1.4; /* proporción típica de cartel */
+      aspect-ratio: 1 / 1.4;
       width: 100%;
     }
 
@@ -284,34 +383,15 @@
     .evento-card img {
       width: 100%;
       height: 100%;
-      object-fit: cover;         /* la imagen cubre todo el contenedor */
+      object-fit: cover;
       object-position: center;
       border-radius: 20px;
       border: 3px solid #ffff00;
       box-shadow: 0 0 20px #ffff00aa;
-      background: #000;           /* por si la imagen tiene transparencia */
+      background: #000;
     }
 
-    /* ===== MUNCHIES ===== */
-    .munchies-placeholder {
-      background: rgba(255, 24, 208, 0.1);
-      border: 2px dashed #ff18d0;
-      border-radius: 25px;
-      padding: 2rem 1rem;
-      text-align: center;
-    }
-
-    .munchies-placeholder h2 {
-      font-size: 2.2rem;
-      color: #ff18d0;
-      margin-bottom: 0.5rem;
-    }
-
-    .munchies-placeholder p {
-      font-size: 1.4rem;
-      color: white;
-    }
-
+    /* scroll */
     .contenido::-webkit-scrollbar {
       width: 4px;
     }
@@ -356,7 +436,7 @@
 
     <!-- CONTENIDO -->
     <div class="contenido">
-      <!-- PANEL GÉNERO -->
+      <!-- PANEL GÉNERO (idéntico) -->
       <div id="panel-genero" class="panel activo">
         <div class="catalogo-grid">
           <!-- EXTRACCIÓN -->
@@ -387,31 +467,51 @@
         </div>
       </div>
 
-      <!-- PANEL MUNCHIES -->
+      <!-- PANEL MUNCHIES (actualizado con carta real) -->
       <div id="panel-munchies" class="panel">
-        <div class="munchies-placeholder">
-          <h2>🍟 MUNCHIES</h2>
-          <p>Próximamente</p>
-          <p style="font-size:1.2rem; margin-top:1rem;">Carta de snacks y dulces</p>
+        <div class="munchies-grid">
+          <!-- REFRESCOS (bebidas) -->
+          <div class="munchies-categoria">
+            <div class="categoria-titulo">🥤 REFRESCOS</div>
+            <div class="items-lista">
+              <div class="item-munchi"><span class="item-nombre">AQUARIUS</span><span class="item-precio">2€</span></div>
+              <div class="item-munchi"><span class="item-nombre">COCACOLA</span><span class="item-precio">2€</span></div>
+              <div class="item-munchi"><span class="item-nombre">FANTA</span><span class="item-precio">2€</span></div>
+              <div class="item-munchi"><span class="item-nombre">MONSTER</span><span class="item-precio">2.50€</span></div>
+              <div class="item-munchi"><span class="item-nombre">NESTEA</span><span class="item-precio">2€</span></div>
+              <div class="item-munchi"><span class="item-nombre">AGUA</span><span class="item-precio">1.50€</span></div>
+              <div class="item-munchi"><span class="item-nombre">ESTRELLA</span><span class="item-precio">2€</span></div>
+              <div class="item-munchi"><span class="item-nombre">HEINEKEN</span><span class="item-precio">2€</span></div>
+              <div class="item-munchi"><span class="item-nombre">REDBULL</span><span class="item-precio">2.50€</span></div>
+              <div class="item-munchi"><span class="item-nombre">COMBINADO</span><span class="item-precio">5€</span></div>
+              <div class="item-munchi"><span class="item-nombre">LATA</span><span class="item-precio">(varias)</span></div>
+            </div>
+          </div>
+
+          <!-- PARA PICAR (comida) -->
+          <div class="munchies-categoria">
+            <div class="categoria-titulo">🍟 PARA PICAR</div>
+            <div class="items-lista">
+              <div class="item-munchi"><span class="item-nombre">PATATAS</span><span class="item-precio">1.50€</span></div>
+              <div class="item-munchi"><span class="item-nombre">CHUCHES</span><span class="item-precio">1.50€</span></div>
+              <div class="item-munchi"><span class="item-nombre">PALOMITAS</span><span class="item-precio">1.50€</span></div>
+            </div>
+          </div>
+
+          <!-- Instagram footer -->
+          <div class="munchies-footer">
+            📲 <a href="https://instagram.com/masquehigh.culb" target="_blank">@MASQUEHIGH.CULB</a>
+          </div>
         </div>
       </div>
 
-      <!-- PANEL EVENTOS (SOLO CARTELES, SIN NOMBRES, CON image17 INCLUIDA) -->
+      <!-- PANEL EVENTOS (con image17 incluida) -->
       <div id="panel-eventos" class="panel">
         <div class="eventos-grid">
-          <!-- Solo imágenes, sin títulos ni números, todas con bordes neón -->
-          <div class="evento-card">
-            <img src="images/image14.jpg" alt="cartel evento">
-          </div>
-          <div class="evento-card">
-            <img src="images/image15.jpg" alt="cartel evento">
-          </div>
-          <div class="evento-card">
-            <img src="images/image16.jpg" alt="cartel evento">
-          </div>
-          <div class="evento-card">
-            <img src="images/image17.jpg" alt="cartel evento">
-          </div>
+          <div class="evento-card"><img src="images/image14.jpg" alt="cartel evento"></div>
+          <div class="evento-card"><img src="images/image15.jpg" alt="cartel evento"></div>
+          <div class="evento-card"><img src="images/image16.jpg" alt="cartel evento"></div>
+          <div class="evento-card"><img src="images/image17.jpg" alt="cartel evento"></div>
         </div>
       </div>
     </div>
