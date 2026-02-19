@@ -4,285 +4,319 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   
-  <!-- CONFIGURACIÓN PARA PANTALLA COMPLETA EN TABLET -->
+  <!-- CONFIGURACIÓN PANTALLA COMPLETA -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#0b0c14">
   
-  <!-- ICONO PARA CUANDO SE GUARDE EN LA TABLET -->
-  <link rel="apple-touch-icon" href="images/icon-192.png">
-  
-  <title>Masquehigh Club · Catálogo</title>
+  <title>Masquehigh Club · Bienvenido</title>
   <style>
-    /* RESET TOTAL PARA PANTALLA COMPLETA */
+    /* ===== RESET ===== */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
-      user-select: none; /* Evita seleccionar texto accidentalmente */
-      -webkit-tap-highlight-color: transparent; /* Quita el gris al tocar */
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    /* OCUPA TODA LA PANTALLA SIN BORDES */
+    /* ===== PANTALLA COMPLETA ===== */
     html, body {
       width: 100%;
       height: 100%;
-      overflow: hidden; /* EVITA SCROLL COMPLETAMENTE */
-      position: fixed; /* Fija la pantalla */
-      background-color: #0b0c14;
+      overflow: hidden;
+      background: #0b0c14;
     }
 
     body {
-      background-image: radial-gradient(circle at 30% 10%, #1a2a3a 0%, #030408 90%);
+      background: radial-gradient(circle at 30% 30%, #1a2a3a 0%, #030408 100%);
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 0; /* Sin padding para máximo espacio */
+      padding: 10px;
     }
 
-    /* CONTENEDOR PRINCIPAL QUE OCUPA TODA LA PANTALLA */
+    /* ===== CONTENEDOR PRINCIPAL ===== */
     .kiosco {
       width: 100%;
+      max-width: 1280px;
       height: 100%;
       background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(4px);
-      border: none; /* Sin bordes en pantalla completa */
-      box-shadow: none;
+      backdrop-filter: blur(10px);
+      border: 2px solid #00ff9f;
+      border-radius: 60px 60px 40px 40px;
+      box-shadow: 0 0 40px #00ff9f66, inset 0 0 30px #ff18d066;
       padding: 2rem 2rem 1.5rem;
       display: flex;
       flex-direction: column;
-      overflow-y: auto; /* SOLO SCROLL VERTICAL DENTRO */
+      overflow-y: auto;
       overflow-x: hidden;
-      -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
+      -webkit-overflow-scrolling: touch;
     }
 
-    /* Personalizar scroll (opcional) */
-    .kiosco::-webkit-scrollbar {
-      width: 6px;
-    }
-    .kiosco::-webkit-scrollbar-track {
-      background: #0b0c14;
-    }
-    .kiosco::-webkit-scrollbar-thumb {
-      background: #00ff9f;
-      border-radius: 10px;
-    }
-
-    .club-header {
+    /* ===== LOGO PRINCIPAL (IGUAL QUE EL ORIGINAL) ===== */
+    .logo-container {
       text-align: center;
-      margin-bottom: 2rem;
-      flex-shrink: 0; /* Evita que se comprima */
+      margin: 1rem 0 2rem;
+      position: relative;
     }
 
-    .club-header h1 {
-      font-size: 4rem;
+    .logo-masquehigh {
+      font-size: 5.5rem;
       font-weight: 900;
-      letter-spacing: 4px;
+      letter-spacing: 8px;
       text-transform: uppercase;
-      background: linear-gradient(45deg, #00ff9f, #ff18d0, #00ffff);
+      line-height: 1;
+      color: #00ff9f;
+      text-shadow: 0 0 20px #00ff9f, 0 0 40px #ff18d0, 5px 5px 0 #0a0c1a;
+      -webkit-text-stroke: 2px #ffb3ff;
+      background: linear-gradient(135deg, #b5ffb5, #ffb3ff, #00ffff);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 20px #ff18d0;
-      margin-bottom: 0.25rem;
+      filter: drop-shadow(0 0 30px #ff18d0);
+      margin-bottom: 0.5rem;
     }
 
-    .club-header h1 span {
-      font-size: 2.2rem;
-      display: block;
-      letter-spacing: 8px;
+    .logo-club {
+      font-size: 3.5rem;
+      font-weight: 900;
+      letter-spacing: 12px;
+      text-transform: uppercase;
+      color: #ff44e0;
+      text-shadow: 0 0 15px #ff18d0, 0 0 30px #00ff9f;
+      -webkit-text-stroke: 1px #00ff9f;
+      margin-top: -0.8rem;
     }
 
-    .catalogo-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-      flex: 1; /* Ocupa el espacio restante */
+    /* ===== BIENVENIDA ===== */
+    .welcome {
+      text-align: center;
+      margin: 1rem 0 3rem;
     }
 
-    .seccion {
-      background: rgba(0, 0, 0, 0.6);
-      border: 2px solid #ff18d0;
-      border-radius: 40px 40px 30px 30px;
-      padding: 1.8rem 1.5rem;
+    .welcome h2 {
+      font-size: 3.2rem;
+      color: #ffffff;
+      text-shadow: 0 0 10px #00ff9f, 0 0 20px #ff18d0;
+      font-weight: 600;
+      letter-spacing: 2px;
+      background: rgba(0, 255, 159, 0.1);
+      padding: 1rem 2rem;
+      border-radius: 60px;
+      display: inline-block;
+      border: 1px solid #ff18d0;
       box-shadow: 0 0 30px #00ff9f33;
     }
 
-    .titulo-seccion {
-      font-size: 2.8rem;
-      font-weight: 800;
-      color: #ff18d0;
-      text-shadow: 0 0 15px #ff18d0;
-      margin-bottom: 1.8rem;
-      padding-left: 0.8rem;
-      border-left: 10px solid #00ff9f;
-    }
-
-    .productos {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.5rem;
-    }
-
-    /* TARJETAS MÁS GRANDES PARA TÁCTIL */
-    .card {
-      background: #0d0f1a;
-      border: 2px solid #3a2b4a;
-      border-radius: 35px;
-      padding: 1.5rem 0.8rem;
+    /* ===== SECCIONES (3 BOTONES) ===== */
+    .secciones {
       display: flex;
       flex-direction: column;
+      gap: 2rem;
+      margin: 1rem 0 2rem;
+      flex: 1;
+    }
+
+    .seccion-btn {
+      background: rgba(0, 0, 0, 0.7);
+      border: 3px solid;
+      border-radius: 50px;
+      padding: 2.5rem 2rem;
+      display: flex;
       align-items: center;
-      text-align: center;
-      transition: all 0.25s ease;
-      box-shadow: 0 8px 0 #00000066;
+      justify-content: space-between;
       cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
       touch-action: manipulation;
-      min-height: 260px; /* Altura mínima para fácil toque */
     }
 
-    .card:active {
-      transform: scale(0.98); /* Efecto al pulsar */
+    .seccion-btn:active {
+      transform: scale(0.98);
+    }
+
+    .seccion-btn.genero {
       border-color: #00ff9f;
+      box-shadow: 0 0 30px #00ff9f66;
     }
 
-    .card.card--ampliada {
-      transform: scale(1.05);
-      border-color: #ff44e0;
-      box-shadow: 0 0 40px #ff18d0;
-      z-index: 10;
+    .seccion-btn.munchies {
+      border-color: #ff18d0;
+      box-shadow: 0 0 30px #ff18d066;
     }
 
-    .card img {
-      width: 140px;
-      height: 140px;
-      object-fit: cover;
-      border-radius: 50%;
-      border: 4px solid #00ff9f;
-      box-shadow: 0 0 0 3px #0b0c14, 0 0 0 6px #ff18d0;
-      margin-bottom: 1rem;
-      pointer-events: none; /* Evita interferencias con el toque */
+    .seccion-btn.eventos {
+      border-color: #ffff00;
+      box-shadow: 0 0 30px #ffff0066;
     }
 
-    .card h3 {
-      font-size: 1.7rem;
-      font-weight: 700;
-      color: white;
-      text-shadow: 0 0 8px #00ff9f;
-      word-break: break-word;
-      line-height: 1.3;
+    .seccion-info {
+      display: flex;
+      flex-direction: column;
     }
 
-    /* INSTRUCCIÓN PARA GUARDAR EN PANTALLA DE INICIO */
-    .install-hint {
+    .seccion-titulo {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .seccion-btn.genero .seccion-titulo {
+      color: #00ff9f;
+      text-shadow: 0 0 15px #00ff9f;
+    }
+
+    .seccion-btn.munchies .seccion-titulo {
+      color: #ff18d0;
+      text-shadow: 0 0 15px #ff18d0;
+    }
+
+    .seccion-btn.eventos .seccion-titulo {
+      color: #ffff00;
+      text-shadow: 0 0 15px #ffff00;
+    }
+
+    .seccion-desc {
+      font-size: 1.8rem;
+      color: #ccccff;
+      margin-top: 0.5rem;
+      opacity: 0.9;
+    }
+
+    .seccion-icon {
+      font-size: 4rem;
+      filter: drop-shadow(0 0 10px currentColor);
+    }
+
+    .seccion-btn.genero .seccion-icon {
+      color: #00ff9f;
+    }
+
+    .seccion-btn.munchies .seccion-icon {
+      color: #ff18d0;
+    }
+
+    .seccion-btn.eventos .seccion-icon {
+      color: #ffff00;
+    }
+
+    /* ===== PIE CON HINT ===== */
+    .footer-hint {
       text-align: center;
       color: #b8b8ff;
-      margin-top: 1.5rem;
-      font-size: 1.2rem;
+      font-size: 1.4rem;
       opacity: 0.6;
-      flex-shrink: 0;
+      padding: 1rem;
+      border-top: 1px solid #ff18d033;
+      margin-top: auto;
     }
 
-    /* MEDIA QUERY PARA TABLET HORIZONTAL */
-    @media (orientation: landscape) and (min-width: 1024px) {
-      .productos {
-        grid-template-columns: repeat(4, 1fr);
-      }
-      .card img {
-        width: 160px;
-        height: 160px;
-      }
+    /* ===== ANIMACIONES ===== */
+    @keyframes glow {
+      0% { filter: drop-shadow(0 0 20px #00ff9f); }
+      50% { filter: drop-shadow(0 0 40px #ff18d0); }
+      100% { filter: drop-shadow(0 0 20px #00ff9f); }
     }
 
-    /* Para tablets más pequeñas */
-    @media (max-width: 600px) {
-      .titulo-seccion { font-size: 2.2rem; }
-      .card h3 { font-size: 1.4rem; }
-      .card img { width: 120px; height: 120px; }
+    .logo-masquehigh {
+      animation: glow 3s infinite;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 800px) {
+      .kiosco { padding: 1.5rem; }
+      .logo-masquehigh { font-size: 4.5rem; }
+      .logo-club { font-size: 2.8rem; }
+      .welcome h2 { font-size: 2.5rem; }
+      .seccion-titulo { font-size: 2.8rem; }
+      .seccion-desc { font-size: 1.5rem; }
+      .seccion-icon { font-size: 3rem; }
+    }
+
+    @media (max-width: 500px) {
+      .logo-masquehigh { font-size: 3.5rem; }
+      .logo-club { font-size: 2.2rem; }
+      .welcome h2 { font-size: 2rem; }
     }
   </style>
 </head>
 <body>
   <main class="kiosco">
-    <div class="club-header">
-      <h1>MASQUEHIGH<span>CLUB</span></h1>
-      <div style="height: 3px; width: 150px; margin:0 auto; background: linear-gradient(90deg, transparent, #00ff9f, #ff18d0, transparent);"></div>
+    <!-- LOGO PRINCIPAL (IGUAL AL ORIGINAL) -->
+    <div class="logo-container">
+      <div class="logo-masquehigh">MASQUEHIGH</div>
+      <div class="logo-club">CLUB</div>
     </div>
 
-    <div class="catalogo-grid">
-      <!-- EXTRACCIÓN (4) -->
-      <section class="seccion">
-        <h2 class="titulo-seccion">⚡ EXTRACCIÓN</h2>
-        <div class="productos">
-          <div class="card"><img src="images/image1.jpg" alt="BHO TROPICANA CHERRY"><h3>BHO TROPICANA CHERRY</h3></div>
-          <div class="card"><img src="images/image2.jpg" alt="FORBBIDEN FROZEN"><h3>FORBBIDEN FROZEN</h3></div>
-          <div class="card"><img src="images/image3.jpg" alt="OREO"><h3>OREO</h3></div>
-          <div class="card"><img src="images/image4.jpg" alt="COOKIES"><h3>COOKIES</h3></div>
-        </div>
-      </section>
-
-      <!-- HIERBAS (9) -->
-      <section class="seccion">
-        <h2 class="titulo-seccion">🌿 HIERBAS</h2>
-        <div class="productos">
-          <div class="card"><img src="images/image5.jpg" alt="LONDON CAKE"><h3>LONDON CAKE</h3></div>
-          <div class="card"><img src="images/image6.jpg" alt="CREAM CARAMEL"><h3>CREAM CARAMEL</h3></div>
-          <div class="card"><img src="images/image7.jpg" alt="AMNESIA"><h3>AMNESIA</h3></div>
-          <div class="card"><img src="images/image8.jpg" alt="TANGIE"><h3>TANGIE</h3></div>
-          <div class="card"><img src="images/image9.jpg" alt="DANCE HALL"><h3>DANCE HALL</h3></div>
-          <div class="card"><img src="images/image10.jpg" alt="MELON"><h3>MELON</h3></div>
-          <div class="card"><img src="images/image11.jpg" alt="TROPICANA CHERRY"><h3>TROPICANA CHERRY</h3></div>
-          <div class="card"><img src="images/image12.jpg" alt="GELATO"><h3>GELATO</h3></div>
-          <div class="card"><img src="images/image13.jpg" alt="PURPLE JEALOUSY"><h3>PURPLE JEALOUSY</h3></div>
-        </div>
-      </section>
+    <!-- BIENVENIDA -->
+    <div class="welcome">
+      <h2>✨ ¡Bienvenido! ✨</h2>
     </div>
 
-    <div class="install-hint">
-      ⚡ Para pantalla completa: Compartir > Añadir a pantalla de inicio ⚡
+    <!-- 3 SECCIONES PRINCIPALES -->
+    <div class="secciones">
+      <!-- SECCIÓN GÉNERO (lo que ya tenemos) -->
+      <div class="seccion-btn genero" id="btn-genero">
+        <div class="seccion-info">
+          <span class="seccion-titulo">GÉNERO</span>
+          <span class="seccion-desc">Extracción · Hierbas</span>
+        </div>
+        <div class="seccion-icon">🌿</div>
+      </div>
+
+      <!-- SECCIÓN MUNCHIES (nueva carta) -->
+      <div class="seccion-btn munchies" id="btn-munchies">
+        <div class="seccion-info">
+          <span class="seccion-titulo">MUNCHIES</span>
+          <span class="seccion-desc">Snacks · Dulces · Bebidas</span>
+        </div>
+        <div class="seccion-icon">🍕</div>
+      </div>
+
+      <!-- SECCIÓN EVENTOS (con imágenes 14-15-16) -->
+      <div class="seccion-btn eventos" id="btn-eventos">
+        <div class="seccion-info">
+          <span class="seccion-titulo">EVENTOS</span>
+          <span class="seccion-desc">Próximas citas · Carteles</span>
+        </div>
+        <div class="seccion-icon">🎉</div>
+      </div>
+    </div>
+
+    <!-- HINT PARA PANTALLA COMPLETA -->
+    <div class="footer-hint">
+      ⚡ Toca una sección para explorar ⚡
     </div>
   </main>
 
   <script>
     (function() {
-      document.addEventListener('DOMContentLoaded', function() {
-        const tarjetas = document.querySelectorAll('.card');
+      // Por ahora solo navegación simulada
+      // Cuando tengamos las otras secciones, aquí irán los enlaces
+      
+      document.getElementById('btn-genero').addEventListener('click', function() {
+        alert('🎯 SECCIÓN GÉNERO\n\nAquí irá el catálogo de:\n• EXTRACCIÓN (4 productos)\n• HIERBAS (9 productos)');
+      });
 
-        function quitarAmpliacion() {
-          tarjetas.forEach(c => c.classList.remove('card--ampliada'));
-        }
+      document.getElementById('btn-munchies').addEventListener('click', function() {
+        alert('🍟 SECCIÓN MUNCHIES\n\nAquí irá la carta de snacks, dulces y bebidas que me adjuntes');
+      });
 
-        tarjetas.forEach(tarjeta => {
-          tarjeta.addEventListener('click', function(e) {
-            e.stopPropagation();
-            e.preventDefault(); // Evita comportamientos extraños
-            if (tarjeta.classList.contains('card--ampliada')) {
-              tarjeta.classList.remove('card--ampliada');
-            } else {
-              quitarAmpliacion();
-              tarjeta.classList.add('card--ampliada');
-            }
-          });
+      document.getElementById('btn-eventos').addEventListener('click', function() {
+        alert('🎪 SECCIÓN EVENTOS\n\nAquí se mostrarán:\n• image14.jpg\n• image15.jpg\n• image16.jpg');
+      });
+
+      // Efecto de feedback táctil
+      const botones = document.querySelectorAll('.seccion-btn');
+      botones.forEach(btn => {
+        btn.addEventListener('touchstart', function() {
+          this.style.opacity = '0.8';
         });
-
-        // Cerrar al tocar fuera
-        document.body.addEventListener('click', function(e) {
-          if (!e.target.closest('.card')) {
-            quitarAmpliacion();
-          }
+        btn.addEventListener('touchend', function() {
+          this.style.opacity = '1';
         });
-
-        // Evita el zoom con doble toque
-        let lastTouchEnd = 0;
-        document.addEventListener('touchend', function(e) {
-          const now = Date.now();
-          if (now - lastTouchEnd <= 300) {
-            e.preventDefault();
-          }
-          lastTouchEnd = now;
-        }, false);
       });
     })();
   </script>
