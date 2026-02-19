@@ -177,7 +177,7 @@
       opacity: 0.8;
     }
 
-    /* ===== CONTENIDO (igual que antes) ===== */
+    /* ===== CONTENIDO ===== */
     .contenido {
       flex: 1;
       overflow-y: auto;
@@ -255,36 +255,41 @@
       text-shadow: 0 0 5px #00ff9f;
     }
 
-    /* ===== EVENTOS ===== */
+    /* ===== EVENTOS (SOLO CARTELES, SIN TEXTO) ===== */
     .eventos-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.2rem;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      align-items: start;
     }
 
     .evento-card {
-      background: rgba(0, 0, 0, 0.6);
-      border: 2px solid #ffff00;
-      border-radius: 20px;
-      padding: 1rem;
+      background: transparent;
+      border: none;
+      border-radius: 24px;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
       align-items: center;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.7);
+      transition: transform 0.2s ease;
+      aspect-ratio: 1 / 1.4; /* proporción típica de cartel */
+      width: 100%;
+    }
+
+    .evento-card:active {
+      transform: scale(0.97);
     }
 
     .evento-card img {
       width: 100%;
-      max-height: 200px;
-      object-fit: cover;
-      border-radius: 15px;
-      border: 2px solid #ff18d0;
-      margin-bottom: 0.5rem;
-    }
-
-    .evento-card h3 {
-      font-size: 1.5rem;
-      color: #ffff00;
-      text-shadow: 0 0 8px #ffff00;
+      height: 100%;
+      object-fit: cover;         /* la imagen cubre todo el contenedor */
+      object-position: center;
+      border-radius: 20px;
+      border: 3px solid #ffff00;
+      box-shadow: 0 0 20px #ffff00aa;
+      background: #000;           /* por si la imagen tiene transparencia */
     }
 
     /* ===== MUNCHIES ===== */
@@ -391,20 +396,21 @@
         </div>
       </div>
 
-      <!-- PANEL EVENTOS -->
+      <!-- PANEL EVENTOS (SOLO CARTELES, SIN NOMBRES, CON image17 INCLUIDA) -->
       <div id="panel-eventos" class="panel">
         <div class="eventos-grid">
+          <!-- Solo imágenes, sin títulos ni números, todas con bordes neón -->
           <div class="evento-card">
-            <img src="images/image14.jpg" alt="Evento 1">
-            <h3>EVENTO 1</h3>
+            <img src="images/image14.jpg" alt="cartel evento">
           </div>
           <div class="evento-card">
-            <img src="images/image15.jpg" alt="Evento 2">
-            <h3>EVENTO 2</h3>
+            <img src="images/image15.jpg" alt="cartel evento">
           </div>
           <div class="evento-card">
-            <img src="images/image16.jpg" alt="Evento 3">
-            <h3>EVENTO 3</h3>
+            <img src="images/image16.jpg" alt="cartel evento">
+          </div>
+          <div class="evento-card">
+            <img src="images/image17.jpg" alt="cartel evento">
           </div>
         </div>
       </div>
