@@ -34,7 +34,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 10px;
+      padding: 8px;
     }
 
     /* ===== CONTENEDOR PRINCIPAL ===== */
@@ -42,10 +42,10 @@
       width: 100%;
       max-width: 1280px;
       height: 100%;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0, 0, 0, 0.85);
       backdrop-filter: blur(10px);
       border: 2px solid #00ff9f;
-      border-radius: 40px;
+      border-radius: 30px;
       box-shadow: 0 0 40px #00ff9f66;
       display: flex;
       flex-direction: column;
@@ -54,68 +54,74 @@
 
     /* ===== HEADER CON LOGO ===== */
     .header {
-      padding: 1.5rem 2rem 0.5rem;
+      padding: 0.8rem 1.5rem 0.3rem;
       text-align: center;
-      border-bottom: 2px solid #ff18d0;
+      border-bottom: 1px solid #ff18d0;
+      background: rgba(0, 0, 0, 0.3);
     }
 
     .logo {
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
     }
 
     .logo-masquehigh {
-      font-size: 4.5rem;
+      font-size: 3.2rem;
       font-weight: 900;
-      letter-spacing: 6px;
+      letter-spacing: 4px;
       text-transform: uppercase;
       color: #00ff9f;
-      text-shadow: 0 0 20px #00ff9f, 0 0 40px #ff18d0;
+      text-shadow: 0 0 15px #00ff9f, 0 0 30px #ff18d0;
       -webkit-text-stroke: 1px #ffb3ff;
-      line-height: 1;
+      line-height: 1.1;
     }
 
     .logo-club {
-      font-size: 3rem;
+      font-size: 2.2rem;
       font-weight: 900;
-      letter-spacing: 10px;
+      letter-spacing: 8px;
       text-transform: uppercase;
       color: #ff44e0;
-      text-shadow: 0 0 15px #ff18d0, 0 0 30px #00ff9f;
-      margin-top: -0.5rem;
+      text-shadow: 0 0 10px #ff18d0, 0 0 20px #00ff9f;
+      margin-top: -0.3rem;
     }
 
     .welcome {
-      font-size: 1.8rem;
+      font-size: 1.4rem;
       color: #ffffff;
-      text-shadow: 0 0 10px #00ff9f;
-      margin: 0.5rem 0;
+      text-shadow: 0 0 8px #00ff9f;
+      margin: 0.2rem 0 0.3rem;
       opacity: 0.9;
+      background: rgba(255, 24, 208, 0.1);
+      padding: 0.2rem 1rem;
+      border-radius: 30px;
+      display: inline-block;
     }
 
-    /* ===== BOTONES DE PESTAÑAS ===== */
+    /* ===== BOTONES MÁS PEQUEÑOS ===== */
     .pestanas {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-      padding: 1.5rem 2rem;
+      gap: 0.6rem;
+      padding: 0.8rem 1.5rem;
     }
 
     .pestana {
       background: rgba(10, 10, 20, 0.9);
-      border: 3px solid;
-      border-radius: 20px;
-      padding: 1.5rem 0.5rem;
+      border: 2px solid;
+      border-radius: 15px;
+      padding: 0.7rem 0.2rem;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
+      gap: 0.2rem;
       cursor: pointer;
       transition: all 0.2s ease;
       backdrop-filter: blur(5px);
-      aspect-ratio: 1 / 0.9;
+      aspect-ratio: 1 / 0.8;
       width: 100%;
     }
 
@@ -125,8 +131,8 @@
 
     .pestana.activa {
       transform: scale(1.02);
-      box-shadow: 0 0 30px currentColor;
-      border-width: 4px;
+      box-shadow: 0 0 20px currentColor;
+      border-width: 3px;
     }
 
     .pestana.genero {
@@ -145,34 +151,33 @@
     }
 
     .pestana-icon {
-      font-size: 3.5rem;
-      filter: drop-shadow(0 0 10px currentColor);
+      font-size: 2.2rem;
+      filter: drop-shadow(0 0 8px currentColor);
     }
 
     .pestana-text {
-      font-size: 1.8rem;
+      font-size: 1.3rem;
       font-weight: 700;
       text-transform: uppercase;
-      text-shadow: 0 0 8px currentColor;
+      text-shadow: 0 0 5px currentColor;
     }
 
     .pestana-desc {
-      font-size: 1.2rem;
+      font-size: 0.9rem;
       color: #ccccff;
       text-align: center;
       opacity: 0.8;
     }
 
-    /* ===== CONTENIDO DE LAS PESTAÑAS ===== */
+    /* ===== CONTENIDO ===== */
     .contenido {
       flex: 1;
       overflow-y: auto;
       overflow-x: hidden;
-      padding: 1.5rem 2rem 2rem;
+      padding: 1rem 1.5rem 1.5rem;
       -webkit-overflow-scrolling: touch;
     }
 
-    /* Ocultar/mostrar paneles */
     .panel {
       display: none;
     }
@@ -181,64 +186,63 @@
       display: block;
     }
 
-    /* ===== GÉNERO (catálogo) ===== */
+    /* ===== GÉNERO ===== */
     .catalogo-grid {
       display: flex;
       flex-direction: column;
-      gap: 2rem;
+      gap: 1.2rem;
     }
 
     .subseccion {
       background: rgba(0, 0, 0, 0.5);
       border: 1px solid #ff18d0;
-      border-radius: 30px;
-      padding: 1.5rem;
+      border-radius: 20px;
+      padding: 1rem;
     }
 
     .subseccion-titulo {
-      font-size: 2.5rem;
+      font-size: 2rem;
       color: #ff18d0;
-      text-shadow: 0 0 15px #ff18d0;
-      margin-bottom: 1.5rem;
-      padding-left: 1rem;
-      border-left: 8px solid #00ff9f;
+      text-shadow: 0 0 10px #ff18d0;
+      margin-bottom: 1rem;
+      padding-left: 0.8rem;
+      border-left: 6px solid #00ff9f;
     }
 
     .productos-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap: 1.2rem;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 1rem;
     }
 
     .producto-card {
       background: #0d0f1a;
       border: 2px solid #3a2b4a;
-      border-radius: 25px;
-      padding: 1.2rem 0.8rem;
+      border-radius: 18px;
+      padding: 0.8rem 0.5rem;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
-      transition: all 0.2s ease;
     }
 
     .producto-card:active {
-      transform: scale(0.98);
+      transform: scale(0.97);
       border-color: #00ff9f;
     }
 
     .producto-card img {
-      width: 120px;
-      height: 120px;
+      width: 100px;
+      height: 100px;
       object-fit: cover;
       border-radius: 50%;
       border: 3px solid #00ff9f;
       box-shadow: 0 0 0 2px #ff18d0;
-      margin-bottom: 0.8rem;
+      margin-bottom: 0.5rem;
     }
 
     .producto-card h4 {
-      font-size: 1.4rem;
+      font-size: 1.2rem;
       color: white;
       text-shadow: 0 0 5px #00ff9f;
     }
@@ -246,60 +250,58 @@
     /* ===== EVENTOS ===== */
     .eventos-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-      padding: 1rem 0;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.2rem;
     }
 
     .evento-card {
       background: rgba(0, 0, 0, 0.6);
-      border: 3px solid #ffff00;
-      border-radius: 30px;
-      padding: 1.5rem;
+      border: 2px solid #ffff00;
+      border-radius: 20px;
+      padding: 1rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      box-shadow: 0 0 30px #ffff0066;
     }
 
     .evento-card img {
       width: 100%;
-      max-height: 300px;
+      max-height: 200px;
       object-fit: cover;
-      border-radius: 20px;
-      border: 3px solid #ff18d0;
-      margin-bottom: 1rem;
+      border-radius: 15px;
+      border: 2px solid #ff18d0;
+      margin-bottom: 0.5rem;
     }
 
     .evento-card h3 {
-      font-size: 2rem;
+      font-size: 1.5rem;
       color: #ffff00;
-      text-shadow: 0 0 10px #ffff00;
+      text-shadow: 0 0 8px #ffff00;
     }
 
-    /* ===== MUNCHIES (placeholder) ===== */
+    /* ===== MUNCHIES ===== */
     .munchies-placeholder {
       background: rgba(255, 24, 208, 0.1);
-      border: 3px dashed #ff18d0;
-      border-radius: 40px;
-      padding: 4rem 2rem;
+      border: 2px dashed #ff18d0;
+      border-radius: 25px;
+      padding: 2rem 1rem;
       text-align: center;
     }
 
     .munchies-placeholder h2 {
-      font-size: 3rem;
+      font-size: 2.2rem;
       color: #ff18d0;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
     }
 
     .munchies-placeholder p {
-      font-size: 2rem;
+      font-size: 1.4rem;
       color: white;
     }
 
     /* ===== SCROLL ===== */
     .contenido::-webkit-scrollbar {
-      width: 6px;
+      width: 4px;
     }
     .contenido::-webkit-scrollbar-track {
       background: #0b0c14;
@@ -309,26 +311,28 @@
       border-radius: 10px;
     }
 
-    @media (max-width: 700px) {
-      .logo-masquehigh { font-size: 3.5rem; }
-      .logo-club { font-size: 2.2rem; }
-      .pestana-icon { font-size: 2.5rem; }
-      .pestana-text { font-size: 1.4rem; }
+    @media (max-width: 600px) {
+      .logo-masquehigh { font-size: 2.5rem; }
+      .logo-club { font-size: 1.8rem; }
+      .welcome { font-size: 1.2rem; }
+      .pestana-icon { font-size: 1.8rem; }
+      .pestana-text { font-size: 1.1rem; }
+      .pestana-desc { font-size: 0.8rem; }
     }
   </style>
 </head>
 <body>
   <main class="kiosco">
-    <!-- HEADER CON LOGO Y BIENVENIDA -->
+    <!-- HEADER CON LOGO (AHORA VISIBLE) -->
     <div class="header">
       <div class="logo">
         <div class="logo-masquehigh">MASQUEHIGH</div>
         <div class="logo-club">CLUB</div>
       </div>
-      <div class="welcome">✨ ¡Bienvenido a Masquehigh Club! ✨</div>
+      <div class="welcome">✨ Bienvenido a Masquehigh Club ✨</div>
     </div>
 
-    <!-- BOTONES DE PESTAÑAS (AL HACER CLIC SE ABRE LA SECCIÓN) -->
+    <!-- BOTONES MÁS PEQUEÑOS -->
     <div class="pestanas">
       <div class="pestana genero activa" data-pestana="genero">
         <div class="pestana-icon">🌿</div>
@@ -347,12 +351,12 @@
       </div>
     </div>
 
-    <!-- CONTENIDO (SE ABRE AL HACER CLIC EN LA PESTAÑA) -->
+    <!-- CONTENIDO -->
     <div class="contenido">
       <!-- PANEL GÉNERO -->
       <div id="panel-genero" class="panel activo">
         <div class="catalogo-grid">
-          <!-- EXTRACCIÓN (4) -->
+          <!-- EXTRACCIÓN -->
           <div class="subseccion">
             <h3 class="subseccion-titulo">⚡ EXTRACCIÓN</h3>
             <div class="productos-grid">
@@ -362,7 +366,7 @@
               <div class="producto-card"><img src="images/image4.jpg" alt="COOKIES"><h4>COOKIES</h4></div>
             </div>
           </div>
-          <!-- HIERBAS (9) -->
+          <!-- HIERBAS -->
           <div class="subseccion">
             <h3 class="subseccion-titulo">🌿 HIERBAS</h3>
             <div class="productos-grid">
@@ -380,16 +384,16 @@
         </div>
       </div>
 
-      <!-- PANEL MUNCHIES (se abre al hacer clic) -->
+      <!-- PANEL MUNCHIES -->
       <div id="panel-munchies" class="panel">
         <div class="munchies-placeholder">
           <h2>🍟 MUNCHIES</h2>
-          <p>Próximamente<br>carta de snacks y dulces</p>
-          <p style="font-size:1.4rem; margin-top:2rem; color:#ff18d0;">Esperando la carta para actualizar</p>
+          <p>Próximamente</p>
+          <p style="font-size:1.2rem; margin-top:1rem;">Carta de snacks y dulces</p>
         </div>
       </div>
 
-      <!-- PANEL EVENTOS (se abre al hacer clic) -->
+      <!-- PANEL EVENTOS -->
       <div id="panel-eventos" class="panel">
         <div class="eventos-grid">
           <div class="evento-card">
@@ -411,7 +415,6 @@
 
   <script>
     (function() {
-      // FUNCIÓN PARA ABRIR PESTAÑA AL HACER CLIC
       const pestanas = document.querySelectorAll('.pestana');
       const paneles = {
         genero: document.getElementById('panel-genero'),
@@ -420,36 +423,20 @@
       };
 
       function abrirPestana(pestanaId) {
-        // Quitar clase activa de todas las pestañas
         pestanas.forEach(p => p.classList.remove('activa'));
+        Object.values(paneles).forEach(panel => panel.classList.remove('activo'));
 
-        // Quitar clase activa de todos los paneles
-        Object.values(paneles).forEach(panel => {
-          panel.classList.remove('activo');
-        });
-
-        // Activar la pestaña seleccionada
         const pestanaActiva = document.querySelector(`.pestana[data-pestana="${pestanaId}"]`);
-        if (pestanaActiva) {
-          pestanaActiva.classList.add('activa');
-        }
-
-        // Activar el panel correspondiente
-        if (paneles[pestanaId]) {
-          paneles[pestanaId].classList.add('activo');
-        }
+        if (pestanaActiva) pestanaActiva.classList.add('activa');
+        if (paneles[pestanaId]) paneles[pestanaId].classList.add('activo');
       }
 
-      // Asignar evento click a cada pestaña
       pestanas.forEach(pestana => {
         pestana.addEventListener('click', function(e) {
           e.preventDefault();
-          const pestanaId = this.getAttribute('data-pestana');
-          abrirPestana(pestanaId);
+          abrirPestana(this.getAttribute('data-pestana'));
         });
       });
-
-      console.log('✅ Pestañas funcionales: al hacer clic se abre la sección');
     })();
   </script>
 </body>
