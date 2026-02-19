@@ -2,195 +2,205 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>Masquehigh Club · Catálogo Kiosco</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  
+  <!-- CONFIGURACIÓN PARA PANTALLA COMPLETA EN TABLET -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#0b0c14">
+  
+  <!-- ICONO PARA CUANDO SE GUARDE EN LA TABLET -->
+  <link rel="apple-touch-icon" href="images/icon-192.png">
+  
+  <title>Masquehigh Club · Catálogo</title>
   <style>
-    /* RESET Y ESTILOS BASE – estilo neón gaming */
+    /* RESET TOTAL PARA PANTALLA COMPLETA */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
       font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+      user-select: none; /* Evita seleccionar texto accidentalmente */
+      -webkit-tap-highlight-color: transparent; /* Quita el gris al tocar */
+    }
+
+    /* OCUPA TODA LA PANTALLA SIN BORDES */
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden; /* EVITA SCROLL COMPLETAMENTE */
+      position: fixed; /* Fija la pantalla */
+      background-color: #0b0c14;
     }
 
     body {
-      background-color: #0b0c14;
       background-image: radial-gradient(circle at 30% 10%, #1a2a3a 0%, #030408 90%);
-      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 20px;
-      overflow-x: hidden;
+      padding: 0; /* Sin padding para máximo espacio */
     }
 
+    /* CONTENEDOR PRINCIPAL QUE OCUPA TODA LA PANTALLA */
     .kiosco {
-      max-width: 1280px;
       width: 100%;
+      height: 100%;
       background: rgba(0, 0, 0, 0.5);
       backdrop-filter: blur(4px);
-      border: 2px solid #00ff9f;
-      box-shadow: 0 0 30px #00ff9f66, inset 0 0 15px #ff18d066;
-      border-radius: 48px 48px 32px 32px;
-      padding: 2rem 2rem 2.5rem;
-      transition: box-shadow 0.3s ease;
+      border: none; /* Sin bordes en pantalla completa */
+      box-shadow: none;
+      padding: 2rem 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto; /* SOLO SCROLL VERTICAL DENTRO */
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
+    }
+
+    /* Personalizar scroll (opcional) */
+    .kiosco::-webkit-scrollbar {
+      width: 6px;
+    }
+    .kiosco::-webkit-scrollbar-track {
+      background: #0b0c14;
+    }
+    .kiosco::-webkit-scrollbar-thumb {
+      background: #00ff9f;
+      border-radius: 10px;
     }
 
     .club-header {
       text-align: center;
-      margin-bottom: 3rem;
-      position: relative;
+      margin-bottom: 2rem;
+      flex-shrink: 0; /* Evita que se comprima */
     }
 
     .club-header h1 {
-      font-size: 4.5rem;
+      font-size: 4rem;
       font-weight: 900;
-      letter-spacing: 6px;
+      letter-spacing: 4px;
       text-transform: uppercase;
-      color: #00ff9f;
-      text-shadow: 0 0 12px #00ff9f, 0 0 30px #ff18d0, 4px 4px 0 #0a0c1a;
-      -webkit-text-stroke: 1px #ffb3ff;
-      background: linear-gradient(45deg, #b5ffb5, #ffb3ff, #00ffff);
+      background: linear-gradient(45deg, #00ff9f, #ff18d0, #00ffff);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 0 20px #ff18d0);
+      text-shadow: 0 0 20px #ff18d0;
       margin-bottom: 0.25rem;
     }
 
     .club-header h1 span {
-      font-size: 2.8rem;
+      font-size: 2.2rem;
       display: block;
-      color: #ff44e0;
-      -webkit-text-fill-color: initial;
+      letter-spacing: 8px;
     }
 
     .catalogo-grid {
       display: flex;
       flex-direction: column;
-      gap: 3rem;
-      width: 100%;
+      gap: 2rem;
+      flex: 1; /* Ocupa el espacio restante */
     }
 
     .seccion {
-      background: rgba(0, 255, 159, 0.03);
-      border: 1px solid #ff18d0;
-      border-radius: 60px 60px 40px 40px;
-      padding: 2rem 1.8rem;
-      box-shadow: 0 0 25px #ff18d066, inset 0 0 20px #00ff9f22;
-      backdrop-filter: blur(2px);
+      background: rgba(0, 0, 0, 0.6);
+      border: 2px solid #ff18d0;
+      border-radius: 40px 40px 30px 30px;
+      padding: 1.8rem 1.5rem;
+      box-shadow: 0 0 30px #00ff9f33;
     }
 
     .titulo-seccion {
-      font-size: 3.4rem;
+      font-size: 2.8rem;
       font-weight: 800;
-      text-transform: uppercase;
       color: #ff18d0;
-      text-shadow: 0 0 15px #ff18d0, 0 0 35px #00ff9f;
-      margin-bottom: 2rem;
-      padding-left: 1rem;
-      border-left: 12px solid #00ff9f;
-      letter-spacing: 3px;
+      text-shadow: 0 0 15px #ff18d0;
+      margin-bottom: 1.8rem;
+      padding-left: 0.8rem;
+      border-left: 10px solid #00ff9f;
     }
 
     .productos {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 2rem 1.5rem;
-      justify-content: center;
-      align-items: stretch;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
     }
 
+    /* TARJETAS MÁS GRANDES PARA TÁCTIL */
     .card {
       background: #0d0f1a;
       border: 2px solid #3a2b4a;
-      border-radius: 42px;
-      padding: 1.8rem 1rem 1.8rem;
+      border-radius: 35px;
+      padding: 1.5rem 0.8rem;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
-      backdrop-filter: blur(5px);
-      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      box-shadow: 0 10px 20px -8px #000000cc, 0 0 0 1px #ff18d033;
+      transition: all 0.25s ease;
+      box-shadow: 0 8px 0 #00000066;
       cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
+      min-height: 260px; /* Altura mínima para fácil toque */
     }
 
-    .card:hover {
-      transform: translateY(-6px);
+    .card:active {
+      transform: scale(0.98); /* Efecto al pulsar */
       border-color: #00ff9f;
-      box-shadow: 0 0 22px #00ff9f, 0 0 40px #ff18d0, inset 0 0 12px #b2ffb2;
     }
 
     .card.card--ampliada {
-      transform: scale(1.08) translateY(-4px);
+      transform: scale(1.05);
       border-color: #ff44e0;
-      box-shadow: 0 0 40px #ff18d0, 0 0 70px #00ff9f, inset 0 0 20px #ffffff88;
+      box-shadow: 0 0 40px #ff18d0;
       z-index: 10;
-      transition: transform 0.25s ease, box-shadow 0.2s ease;
     }
 
     .card img {
-      width: 170px;
-      height: 170px;
+      width: 140px;
+      height: 140px;
       object-fit: cover;
       border-radius: 50%;
       border: 4px solid #00ff9f;
-      box-shadow: 0 0 0 3px #0b0c14, 0 0 0 6px #ff18d0, 0 0 30px #9f00ff;
-      margin-bottom: 1.2rem;
-      transition: inherit;
-      background: #1e1f2c;
-    }
-
-    .card:hover img {
-      border-color: #ffb3ff;
-      box-shadow: 0 0 0 3px #0b0c14, 0 0 0 6px #00ff9f, 0 0 40px cyan;
-    }
-
-    .card--ampliada img {
-      border-width: 6px;
-      box-shadow: 0 0 0 4px black, 0 0 0 8px #ff18d0, 0 0 60px #ffccff;
+      box-shadow: 0 0 0 3px #0b0c14, 0 0 0 6px #ff18d0;
+      margin-bottom: 1rem;
+      pointer-events: none; /* Evita interferencias con el toque */
     }
 
     .card h3 {
-      font-size: 2rem;
+      font-size: 1.7rem;
       font-weight: 700;
-      color: #f0f4ff;
-      text-shadow: 0 0 8px #00ff9f, 2px 2px 0 #0b0c14;
-      letter-spacing: 1px;
+      color: white;
+      text-shadow: 0 0 8px #00ff9f;
       word-break: break-word;
-      background: linear-gradient(145deg, #e0ffe0, #ffe0ff);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      max-width: 100%;
+      line-height: 1.3;
     }
 
-    @media (max-width: 800px) {
-      .kiosco { padding: 1.2rem; }
-      .titulo-seccion { font-size: 2.8rem; }
-      .card img { width: 140px; height: 140px; }
-      .card h3 { font-size: 1.8rem; }
-      .club-header h1 { font-size: 3.8rem; }
-    }
-
-    body, html {
-      max-width: 100%;
-      overflow-x: hidden;
-    }
-
-    .toque-hint {
-      text-align: right;
+    /* INSTRUCCIÓN PARA GUARDAR EN PANTALLA DE INICIO */
+    .install-hint {
+      text-align: center;
       color: #b8b8ff;
-      margin-top: 2rem;
-      font-size: 1.3rem;
-      text-shadow: 0 0 6px magenta;
-      opacity: 0.7;
-      padding-right: 1rem;
-      letter-spacing: 2px;
-      pointer-events: none;
+      margin-top: 1.5rem;
+      font-size: 1.2rem;
+      opacity: 0.6;
+      flex-shrink: 0;
+    }
+
+    /* MEDIA QUERY PARA TABLET HORIZONTAL */
+    @media (orientation: landscape) and (min-width: 1024px) {
+      .productos {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .card img {
+        width: 160px;
+        height: 160px;
+      }
+    }
+
+    /* Para tablets más pequeñas */
+    @media (max-width: 600px) {
+      .titulo-seccion { font-size: 2.2rem; }
+      .card h3 { font-size: 1.4rem; }
+      .card img { width: 120px; height: 120px; }
     }
   </style>
 </head>
@@ -198,78 +208,41 @@
   <main class="kiosco">
     <div class="club-header">
       <h1>MASQUEHIGH<span>CLUB</span></h1>
-      <div style="height: 4px; width: 180px; margin:0 auto; background: linear-gradient(90deg, transparent, #00ff9f, #ff18d0, transparent); border-radius: 4px;"></div>
+      <div style="height: 3px; width: 150px; margin:0 auto; background: linear-gradient(90deg, transparent, #00ff9f, #ff18d0, transparent);"></div>
     </div>
 
     <div class="catalogo-grid">
-      <!-- SECCIÓN 1: EXTRACCIÓN (4 productos) -->
+      <!-- EXTRACCIÓN (4) -->
       <section class="seccion">
         <h2 class="titulo-seccion">⚡ EXTRACCIÓN</h2>
         <div class="productos">
-          <div class="card">
-            <img src="images/image1.jpg" alt="BHO TROPICANA CHERRY" loading="lazy">
-            <h3>BHO TROPICANA CHERRY</h3>
-          </div>
-          <div class="card">
-            <img src="images/image2.jpg" alt="FORBBIDEN FROZEN" loading="lazy">
-            <h3>FORBBIDEN FROZEN</h3>
-          </div>
-          <div class="card">
-            <img src="images/image3.jpg" alt="OREO" loading="lazy">
-            <h3>OREO</h3>
-          </div>
-          <div class="card">
-            <img src="images/image4.jpg" alt="COOKIES" loading="lazy">
-            <h3>COOKIES</h3>
-          </div>
+          <div class="card"><img src="images/image1.jpg" alt="BHO TROPICANA CHERRY"><h3>BHO TROPICANA CHERRY</h3></div>
+          <div class="card"><img src="images/image2.jpg" alt="FORBBIDEN FROZEN"><h3>FORBBIDEN FROZEN</h3></div>
+          <div class="card"><img src="images/image3.jpg" alt="OREO"><h3>OREO</h3></div>
+          <div class="card"><img src="images/image4.jpg" alt="COOKIES"><h3>COOKIES</h3></div>
         </div>
       </section>
 
-      <!-- SECCIÓN 2: HIERBAS (9 productos) -->
+      <!-- HIERBAS (9) -->
       <section class="seccion">
         <h2 class="titulo-seccion">🌿 HIERBAS</h2>
         <div class="productos">
-          <div class="card">
-            <img src="images/image5.jpg" alt="LONDON CAKE" loading="lazy">
-            <h3>LONDON CAKE</h3>
-          </div>
-          <div class="card">
-            <img src="images/image6.jpg" alt="CREAM CARAMEL" loading="lazy">
-            <h3>CREAM CARAMEL</h3>
-          </div>
-          <div class="card">
-            <img src="images/image7.jpg" alt="AMNESIA" loading="lazy">
-            <h3>AMNESIA</h3>
-          </div>
-          <div class="card">
-            <img src="images/image8.jpg" alt="TANGIE" loading="lazy">
-            <h3>TANGIE</h3>
-          </div>
-          <div class="card">
-            <img src="images/image9.jpg" alt="DANCE HALL" loading="lazy">
-            <h3>DANCE HALL</h3>
-          </div>
-          <div class="card">
-            <img src="images/image10.jpg" alt="MELON" loading="lazy">
-            <h3>MELON</h3>
-          </div>
-          <div class="card">
-            <img src="images/image11.jpg" alt="TROPICANA CHERRY" loading="lazy">
-            <h3>TROPICANA CHERRY</h3>
-          </div>
-          <div class="card">
-            <img src="images/image12.jpg" alt="GELATO" loading="lazy">
-            <h3>GELATO</h3>
-          </div>
-          <div class="card">
-            <img src="images/image13.jpg" alt="PURPLE JEALOUSY" loading="lazy">
-            <h3>PURPLE JEALOUSY</h3>
-          </div>
+          <div class="card"><img src="images/image5.jpg" alt="LONDON CAKE"><h3>LONDON CAKE</h3></div>
+          <div class="card"><img src="images/image6.jpg" alt="CREAM CARAMEL"><h3>CREAM CARAMEL</h3></div>
+          <div class="card"><img src="images/image7.jpg" alt="AMNESIA"><h3>AMNESIA</h3></div>
+          <div class="card"><img src="images/image8.jpg" alt="TANGIE"><h3>TANGIE</h3></div>
+          <div class="card"><img src="images/image9.jpg" alt="DANCE HALL"><h3>DANCE HALL</h3></div>
+          <div class="card"><img src="images/image10.jpg" alt="MELON"><h3>MELON</h3></div>
+          <div class="card"><img src="images/image11.jpg" alt="TROPICANA CHERRY"><h3>TROPICANA CHERRY</h3></div>
+          <div class="card"><img src="images/image12.jpg" alt="GELATO"><h3>GELATO</h3></div>
+          <div class="card"><img src="images/image13.jpg" alt="PURPLE JEALOUSY"><h3>PURPLE JEALOUSY</h3></div>
         </div>
       </section>
     </div>
 
-    <div class="toque-hint">✦ toca la tarjeta ✦</div>
+    <div class="install-hint">
+      ⚡ Para pantalla completa: Compartir > Añadir a pantalla de inicio ⚡
+    </div>
   </main>
 
   <script>
@@ -284,6 +257,7 @@
         tarjetas.forEach(tarjeta => {
           tarjeta.addEventListener('click', function(e) {
             e.stopPropagation();
+            e.preventDefault(); // Evita comportamientos extraños
             if (tarjeta.classList.contains('card--ampliada')) {
               tarjeta.classList.remove('card--ampliada');
             } else {
@@ -293,16 +267,22 @@
           });
         });
 
-        const kioscoFondo = document.querySelector('.kiosco');
-        kioscoFondo.addEventListener('click', function(e) {
+        // Cerrar al tocar fuera
+        document.body.addEventListener('click', function(e) {
           if (!e.target.closest('.card')) {
             quitarAmpliacion();
           }
         });
 
-        tarjetas.forEach(c => {
-          c.addEventListener('contextmenu', (e) => e.preventDefault());
-        });
+        // Evita el zoom con doble toque
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(e) {
+          const now = Date.now();
+          if (now - lastTouchEnd <= 300) {
+            e.preventDefault();
+          }
+          lastTouchEnd = now;
+        }, false);
       });
     })();
   </script>
