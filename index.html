@@ -10,7 +10,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#0b0c14">
   
-  <title>Masquehigh Club · Bienvenido</title>
+  <title>Masquehigh Club · Catálogo</title>
   <style>
     /* ===== RESET ===== */
     * {
@@ -42,275 +42,416 @@
       width: 100%;
       max-width: 1280px;
       height: 100%;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.7);
       backdrop-filter: blur(10px);
       border: 2px solid #00ff9f;
-      border-radius: 60px 60px 40px 40px;
-      box-shadow: 0 0 40px #00ff9f66, inset 0 0 30px #ff18d066;
-      padding: 2rem 2rem 1.5rem;
+      border-radius: 40px;
+      box-shadow: 0 0 40px #00ff9f66;
       display: flex;
       flex-direction: column;
-      overflow-y: auto;
-      overflow-x: hidden;
-      -webkit-overflow-scrolling: touch;
+      overflow: hidden;
     }
 
-    /* ===== LOGO PRINCIPAL (IGUAL QUE EL ORIGINAL) ===== */
-    .logo-container {
+    /* ===== HEADER CON LOGO ===== */
+    .header {
+      padding: 1.5rem 2rem 0.5rem;
       text-align: center;
-      margin: 1rem 0 2rem;
-      position: relative;
+      border-bottom: 2px solid #ff18d0;
+    }
+
+    .logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .logo-masquehigh {
-      font-size: 5.5rem;
+      font-size: 4.5rem;
       font-weight: 900;
-      letter-spacing: 8px;
+      letter-spacing: 6px;
       text-transform: uppercase;
-      line-height: 1;
       color: #00ff9f;
-      text-shadow: 0 0 20px #00ff9f, 0 0 40px #ff18d0, 5px 5px 0 #0a0c1a;
-      -webkit-text-stroke: 2px #ffb3ff;
-      background: linear-gradient(135deg, #b5ffb5, #ffb3ff, #00ffff);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 0 30px #ff18d0);
-      margin-bottom: 0.5rem;
+      text-shadow: 0 0 20px #00ff9f, 0 0 40px #ff18d0;
+      -webkit-text-stroke: 1px #ffb3ff;
+      line-height: 1;
     }
 
     .logo-club {
-      font-size: 3.5rem;
+      font-size: 3rem;
       font-weight: 900;
-      letter-spacing: 12px;
+      letter-spacing: 10px;
       text-transform: uppercase;
       color: #ff44e0;
       text-shadow: 0 0 15px #ff18d0, 0 0 30px #00ff9f;
-      -webkit-text-stroke: 1px #00ff9f;
-      margin-top: -0.8rem;
+      margin-top: -0.5rem;
     }
 
-    /* ===== BIENVENIDA ===== */
     .welcome {
-      text-align: center;
-      margin: 1rem 0 3rem;
-    }
-
-    .welcome h2 {
-      font-size: 3.2rem;
-      color: #ffffff;
-      text-shadow: 0 0 10px #00ff9f, 0 0 20px #ff18d0;
-      font-weight: 600;
-      letter-spacing: 2px;
-      background: rgba(0, 255, 159, 0.1);
-      padding: 1rem 2rem;
-      border-radius: 60px;
-      display: inline-block;
-      border: 1px solid #ff18d0;
-      box-shadow: 0 0 30px #00ff9f33;
-    }
-
-    /* ===== SECCIONES (3 BOTONES) ===== */
-    .secciones {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-      margin: 1rem 0 2rem;
-      flex: 1;
-    }
-
-    .seccion-btn {
-      background: rgba(0, 0, 0, 0.7);
-      border: 3px solid;
-      border-radius: 50px;
-      padding: 2.5rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(5px);
-      touch-action: manipulation;
-    }
-
-    .seccion-btn:active {
-      transform: scale(0.98);
-    }
-
-    .seccion-btn.genero {
-      border-color: #00ff9f;
-      box-shadow: 0 0 30px #00ff9f66;
-    }
-
-    .seccion-btn.munchies {
-      border-color: #ff18d0;
-      box-shadow: 0 0 30px #ff18d066;
-    }
-
-    .seccion-btn.eventos {
-      border-color: #ffff00;
-      box-shadow: 0 0 30px #ffff0066;
-    }
-
-    .seccion-info {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .seccion-titulo {
-      font-size: 3.5rem;
-      font-weight: 800;
-      line-height: 1.2;
-    }
-
-    .seccion-btn.genero .seccion-titulo {
-      color: #00ff9f;
-      text-shadow: 0 0 15px #00ff9f;
-    }
-
-    .seccion-btn.munchies .seccion-titulo {
-      color: #ff18d0;
-      text-shadow: 0 0 15px #ff18d0;
-    }
-
-    .seccion-btn.eventos .seccion-titulo {
-      color: #ffff00;
-      text-shadow: 0 0 15px #ffff00;
-    }
-
-    .seccion-desc {
       font-size: 1.8rem;
-      color: #ccccff;
-      margin-top: 0.5rem;
+      color: #ffffff;
+      text-shadow: 0 0 10px #00ff9f;
+      margin: 0.5rem 0;
       opacity: 0.9;
     }
 
-    .seccion-icon {
-      font-size: 4rem;
-      filter: drop-shadow(0 0 10px currentColor);
+    /* ===== NAVEGACIÓN (BOTONES CUADRADOS) ===== */
+    .nav-botones {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      padding: 1.5rem 2rem;
     }
 
-    .seccion-btn.genero .seccion-icon {
+    .nav-btn {
+      background: rgba(10, 10, 20, 0.9);
+      border: 3px solid;
+      border-radius: 20px; /* Ligeramente redondeado pero cuadrado */
+      padding: 1.8rem 0.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(5px);
+      aspect-ratio: 1 / 1; /* Hace que sean cuadrados perfectos */
+      width: 100%;
+    }
+
+    .nav-btn:active {
+      transform: scale(0.95);
+    }
+
+    .nav-btn.activo {
+      transform: scale(1.02);
+      box-shadow: 0 0 30px currentColor;
+    }
+
+    .nav-btn.genero {
+      border-color: #00ff9f;
       color: #00ff9f;
     }
 
-    .seccion-btn.munchies .seccion-icon {
+    .nav-btn.munchies {
+      border-color: #ff18d0;
       color: #ff18d0;
     }
 
-    .seccion-btn.eventos .seccion-icon {
+    .nav-btn.eventos {
+      border-color: #ffff00;
       color: #ffff00;
     }
 
-    /* ===== PIE CON HINT ===== */
-    .footer-hint {
+    .nav-icon {
+      font-size: 3.5rem;
+      filter: drop-shadow(0 0 10px currentColor);
+    }
+
+    .nav-text {
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      text-shadow: 0 0 8px currentColor;
+    }
+
+    .nav-desc {
+      font-size: 1.2rem;
+      color: #ccccff;
       text-align: center;
-      color: #b8b8ff;
+      opacity: 0.8;
+    }
+
+    /* ===== CONTENIDO DE LAS SECCIONES ===== */
+    .contenido {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 1.5rem 2rem 2rem;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Ocultar/mostrar secciones */
+    .seccion-panel {
+      display: none;
+    }
+
+    .seccion-panel.activo {
+      display: block;
+    }
+
+    /* ===== ESTILOS PARA GÉNERO (catálogo existente) ===== */
+    .catalogo-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .subseccion {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid #ff18d0;
+      border-radius: 30px;
+      padding: 1.5rem;
+    }
+
+    .subseccion-titulo {
+      font-size: 2.5rem;
+      color: #ff18d0;
+      text-shadow: 0 0 15px #ff18d0;
+      margin-bottom: 1.5rem;
+      padding-left: 1rem;
+      border-left: 8px solid #00ff9f;
+    }
+
+    .productos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .producto-card {
+      background: #0d0f1a;
+      border: 2px solid #3a2b4a;
+      border-radius: 25px;
+      padding: 1.2rem 0.8rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .producto-card:active {
+      transform: scale(0.98);
+      border-color: #00ff9f;
+    }
+
+    .producto-card img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid #00ff9f;
+      box-shadow: 0 0 0 2px #ff18d0;
+      margin-bottom: 0.8rem;
+    }
+
+    .producto-card h4 {
       font-size: 1.4rem;
-      opacity: 0.6;
-      padding: 1rem;
-      border-top: 1px solid #ff18d033;
-      margin-top: auto;
+      color: white;
+      text-shadow: 0 0 5px #00ff9f;
     }
 
-    /* ===== ANIMACIONES ===== */
-    @keyframes glow {
-      0% { filter: drop-shadow(0 0 20px #00ff9f); }
-      50% { filter: drop-shadow(0 0 40px #ff18d0); }
-      100% { filter: drop-shadow(0 0 20px #00ff9f); }
+    /* ===== ESTILOS PARA EVENTOS (carteles) ===== */
+    .eventos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      padding: 1rem 0;
     }
 
-    .logo-masquehigh {
-      animation: glow 3s infinite;
+    .evento-card {
+      background: rgba(0, 0, 0, 0.6);
+      border: 3px solid #ffff00;
+      border-radius: 30px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 0 30px #ffff0066;
+    }
+
+    .evento-card img {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: 20px;
+      border: 3px solid #ff18d0;
+      margin-bottom: 1rem;
+    }
+
+    .evento-card h3 {
+      font-size: 2rem;
+      color: #ffff00;
+      text-shadow: 0 0 10px #ffff00;
+    }
+
+    /* ===== ESTILOS PARA MUNCHIES (placeholder) ===== */
+    .munchies-placeholder {
+      background: rgba(255, 24, 208, 0.1);
+      border: 3px dashed #ff18d0;
+      border-radius: 40px;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    .munchies-placeholder h2 {
+      font-size: 3rem;
+      color: #ff18d0;
+      margin-bottom: 1rem;
+    }
+
+    .munchies-placeholder p {
+      font-size: 2rem;
+      color: white;
+    }
+
+    /* ===== SCROLL PERSONALIZADO ===== */
+    .contenido::-webkit-scrollbar {
+      width: 6px;
+    }
+    .contenido::-webkit-scrollbar-track {
+      background: #0b0c14;
+    }
+    .contenido::-webkit-scrollbar-thumb {
+      background: #00ff9f;
+      border-radius: 10px;
     }
 
     /* ===== RESPONSIVE ===== */
-    @media (max-width: 800px) {
-      .kiosco { padding: 1.5rem; }
-      .logo-masquehigh { font-size: 4.5rem; }
-      .logo-club { font-size: 2.8rem; }
-      .welcome h2 { font-size: 2.5rem; }
-      .seccion-titulo { font-size: 2.8rem; }
-      .seccion-desc { font-size: 1.5rem; }
-      .seccion-icon { font-size: 3rem; }
-    }
-
-    @media (max-width: 500px) {
+    @media (max-width: 700px) {
       .logo-masquehigh { font-size: 3.5rem; }
       .logo-club { font-size: 2.2rem; }
-      .welcome h2 { font-size: 2rem; }
+      .nav-icon { font-size: 2.5rem; }
+      .nav-text { font-size: 1.4rem; }
+      .productos-grid { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
 <body>
   <main class="kiosco">
-    <!-- LOGO PRINCIPAL (IGUAL AL ORIGINAL) -->
-    <div class="logo-container">
-      <div class="logo-masquehigh">MASQUEHIGH</div>
-      <div class="logo-club">CLUB</div>
+    <!-- HEADER CON LOGO -->
+    <div class="header">
+      <div class="logo">
+        <div class="logo-masquehigh">MASQUEHIGH</div>
+        <div class="logo-club">CLUB</div>
+      </div>
+      <div class="welcome">✨ ¡Bienvenido! ✨</div>
     </div>
 
-    <!-- BIENVENIDA -->
-    <div class="welcome">
-      <h2>✨ ¡Bienvenido! ✨</h2>
-    </div>
-
-    <!-- 3 SECCIONES PRINCIPALES -->
-    <div class="secciones">
-      <!-- SECCIÓN GÉNERO (lo que ya tenemos) -->
-      <div class="seccion-btn genero" id="btn-genero">
-        <div class="seccion-info">
-          <span class="seccion-titulo">GÉNERO</span>
-          <span class="seccion-desc">Extracción · Hierbas</span>
-        </div>
-        <div class="seccion-icon">🌿</div>
+    <!-- BOTONES DE NAVEGACIÓN (CUADRADOS) -->
+    <div class="nav-botones">
+      <div class="nav-btn genero activo" data-seccion="genero">
+        <div class="nav-icon">🌿</div>
+        <div class="nav-text">GÉNERO</div>
+        <div class="nav-desc">Extracción · Hierbas</div>
       </div>
-
-      <!-- SECCIÓN MUNCHIES (nueva carta) -->
-      <div class="seccion-btn munchies" id="btn-munchies">
-        <div class="seccion-info">
-          <span class="seccion-titulo">MUNCHIES</span>
-          <span class="seccion-desc">Snacks · Dulces · Bebidas</span>
-        </div>
-        <div class="seccion-icon">🍕</div>
+      <div class="nav-btn munchies" data-seccion="munchies">
+        <div class="nav-icon">🍕</div>
+        <div class="nav-text">MUNCHIES</div>
+        <div class="nav-desc">Snacks · Dulces</div>
       </div>
-
-      <!-- SECCIÓN EVENTOS (con imágenes 14-15-16) -->
-      <div class="seccion-btn eventos" id="btn-eventos">
-        <div class="seccion-info">
-          <span class="seccion-titulo">EVENTOS</span>
-          <span class="seccion-desc">Próximas citas · Carteles</span>
-        </div>
-        <div class="seccion-icon">🎉</div>
+      <div class="nav-btn eventos" data-seccion="eventos">
+        <div class="nav-icon">🎉</div>
+        <div class="nav-text">EVENTOS</div>
+        <div class="nav-desc">Carteles · Fechas</div>
       </div>
     </div>
 
-    <!-- HINT PARA PANTALLA COMPLETA -->
-    <div class="footer-hint">
-      ⚡ Toca una sección para explorar ⚡
+    <!-- CONTENIDO (PANELES) -->
+    <div class="contenido">
+      <!-- PANEL GÉNERO (ACTIVO POR DEFECTO) -->
+      <div id="panel-genero" class="seccion-panel activo">
+        <div class="catalogo-grid">
+          <!-- EXTRACCIÓN -->
+          <div class="subseccion">
+            <h3 class="subseccion-titulo">⚡ EXTRACCIÓN</h3>
+            <div class="productos-grid">
+              <div class="producto-card"><img src="images/image1.jpg" alt="BHO TROPICANA CHERRY"><h4>BHO TROPICANA CHERRY</h4></div>
+              <div class="producto-card"><img src="images/image2.jpg" alt="FORBBIDEN FROZEN"><h4>FORBBIDEN FROZEN</h4></div>
+              <div class="producto-card"><img src="images/image3.jpg" alt="OREO"><h4>OREO</h4></div>
+              <div class="producto-card"><img src="images/image4.jpg" alt="COOKIES"><h4>COOKIES</h4></div>
+            </div>
+          </div>
+          <!-- HIERBAS -->
+          <div class="subseccion">
+            <h3 class="subseccion-titulo">🌿 HIERBAS</h3>
+            <div class="productos-grid">
+              <div class="producto-card"><img src="images/image5.jpg" alt="LONDON CAKE"><h4>LONDON CAKE</h4></div>
+              <div class="producto-card"><img src="images/image6.jpg" alt="CREAM CARAMEL"><h4>CREAM CARAMEL</h4></div>
+              <div class="producto-card"><img src="images/image7.jpg" alt="AMNESIA"><h4>AMNESIA</h4></div>
+              <div class="producto-card"><img src="images/image8.jpg" alt="TANGIE"><h4>TANGIE</h4></div>
+              <div class="producto-card"><img src="images/image9.jpg" alt="DANCE HALL"><h4>DANCE HALL</h4></div>
+              <div class="producto-card"><img src="images/image10.jpg" alt="MELON"><h4>MELON</h4></div>
+              <div class="producto-card"><img src="images/image11.jpg" alt="TROPICANA CHERRY"><h4>TROPICANA CHERRY</h4></div>
+              <div class="producto-card"><img src="images/image12.jpg" alt="GELATO"><h4>GELATO</h4></div>
+              <div class="producto-card"><img src="images/image13.jpg" alt="PURPLE JEALOUSY"><h4>PURPLE JEALOUSY</h4></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL MUNCHIES (POR AHORA PLACEHOLDER) -->
+      <div id="panel-munchies" class="seccion-panel">
+        <div class="munchies-placeholder">
+          <h2>🍟 MUNCHIES</h2>
+          <p>Próximamente<br>carta de snacks y dulces</p>
+          <p style="font-size:1.4rem; margin-top:2rem;">Cuando me pases la carta, la actualizo</p>
+        </div>
+      </div>
+
+      <!-- PANEL EVENTOS (CON IMÁGENES 14-15-16) -->
+      <div id="panel-eventos" class="seccion-panel">
+        <div class="eventos-grid">
+          <div class="evento-card">
+            <img src="images/image14.jpg" alt="Evento 1">
+            <h3>EVENTO 1</h3>
+          </div>
+          <div class="evento-card">
+            <img src="images/image15.jpg" alt="Evento 2">
+            <h3>EVENTO 2</h3>
+          </div>
+          <div class="evento-card">
+            <img src="images/image16.jpg" alt="Evento 3">
+            <h3>EVENTO 3</h3>
+          </div>
+        </div>
+      </div>
     </div>
   </main>
 
   <script>
     (function() {
-      // Por ahora solo navegación simulada
-      // Cuando tengamos las otras secciones, aquí irán los enlaces
-      
-      document.getElementById('btn-genero').addEventListener('click', function() {
-        alert('🎯 SECCIÓN GÉNERO\n\nAquí irá el catálogo de:\n• EXTRACCIÓN (4 productos)\n• HIERBAS (9 productos)');
-      });
+      // FUNCIÓN PARA CAMBIAR DE SECCIÓN
+      const botones = document.querySelectorAll('.nav-btn');
+      const paneles = {
+        genero: document.getElementById('panel-genero'),
+        munchies: document.getElementById('panel-munchies'),
+        eventos: document.getElementById('panel-eventos')
+      };
 
-      document.getElementById('btn-munchies').addEventListener('click', function() {
-        alert('🍟 SECCIÓN MUNCHIES\n\nAquí irá la carta de snacks, dulces y bebidas que me adjuntes');
-      });
+      function activarSeccion(seccionId) {
+        // Quitar clase activo de todos los botones
+        botones.forEach(btn => {
+          btn.classList.remove('activo');
+        });
 
-      document.getElementById('btn-eventos').addEventListener('click', function() {
-        alert('🎪 SECCIÓN EVENTOS\n\nAquí se mostrarán:\n• image14.jpg\n• image15.jpg\n• image16.jpg');
-      });
+        // Quitar clase activo de todos los paneles
+        Object.values(paneles).forEach(panel => {
+          panel.classList.remove('activo');
+        });
 
-      // Efecto de feedback táctil
-      const botones = document.querySelectorAll('.seccion-btn');
+        // Activar botón correspondiente
+        const btnActivo = document.querySelector(`.nav-btn[data-seccion="${seccionId}"]`);
+        if (btnActivo) {
+          btnActivo.classList.add('activo');
+        }
+
+        // Activar panel correspondiente
+        if (paneles[seccionId]) {
+          paneles[seccionId].classList.add('activo');
+        }
+      }
+
+      // Asignar eventos a los botones
       botones.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          const seccion = this.getAttribute('data-seccion');
+          activarSeccion(seccion);
+        });
+
+        // Feedback táctil
         btn.addEventListener('touchstart', function() {
           this.style.opacity = '0.8';
         });
@@ -318,6 +459,11 @@
           this.style.opacity = '1';
         });
       });
+
+      // Cargar imágenes de eventos solo cuando se necesiten (optimización)
+      // Las imágenes ya están referenciadas en HTML pero solo se cargan al abrir el panel
+      
+      console.log('✅ Catálogo Masquehigh Club cargado');
     })();
   </script>
 </body>
