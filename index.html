@@ -35,9 +35,38 @@
       justify-content: center;
       align-items: center;
       padding: 8px;
+      position: relative;
     }
 
-    /* ===== CONTENEDOR PRINCIPAL ===== */
+    /* ===== MARCA DE AGUA (LOGO DETRÁS, SIN USAR CARPETA IMAGES) ===== */
+    body::before {
+      content: "MASQUEHIGH CLUB";
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-12deg) scale(1.2);
+      font-size: clamp(3rem, 15vw, 10rem);
+      font-weight: 900;
+      color: rgba(255, 24, 208, 0.08);
+      white-space: nowrap;
+      letter-spacing: 12px;
+      text-transform: uppercase;
+      pointer-events: none;
+      z-index: 1;
+      text-shadow: 0 0 20px rgba(0, 255, 159, 0.1);
+      border: 3px solid rgba(255, 255, 0, 0.05);
+      padding: 2rem 4rem;
+      border-radius: 80px;
+      backdrop-filter: blur(1px);
+      animation: floatLogo 20s infinite alternate ease-in-out;
+    }
+
+    @keyframes floatLogo {
+      0% { transform: translate(-50%, -50%) rotate(-12deg) scale(1.2); opacity: 0.08; }
+      100% { transform: translate(-48%, -52%) rotate(-8deg) scale(1.25); opacity: 0.12; }
+    }
+
+    /* ===== CONTENEDOR PRINCIPAL (encima del logo) ===== */
     .kiosco {
       width: 100%;
       max-width: 1280px;
@@ -50,6 +79,8 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      position: relative;
+      z-index: 10;
     }
 
     /* ===== HEADER CON LOGO GRANDE ===== */
@@ -194,7 +225,7 @@
       display: block;
     }
 
-    /* ===== GÉNERO (sin cambios) ===== */
+    /* ===== GÉNERO (con precios estilo "g") ===== */
     .catalogo-grid {
       display: flex;
       flex-direction: column;
@@ -219,7 +250,7 @@
 
     .productos-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
       gap: 1rem;
     }
 
@@ -253,9 +284,24 @@
       font-size: 1.2rem;
       color: white;
       text-shadow: 0 0 5px #00ff9f;
+      margin-bottom: 0.25rem;
     }
 
-    /* ===== MUNCHIES (nuevo estilo tipo carta) ===== */
+    /* Precio solo en género, estilo "g" */
+    .producto-precio {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #00ff9f;
+      text-shadow: 0 0 8px #00ff9f;
+      background: rgba(255, 24, 208, 0.2);
+      padding: 0.2rem 1rem;
+      border-radius: 30px;
+      border: 1px solid #ff18d0;
+      display: inline-block;
+      margin-top: 0.2rem;
+    }
+
+    /* ===== MUNCHIES (sin precios, solo la carta visual) ===== */
     .munchies-grid {
       display: flex;
       flex-direction: column;
@@ -315,29 +361,12 @@
       letter-spacing: 1px;
     }
 
-    .item-precio {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: #00ff9f;
-      text-shadow: 0 0 8px #00ff9f;
-      white-space: nowrap;
-      margin-left: 0.5rem;
+    /* Quitamos los precios de munchies (solo se ve el nombre y un separador decorativo) */
+    .item-munchi .item-precio {
+      display: none;  /* ocultamos cualquier resto de precio */
     }
 
-    .item-precio::before {
-      content: '·';
-      color: #ff18d0;
-      margin-right: 0.5rem;
-      font-size: 2rem;
-      vertical-align: middle;
-    }
-
-    /* Ajuste especial para monster y redbull que tienen 2.50€ */
-    .item-precio span {
-      font-size: 1.3rem;
-    }
-
-    /* Pie con la cuenta de instagram */
+    /* Pie con instagram */
     .munchies-footer {
       margin-top: 2rem;
       text-align: center;
@@ -354,7 +383,7 @@
       text-shadow: 0 0 8px #00ff9f;
     }
 
-    /* ===== EVENTOS (carteles sin texto) ===== */
+    /* ===== EVENTOS ===== */
     .eventos-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -436,64 +465,65 @@
 
     <!-- CONTENIDO -->
     <div class="contenido">
-      <!-- PANEL GÉNERO (idéntico) -->
+      <!-- PANEL GÉNERO (con precios g) -->
       <div id="panel-genero" class="panel activo">
         <div class="catalogo-grid">
           <!-- EXTRACCIÓN -->
           <div class="subseccion">
             <h3 class="subseccion-titulo">⚡ EXTRACCIÓN</h3>
             <div class="productos-grid">
-              <div class="producto-card"><img src="images/image1.jpg" alt="BHO TROPICANA CHERRY"><h4>BHO TROPICANA CHERRY</h4></div>
-              <div class="producto-card"><img src="images/image2.jpg" alt="FORBBIDEN FROZEN"><h4>FORBBIDEN FROZEN</h4></div>
-              <div class="producto-card"><img src="images/image3.jpg" alt="OREO"><h4>OREO</h4></div>
-              <div class="producto-card"><img src="images/image4.jpg" alt="COOKIES"><h4>COOKIES</h4></div>
+              <div class="producto-card"><img src="images/image1.jpg" alt="BHO TROPICANA CHERRY"><h4>BHO TROPICANA CHERRY</h4><div class="producto-precio">g</div></div>
+              <div class="producto-card"><img src="images/image2.jpg" alt="FORBBIDEN FROZEN"><h4>FORBBIDEN FROZEN</h4><div class="producto-precio">g</div></div>
+              <div class="producto-card"><img src="images/image3.jpg" alt="OREO"><h4>OREO</h4><div class="producto-precio">g</div></div>
+              <div class="producto-card"><img src="images/image4.jpg" alt="COOKIES"><h4>COOKIES</h4><div class="producto-precio">g</div></div>
             </div>
           </div>
           <!-- HIERBAS -->
           <div class="subseccion">
             <h3 class="subseccion-titulo">🌿 HIERBAS</h3>
             <div class="productos-grid">
-              <div class="producto-card"><img src="images/image5.jpg" alt="LONDON CAKE"><h4>LONDON CAKE</h4></div>
-              <div class="producto-card"><img src="images/image6.jpg" alt="CREAM CARAMEL"><h4>CREAM CARAMEL</h4></div>
-              <div class="producto-card"><img src="images/image7.jpg" alt="AMNESIA"><h4>AMNESIA</h4></div>
-              <div class="producto-card"><img src="images/image8.jpg" alt="TANGIE"><h4>TANGIE</h4></div>
-              <div class="producto-card"><img src="images/image9.jpg" alt="DANCE HALL"><h4>DANCE HALL</h4></div>
-              <div class="producto-card"><img src="images/image10.jpg" alt="MELON"><h4>MELON</h4></div>
-              <div class="producto-card"><img src="images/image11.jpg" alt="TROPICANA CHERRY"><h4>TROPICANA CHERRY</h4></div>
-              <div class="producto-card"><img src="images/image12.jpg" alt="GELATO"><h4>GELATO</h4></div>
-              <div class="producto-card"><img src="images/image13.jpg" alt="PURPLE JEALOUSY"><h4>PURPLE JEALOUSY</h4></div>
+              <div class="producto-card"><img src="images/image5.jpg" alt="LONDON CAKE"><h4>LONDON CAKE</h4><div class="producto-precio">g</div></div>
+              <div class="producto-card"><img src="images/image6.jpg" alt="CREAM CARAMEL"><h4>CREAM CARAMEL</h4><div class="producto-precio">g</div></div>
+              <div class="producto-card"><img src="images/image7.jpg" alt="AMNESIA"><h4>AMNESIA</h4><div class="producto-precio">g</div></div>
+              <div class="producto-card"><img src="images/image8.jpg" alt="TANGIE"><h4>TANGIE</h4><div class="producto-precio">g</div></div>
+              <div class="producto-card"><img src="images/image9.jpg" alt="DANCE HALL"><h4>DANCE HALL</h4><div class="producto-precio">g</div></div>
+              <div class="producto-card"><img src="images/image10.jpg" alt="MELON"><h4>MELON</h4><div class="producto-precio">g</div></div>
+              <div class="producto-card"><img src="images/image11.jpg" alt="TROPICANA CHERRY"><h4>TROPICANA CHERRY</h4><div class="producto-precio">g</div></div>
+              <div class="producto-card"><img src="images/image12.jpg" alt="GELATO"><h4>GELATO</h4><div class="producto-precio">g</div></div>
+              <div class="producto-card"><img src="images/image13.jpg" alt="PURPLE JEALOUSY"><h4>PURPLE JEALOUSY</h4><div class="producto-precio">g</div></div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- PANEL MUNCHIES (actualizado con carta real) -->
+      <!-- PANEL MUNCHIES (solo nombres, sin precios) -->
       <div id="panel-munchies" class="panel">
         <div class="munchies-grid">
           <!-- REFRESCOS (bebidas) -->
           <div class="munchies-categoria">
             <div class="categoria-titulo">🥤 REFRESCOS</div>
             <div class="items-lista">
-              <div class="item-munchi"><span class="item-nombre">AQUARIUS</span><span class="item-precio">2€</span></div>
-              <div class="item-munchi"><span class="item-nombre">COCACOLA</span><span class="item-precio">2€</span></div>
-              <div class="item-munchi"><span class="item-nombre">FANTA</span><span class="item-precio">2€</span></div>
-              <div class="item-munchi"><span class="item-nombre">MONSTER</span><span class="item-precio">2.50€</span></div>
-              <div class="item-munchi"><span class="item-nombre">NESTEA</span><span class="item-precio">2€</span></div>
-              <div class="item-munchi"><span class="item-nombre">AGUA</span><span class="item-precio">1.50€</span></div>
-              <div class="item-munchi"><span class="item-nombre">ESTRELLA</span><span class="item-precio">2€</span></div>
-              <div class="item-munchi"><span class="item-nombre">HEINEKEN</span><span class="item-precio">2€</span></div>
-              <div class="item-munchi"><span class="item-nombre">REDBULL</span><span class="item-precio">2.50€</span></div>
-              <div class="item-munchi"><span class="item-nombre">COMB. LATA</span><span class="item-precio">5€</span></div>
-          </div>
+              <div class="item-munchi"><span class="item-nombre">AQUARIUS</span></div>
+              <div class="item-munchi"><span class="item-nombre">COCACOLA</span></div>
+              <div class="item-munchi"><span class="item-nombre">FANTA</span></div>
+              <div class="item-munchi"><span class="item-nombre">MONSTER</span></div>
+              <div class="item-munchi"><span class="item-nombre">NESTEA</span></div>
+              <div class="item-munchi"><span class="item-nombre">AGUA</span></div>
+              <div class="item-munchi"><span class="item-nombre">ESTRELLA</span></div>
+              <div class="item-munchi"><span class="item-nombre">HEINEKEN</span></div>
+              <div class="item-munchi"><span class="item-nombre">REDBULL</span></div>
+              <div class="item-munchi"><span class="item-nombre">COMBINADO</span></div>
+              <div class="item-munchi"><span class="item-nombre">LATA</span></div>
+            </div>
           </div>
 
           <!-- PARA PICAR (comida) -->
           <div class="munchies-categoria">
             <div class="categoria-titulo">🍟 PARA PICAR</div>
             <div class="items-lista">
-              <div class="item-munchi"><span class="item-nombre">PATATAS</span><span class="item-precio">1.50€</span></div>
-              <div class="item-munchi"><span class="item-nombre">CHUCHES</span><span class="item-precio">1.50€</span></div>
-              <div class="item-munchi"><span class="item-nombre">PALOMITAS</span><span class="item-precio">1.50€</span></div>
+              <div class="item-munchi"><span class="item-nombre">PATATAS</span></div>
+              <div class="item-munchi"><span class="item-nombre">CHUCHES</span></div>
+              <div class="item-munchi"><span class="item-nombre">PALOMITAS</span></div>
             </div>
           </div>
 
@@ -504,7 +534,7 @@
         </div>
       </div>
 
-      <!-- PANEL EVENTOS (con image17 incluida) -->
+      <!-- PANEL EVENTOS (con image17) -->
       <div id="panel-eventos" class="panel">
         <div class="eventos-grid">
           <div class="evento-card"><img src="images/image14.jpg" alt="cartel evento"></div>
@@ -544,4 +574,3 @@
   </script>
 </body>
 </html>
-
