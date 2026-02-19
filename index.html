@@ -94,75 +94,76 @@
       opacity: 0.9;
     }
 
-    /* ===== NAVEGACIÓN (BOTONES CUADRADOS) ===== */
-    .nav-botones {
+    /* ===== BOTONES DE PESTAÑAS ===== */
+    .pestanas {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 1rem;
       padding: 1.5rem 2rem;
     }
 
-    .nav-btn {
+    .pestana {
       background: rgba(10, 10, 20, 0.9);
       border: 3px solid;
-      border-radius: 20px; /* Ligeramente redondeado pero cuadrado */
-      padding: 1.8rem 0.5rem;
+      border-radius: 20px;
+      padding: 1.5rem 0.5rem;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 0.8rem;
+      gap: 0.5rem;
       cursor: pointer;
       transition: all 0.2s ease;
       backdrop-filter: blur(5px);
-      aspect-ratio: 1 / 1; /* Hace que sean cuadrados perfectos */
+      aspect-ratio: 1 / 0.9;
       width: 100%;
     }
 
-    .nav-btn:active {
+    .pestana:active {
       transform: scale(0.95);
     }
 
-    .nav-btn.activo {
+    .pestana.activa {
       transform: scale(1.02);
       box-shadow: 0 0 30px currentColor;
+      border-width: 4px;
     }
 
-    .nav-btn.genero {
+    .pestana.genero {
       border-color: #00ff9f;
       color: #00ff9f;
     }
 
-    .nav-btn.munchies {
+    .pestana.munchies {
       border-color: #ff18d0;
       color: #ff18d0;
     }
 
-    .nav-btn.eventos {
+    .pestana.eventos {
       border-color: #ffff00;
       color: #ffff00;
     }
 
-    .nav-icon {
+    .pestana-icon {
       font-size: 3.5rem;
       filter: drop-shadow(0 0 10px currentColor);
     }
 
-    .nav-text {
+    .pestana-text {
       font-size: 1.8rem;
       font-weight: 700;
       text-transform: uppercase;
       text-shadow: 0 0 8px currentColor;
     }
 
-    .nav-desc {
+    .pestana-desc {
       font-size: 1.2rem;
       color: #ccccff;
       text-align: center;
       opacity: 0.8;
     }
 
-    /* ===== CONTENIDO DE LAS SECCIONES ===== */
+    /* ===== CONTENIDO DE LAS PESTAÑAS ===== */
     .contenido {
       flex: 1;
       overflow-y: auto;
@@ -171,16 +172,16 @@
       -webkit-overflow-scrolling: touch;
     }
 
-    /* Ocultar/mostrar secciones */
-    .seccion-panel {
+    /* Ocultar/mostrar paneles */
+    .panel {
       display: none;
     }
 
-    .seccion-panel.activo {
+    .panel.activo {
       display: block;
     }
 
-    /* ===== ESTILOS PARA GÉNERO (catálogo existente) ===== */
+    /* ===== GÉNERO (catálogo) ===== */
     .catalogo-grid {
       display: flex;
       flex-direction: column;
@@ -242,7 +243,7 @@
       text-shadow: 0 0 5px #00ff9f;
     }
 
-    /* ===== ESTILOS PARA EVENTOS (carteles) ===== */
+    /* ===== EVENTOS ===== */
     .eventos-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -276,7 +277,7 @@
       text-shadow: 0 0 10px #ffff00;
     }
 
-    /* ===== ESTILOS PARA MUNCHIES (placeholder) ===== */
+    /* ===== MUNCHIES (placeholder) ===== */
     .munchies-placeholder {
       background: rgba(255, 24, 208, 0.1);
       border: 3px dashed #ff18d0;
@@ -296,7 +297,7 @@
       color: white;
     }
 
-    /* ===== SCROLL PERSONALIZADO ===== */
+    /* ===== SCROLL ===== */
     .contenido::-webkit-scrollbar {
       width: 6px;
     }
@@ -308,52 +309,50 @@
       border-radius: 10px;
     }
 
-    /* ===== RESPONSIVE ===== */
     @media (max-width: 700px) {
       .logo-masquehigh { font-size: 3.5rem; }
       .logo-club { font-size: 2.2rem; }
-      .nav-icon { font-size: 2.5rem; }
-      .nav-text { font-size: 1.4rem; }
-      .productos-grid { grid-template-columns: repeat(2, 1fr); }
+      .pestana-icon { font-size: 2.5rem; }
+      .pestana-text { font-size: 1.4rem; }
     }
   </style>
 </head>
 <body>
   <main class="kiosco">
-    <!-- HEADER CON LOGO -->
+    <!-- HEADER CON LOGO Y BIENVENIDA -->
     <div class="header">
       <div class="logo">
         <div class="logo-masquehigh">MASQUEHIGH</div>
         <div class="logo-club">CLUB</div>
       </div>
-      <div class="welcome">✨ ¡Bienvenido! ✨</div>
+      <div class="welcome">✨ ¡Bienvenido a Masquehigh Club! ✨</div>
     </div>
 
-    <!-- BOTONES DE NAVEGACIÓN (CUADRADOS) -->
-    <div class="nav-botones">
-      <div class="nav-btn genero activo" data-seccion="genero">
-        <div class="nav-icon">🌿</div>
-        <div class="nav-text">GÉNERO</div>
-        <div class="nav-desc">Extracción · Hierbas</div>
+    <!-- BOTONES DE PESTAÑAS (AL HACER CLIC SE ABRE LA SECCIÓN) -->
+    <div class="pestanas">
+      <div class="pestana genero activa" data-pestana="genero">
+        <div class="pestana-icon">🌿</div>
+        <div class="pestana-text">GÉNERO</div>
+        <div class="pestana-desc">Extracción · Hierbas</div>
       </div>
-      <div class="nav-btn munchies" data-seccion="munchies">
-        <div class="nav-icon">🍕</div>
-        <div class="nav-text">MUNCHIES</div>
-        <div class="nav-desc">Snacks · Dulces</div>
+      <div class="pestana munchies" data-pestana="munchies">
+        <div class="pestana-icon">🍕</div>
+        <div class="pestana-text">MUNCHIES</div>
+        <div class="pestana-desc">Snacks · Dulces</div>
       </div>
-      <div class="nav-btn eventos" data-seccion="eventos">
-        <div class="nav-icon">🎉</div>
-        <div class="nav-text">EVENTOS</div>
-        <div class="nav-desc">Carteles · Fechas</div>
+      <div class="pestana eventos" data-pestana="eventos">
+        <div class="pestana-icon">🎉</div>
+        <div class="pestana-text">EVENTOS</div>
+        <div class="pestana-desc">Carteles · Fechas</div>
       </div>
     </div>
 
-    <!-- CONTENIDO (PANELES) -->
+    <!-- CONTENIDO (SE ABRE AL HACER CLIC EN LA PESTAÑA) -->
     <div class="contenido">
-      <!-- PANEL GÉNERO (ACTIVO POR DEFECTO) -->
-      <div id="panel-genero" class="seccion-panel activo">
+      <!-- PANEL GÉNERO -->
+      <div id="panel-genero" class="panel activo">
         <div class="catalogo-grid">
-          <!-- EXTRACCIÓN -->
+          <!-- EXTRACCIÓN (4) -->
           <div class="subseccion">
             <h3 class="subseccion-titulo">⚡ EXTRACCIÓN</h3>
             <div class="productos-grid">
@@ -363,7 +362,7 @@
               <div class="producto-card"><img src="images/image4.jpg" alt="COOKIES"><h4>COOKIES</h4></div>
             </div>
           </div>
-          <!-- HIERBAS -->
+          <!-- HIERBAS (9) -->
           <div class="subseccion">
             <h3 class="subseccion-titulo">🌿 HIERBAS</h3>
             <div class="productos-grid">
@@ -381,17 +380,17 @@
         </div>
       </div>
 
-      <!-- PANEL MUNCHIES (POR AHORA PLACEHOLDER) -->
-      <div id="panel-munchies" class="seccion-panel">
+      <!-- PANEL MUNCHIES (se abre al hacer clic) -->
+      <div id="panel-munchies" class="panel">
         <div class="munchies-placeholder">
           <h2>🍟 MUNCHIES</h2>
           <p>Próximamente<br>carta de snacks y dulces</p>
-          <p style="font-size:1.4rem; margin-top:2rem;">Cuando me pases la carta, la actualizo</p>
+          <p style="font-size:1.4rem; margin-top:2rem; color:#ff18d0;">Esperando la carta para actualizar</p>
         </div>
       </div>
 
-      <!-- PANEL EVENTOS (CON IMÁGENES 14-15-16) -->
-      <div id="panel-eventos" class="seccion-panel">
+      <!-- PANEL EVENTOS (se abre al hacer clic) -->
+      <div id="panel-eventos" class="panel">
         <div class="eventos-grid">
           <div class="evento-card">
             <img src="images/image14.jpg" alt="Evento 1">
@@ -412,58 +411,45 @@
 
   <script>
     (function() {
-      // FUNCIÓN PARA CAMBIAR DE SECCIÓN
-      const botones = document.querySelectorAll('.nav-btn');
+      // FUNCIÓN PARA ABRIR PESTAÑA AL HACER CLIC
+      const pestanas = document.querySelectorAll('.pestana');
       const paneles = {
         genero: document.getElementById('panel-genero'),
         munchies: document.getElementById('panel-munchies'),
         eventos: document.getElementById('panel-eventos')
       };
 
-      function activarSeccion(seccionId) {
-        // Quitar clase activo de todos los botones
-        botones.forEach(btn => {
-          btn.classList.remove('activo');
-        });
+      function abrirPestana(pestanaId) {
+        // Quitar clase activa de todas las pestañas
+        pestanas.forEach(p => p.classList.remove('activa'));
 
-        // Quitar clase activo de todos los paneles
+        // Quitar clase activa de todos los paneles
         Object.values(paneles).forEach(panel => {
           panel.classList.remove('activo');
         });
 
-        // Activar botón correspondiente
-        const btnActivo = document.querySelector(`.nav-btn[data-seccion="${seccionId}"]`);
-        if (btnActivo) {
-          btnActivo.classList.add('activo');
+        // Activar la pestaña seleccionada
+        const pestanaActiva = document.querySelector(`.pestana[data-pestana="${pestanaId}"]`);
+        if (pestanaActiva) {
+          pestanaActiva.classList.add('activa');
         }
 
-        // Activar panel correspondiente
-        if (paneles[seccionId]) {
-          paneles[seccionId].classList.add('activo');
+        // Activar el panel correspondiente
+        if (paneles[pestanaId]) {
+          paneles[pestanaId].classList.add('activo');
         }
       }
 
-      // Asignar eventos a los botones
-      botones.forEach(btn => {
-        btn.addEventListener('click', function(e) {
+      // Asignar evento click a cada pestaña
+      pestanas.forEach(pestana => {
+        pestana.addEventListener('click', function(e) {
           e.preventDefault();
-          const seccion = this.getAttribute('data-seccion');
-          activarSeccion(seccion);
-        });
-
-        // Feedback táctil
-        btn.addEventListener('touchstart', function() {
-          this.style.opacity = '0.8';
-        });
-        btn.addEventListener('touchend', function() {
-          this.style.opacity = '1';
+          const pestanaId = this.getAttribute('data-pestana');
+          abrirPestana(pestanaId);
         });
       });
 
-      // Cargar imágenes de eventos solo cuando se necesiten (optimización)
-      // Las imágenes ya están referenciadas en HTML pero solo se cargan al abrir el panel
-      
-      console.log('✅ Catálogo Masquehigh Club cargado');
+      console.log('✅ Pestañas funcionales: al hacer clic se abre la sección');
     })();
   </script>
 </body>
