@@ -1,0 +1,18 @@
+{
+  "name": "Masquehigh Club Catálogo",
+  "short_name": "Masquehigh",
+  "description": "Catálogo interactivo de Masquehigh Club",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0b0c14",
+  "theme_color": "#0b0c14",
+  "orientation": "landscape",
+  "icons": [
+    {
+      "src": "images/logo_app.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
