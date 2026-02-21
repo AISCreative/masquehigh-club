@@ -12,125 +12,166 @@
   
   <title>Masquehigh Club · Catálogo</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; -webkit-tap-highlight-color: transparent; }
-    html, body { width: 100%; height: 100%; overflow: hidden; background: #0b0c14; touch-action: pan-y; user-select: none; }
-    body { background: radial-gradient(circle at 30% 30%, #1a2a3a 0%, #030408 100%); display: flex; justify-content: center; align-items: center; padding: 10px; }
-
-    .kiosco {
-      width: 100%; max-width: 1280px; height: 100%;
-      background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px);
-      border: 2px solid #00ff9f; border-radius: 30px;
-      display: flex; flex-direction: column; overflow: hidden; position: relative;
-    }
-
-    .header { padding: 1.2rem; text-align: center; border-bottom: 2px solid #ff18d0; }
-    .logo-masquehigh { font-size: clamp(2rem, 8vw, 3.5rem); font-weight: 900; color: #00ff9f; text-shadow: 0 0 20px #00ff9f; line-height: 1; }
-    .logo-club { font-size: clamp(1.5rem, 5vw, 2.5rem); letter-spacing: 10px; color: #ff44e0; }
-
-    .pestanas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 12px; }
-    .pestana { 
-      background: #0a0a14; border: 2px solid #333; border-radius: 15px; padding: 12px;
-      text-align: center; color: #fff; cursor: pointer; font-weight: bold; font-size: 1.1rem;
-    }
-    .pestana.activa[data-pestana="genero"] { border-color: #00ff9f; color: #00ff9f; box-shadow: 0 0 10px #00ff9f66; }
-    .pestana.activa[data-pestana="munchies"] { border-color: #ff18d0; color: #ff18d0; box-shadow: 0 0 10px #ff18d066; }
-    .pestana.activa[data-pestana="eventos"] { border-color: #ffff00; color: #ffff00; box-shadow: 0 0 10px #ffff0066; }
-
-    .contenido { flex: 1; overflow-y: auto; padding: 15px; -webkit-overflow-scrolling: touch; }
+    /* Estilos originales preservados */
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #0b0c14; }
+    body { background: radial-gradient(circle at 30% 30%, #1a2a3a 0%, #030408 100%); display: flex; justify-content: center; align-items: center; padding: 8px; position: relative; }
+    body::before { content: "MASQUEHIGH CLUB"; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-12deg) scale(1.2); font-size: clamp(3rem, 15vw, 10rem); font-weight: 900; color: rgba(255, 24, 208, 0.08); white-space: nowrap; letter-spacing: 12px; text-transform: uppercase; pointer-events: none; z-index: 1; animation: floatLogo 20s infinite alternate ease-in-out; }
+    @keyframes floatLogo { 0% { transform: translate(-50%, -50%) rotate(-12deg) scale(1.2); opacity: 0.08; } 100% { transform: translate(-48%, -52%) rotate(-8deg) scale(1.25); opacity: 0.12; } }
+    .kiosco { width: 100%; max-width: 1280px; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); border: 2px solid #00ff9f; border-radius: 30px; box-shadow: 0 0 40px #00ff9f66; display: flex; flex-direction: column; overflow: hidden; position: relative; z-index: 10; }
+    .header { padding: 1.5rem 1.5rem 0.8rem; text-align: center; border-bottom: 2px solid #ff18d0; }
+    .logo-masquehigh { font-size: 4.8rem; font-weight: 900; color: #00ff9f; text-shadow: 0 0 25px #00ff9f; line-height: 1.1; }
+    .logo-club { font-size: 3.5rem; font-weight: 900; letter-spacing: 12px; color: #ff44e0; margin-top: -0.5rem; }
+    .welcome { font-size: 1.6rem; color: #ffffff; background: linear-gradient(90deg, transparent, rgba(255, 24, 208, 0.2), transparent); padding: 0.3rem 1rem; border-radius: 40px; display: inline-block; }
+    .pestanas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; padding: 0.8rem 1.5rem; }
+    .pestana { background: rgba(10, 10, 20, 0.9); border: 2px solid; border-radius: 15px; padding: 0.7rem 0.2rem; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
+    .pestana.genero { border-color: #00ff9f; color: #00ff9f; }
+    .pestana.munchies { border-color: #ff18d0; color: #ff18d0; }
+    .pestana.eventos { border-color: #ffff00; color: #ffff00; }
+    .pestana.activa { transform: scale(1.02); box-shadow: 0 0 20px currentColor; border-width: 3px; }
+    .pestana-icon { font-size: 2.2rem; }
+    .pestana-text { font-size: 1.3rem; font-weight: 700; }
+    .contenido { flex: 1; overflow-y: auto; padding: 1rem 1.5rem; }
     .panel { display: none; }
     .panel.activo { display: block; }
-
-    .subseccion-titulo { color: #ff18d0; font-size: 1.6rem; margin: 15px 0; border-left: 5px solid #00ff9f; padding-left: 10px; text-transform: uppercase; }
-    .productos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
-    .producto-card { background: #0d0f1a; border: 1px solid #333; border-radius: 20px; padding: 12px; text-align: center; }
-    .producto-card img { width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 2px solid #00ff9f; margin-bottom: 8px; }
-    .producto-card h4 { color: white; font-size: 0.95rem; margin-bottom: 8px; min-height: 2.4em; display: flex; align-items: center; justify-content: center; }
-    .precio { color: #00ff9f; font-weight: bold; background: rgba(0,255,159,0.1); padding: 4px 12px; border-radius: 20px; border: 1px solid #00ff9f; display: inline-block; }
-
-    .munchies-cat { background: rgba(255, 24, 208, 0.05); border: 1px solid #ff18d0; border-radius: 20px; padding: 15px; margin-bottom: 15px; }
-    .munchi-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #333; color: white; font-size: 1.1rem; }
-
-    .eventos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
-    .eventos-grid img { width: 100%; border-radius: 15px; border: 2px solid #ffff00; display: block; }
+    .subseccion { background: rgba(0, 0, 0, 0.5); border: 1px solid #ff18d0; border-radius: 20px; padding: 1rem; margin-bottom: 1.2rem; }
+    .subseccion-titulo { font-size: 2rem; color: #ff18d0; text-shadow: 0 0 10px #ff18d0; margin-bottom: 1rem; padding-left: 0.8rem; border-left: 6px solid #00ff9f; }
+    .productos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
+    .producto-card { background: #0d0f1a; border: 2px solid #3a2b4a; border-radius: 18px; padding: 0.8rem 0.5rem; display: flex; flex-direction: column; align-items: center; text-align: center; }
+    .producto-card img { width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 3px solid #00ff9f; box-shadow: 0 0 0 2px #ff18d0; margin-bottom: 0.5rem; }
+    .producto-card h4 { font-size: 1.2rem; color: white; text-shadow: 0 0 5px #00ff9f; margin-bottom: 0.25rem; }
+    .producto-precio { font-size: 1.3rem; font-weight: 800; color: #00ff9f; background: rgba(255, 24, 208, 0.2); padding: 0.2rem 1rem; border-radius: 30px; border: 1px solid #ff18d0; display: inline-block; }
+    .munchies-categoria { background: rgba(20, 5, 25, 0.7); border: 2px solid #ff18d0; border-radius: 30px; padding: 1.5rem 1.2rem; margin-bottom: 1.5rem; }
+    .categoria-titulo { font-size: 2.6rem; color: #ff18d0; text-shadow: 0 0 15px #ff18d0; margin-bottom: 1.5rem; border-bottom: 3px dotted #00ff9f; padding-bottom: 0.5rem; display: inline-block; }
+    .items-lista { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.2rem; }
+    .item-munchi { display: flex; justify-content: space-between; align-items: center; background: rgba(0, 0, 0, 0.6); padding: 0.8rem 1.2rem; border-radius: 60px; border: 1px solid #00ff9f; }
+    .item-nombre { font-size: 1.4rem; color: white; text-transform: uppercase; }
+    .item-precio { font-size: 1.5rem; font-weight: 800; color: #00ff9f; }
+    .eventos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+    .evento-card img { width: 100%; border-radius: 20px; border: 3px solid #ffff00; }
   </style>
 </head>
 <body>
-  <div class="kiosco">
+  <main class="kiosco">
     <div class="header">
-      <div class="logo-masquehigh">MASQUEHIGH</div>
-      <div class="logo-club">CLUB</div>
+      <div class="logo">
+        <div class="logo-masquehigh">MASQUEHIGH</div>
+        <div class="logo-club">CLUB</div>
+      </div>
+      <div class="welcome">✨ Bienvenido a Masquehigh Club ✨</div>
     </div>
 
     <div class="pestanas">
-      <div class="pestana activa" data-pestana="genero">🌿 GÉNERO</div>
-      <div class="pestana" data-pestana="munchies">🍕 MUNCHIES</div>
-      <div class="pestana" data-pestana="eventos">🎉 EVENTOS</div>
+      <div class="pestana genero activa" data-pestana="genero">
+        <div class="pestana-icon">🌿</div>
+        <div class="pestana-text">GÉNERO</div>
+      </div>
+      <div class="pestana munchies" data-pestana="munchies">
+        <div class="pestana-icon">🍕</div>
+        <div class="pestana-text">MUNCHIES</div>
+      </div>
+      <div class="pestana eventos" data-pestana="eventos">
+        <div class="pestana-icon">🎉</div>
+        <div class="pestana-text">EVENTOS</div>
+      </div>
     </div>
 
     <div class="contenido">
       <div id="panel-genero" class="panel activo">
-        <h3 class="subseccion-titulo">⚡ EXTRACCIÓN</h3>
-        <div class="productos-grid">
-          <div class="producto-card"><img src="images/image1.jpg"><h4>BHO TROPICANA</h4><span class="precio">28€/g</span></div>
-          <div class="producto-card"><img src="images/image2.jpg"><h4>FORBBIDEN FROZEN</h4><span class="precio">8€/g</span></div>
-          <div class="producto-card"><img src="images/image3.jpg"><h4>OREO</h4><span class="precio">6€/g</span></div>
-          <div class="producto-card"><img src="images/image4.jpg"><h4>COOKIES</h4><span class="precio">5€/g</span></div>
-        </div>
-        
-        <h3 class="subseccion-titulo">🌿 HIERBAS</h3>
-        <div class="productos-grid">
-          <div class="producto-card"><img src="images/image5.jpg"><h4>LONDON CAKE</h4><span class="precio">8€/g</span></div>
-          <div class="producto-card"><img src="images/image6.jpg"><h4>CREAM CARAMEL</h4><span class="precio">6€/g</span></div>
-          <div class="producto-card"><img src="images/image7.jpg"><h4>AMNESIA</h4><span class="precio">4€/g</span></div>
-          <div class="producto-card"><img src="images/image8.jpg"><h4>TANGIE</h4><span class="precio">7€/g</span></div>
-          <div class="producto-card"><img src="images/image9.jpg"><h4>DANCE HALL</h4><span class="precio">6€/g</span></div>
-          <div class="producto-card"><img src="images/image10.jpg"><h4>MELON</h4><span class="precio">5€/g</span></div>
-          <div class="producto-card"><img src="images/image11.jpg"><h4>TROPICANA CHERRY</h4><span class="precio">8€/g</span></div>
-          <div class="producto-card"><img src="images/image12.jpg"><h4>GELATOxPURPLE</h4><span class="precio">7€/g</span></div>
-          <div class="producto-card"><img src="images/image13.jpg"><h4>JEALOUSY</h4><span class="precio">7€/g</span></div>
+        <div class="catalogo-grid">
+          <div class="subseccion">
+            <h3 class="subseccion-titulo">⚡ EXTRACCIÓN</h3>
+            <div class="productos-grid">
+              <div class="producto-card"><img src="images/image1.jpg"><h4>BHO TROPICANA CHERRY</h4><div class="producto-precio">28€/g</div></div>
+              <div class="producto-card"><img src="images/image2.jpg"><h4>FORBBIDEN FROZEN</h4><div class="producto-precio">8€/g</div></div>
+              <div class="producto-card"><img src="images/image3.jpg"><h4>OREO</h4><div class="producto-precio">6€/g</div></div>
+              <div class="producto-card"><img src="images/image4.jpg"><h4>COOKIES</h4><div class="producto-precio">5€/g</div></div>
+            </div>
+          </div>
+          <div class="subseccion">
+            <h3 class="subseccion-titulo">🌿 HIERBAS</h3>
+            <div class="productos-grid">
+              <div class="producto-card"><img src="images/image5.jpg"><h4>LONDON CAKE</h4><div class="producto-precio">8€/g</div></div>
+              <div class="producto-card"><img src="images/image6.jpg"><h4>CREAM CARAMEL</h4><div class="producto-precio">6€/g</div></div>
+              <div class="producto-card"><img src="images/image7.jpg"><h4>AMNESIA</h4><div class="producto-precio">4€/g</div></div>
+              <div class="producto-card"><img src="images/image8.jpg"><h4>TANGIE</h4><div class="producto-precio">7€/g</div></div>
+              <div class="producto-card"><img src="images/image9.jpg"><h4>DANCE HALL</h4><div class="producto-precio">6€/g</div></div>
+              <div class="producto-card"><img src="images/image10.jpg"><h4>MELON</h4><div class="producto-precio">5€/g</div></div>
+              <div class="producto-card"><img src="images/image11.jpg"><h4>TROPICANA CHERRY</h4><div class="producto-precio">8€/g</div></div>
+              <div class="producto-card"><img src="images/image12.jpg"><h4>GELATOxPURPLE</h4><div class="producto-precio">7€/g</div></div>
+              <div class="producto-card"><img src="images/image13.jpg"><h4>JEALOUSY</h4><div class="producto-precio">7€/g</div></div>
+            </div>
+          </div>
         </div>
       </div>
 
       <div id="panel-munchies" class="panel">
-        <div class="munchies-cat">
-          <h2 style="color:#00ff9f; margin-bottom:10px;">🥤 BEBIDAS</h2>
-          <div class="munchi-item"><span>REFRESCOS / NESTEA</span><span>2€</span></div>
-          <div class="munchi-item"><span>MONSTER / REDBULL</span><span>2.50€</span></div>
-          <div class="munchi-item"><span>AGUA</span><span>1.50€</span></div>
-          <div class="munchi-item"><span>CERVEZA</span><span>2€</span></div>
-        </div>
-        <div class="munchies-cat">
-          <h2 style="color:#00ff9f; margin-bottom:10px;">🍟 SNACKS</h2>
-          <div class="munchi-item"><span>PATATAS / CHUCHES</span><span>1.50€</span></div>
+        <div class="munchies-grid">
+          <div class="munchies-categoria">
+            <div class="categoria-titulo">🥤 REFRESCOS</div>
+            <div class="items-lista">
+              <div class="item-munchi"><span class="item-nombre">AQUARIUS</span><span class="item-precio">2€</span></div>
+              <div class="item-munchi"><span class="item-nombre">COCACOLA</span><span class="item-precio">2€</span></div>
+              <div class="item-munchi"><span class="item-nombre">FANTA</span><span class="item-precio">2€</span></div>
+              <div class="item-munchi"><span class="item-nombre">MONSTER</span><span class="item-precio">2.50€</span></div>
+              <div class="item-munchi"><span class="item-nombre">NESTEA</span><span class="item-precio">2€</span></div>
+              <div class="item-munchi"><span class="item-nombre">AGUA</span><span class="item-precio">1.50€</span></div>
+              <div class="item-munchi"><span class="item-nombre">ESTRELLA</span><span class="item-precio">2€</span></div>
+              <div class="item-munchi"><span class="item-nombre">HEINEKEN</span><span class="item-precio">2€</span></div>
+              <div class="item-munchi"><span class="item-nombre">REDBULL</span><span class="item-precio">2.50€</span></div>
+              <div class="item-munchi"><span class="item-nombre">COMB.LATA</span><span class="item-precio">5€</span></div>
+            </div>
+          </div>
+          <div class="munchies-categoria">
+            <div class="categoria-titulo">🍟 PARA PICAR</div>
+            <div class="items-lista">
+              <div class="item-munchi"><span class="item-nombre">PATATAS</span><span class="item-precio">1.50€</span></div>
+              <div class="item-munchi"><span class="item-nombre">CHUCHES</span><span class="item-precio">1.50€</span></div>
+              <div class="item-munchi"><span class="item-nombre">PALOMITAS</span><span class="item-precio">1.50€</span></div>
+            </div>
+          </div>
         </div>
       </div>
 
       <div id="panel-eventos" class="panel">
         <div class="eventos-grid">
-          <img src="images/image14.jpg">
-          <img src="images/image15.jpg">
-          <img src="images/image16.jpg">
-          <img src="images/image17.jpg">
+          <div class="evento-card"><img src="images/image14.jpg"></div>
+          <div class="evento-card"><img src="images/image15.jpg"></div>
+          <div class="evento-card"><img src="images/image16.jpg"></div>
+          <div class="evento-card"><img src="images/image17.jpg"></div>
         </div>
       </div>
     </div>
-  </div>
+  </main>
 
   <script>
-    const tabs = document.querySelectorAll('.pestana');
-    const panels = document.querySelectorAll('.panel');
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('activa'));
-        panels.forEach(p => p.classList.remove('activo'));
-        tab.classList.add('activa');
-        document.getElementById('panel-' + tab.dataset.pestana).classList.add('activo');
+    (function() {
+      const pestanas = document.querySelectorAll('.pestana');
+      const paneles = {
+        genero: document.getElementById('panel-genero'),
+        munchies: document.getElementById('panel-munchies'),
+        eventos: document.getElementById('panel-eventos')
+      };
+
+      function abrirPestana(pestanaId) {
+        pestanas.forEach(p => p.classList.remove('activa'));
+        Object.values(paneles).forEach(panel => panel.classList.remove('activo'));
+        const pestanaActiva = document.querySelector(`.pestana[data-pestana="${pestanaId}"]`);
+        if (pestanaActiva) pestanaActiva.classList.add('activa');
+        if (paneles[pestanaId]) paneles[pestanaId].classList.add('activo');
+      }
+
+      pestanas.forEach(p => {
+        p.addEventListener('click', (e) => {
+          e.preventDefault();
+          abrirPestana(p.getAttribute('data-pestana'));
+        });
       });
-    });
+    })();
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').then(() => console.log("SW OK"));
+        navigator.serviceWorker.register('./sw.js');
       });
     }
   </script>
