@@ -41,6 +41,9 @@
     .producto-card img { width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 3px solid #00ff9f; box-shadow: 0 0 0 2px #ff18d0; margin-bottom: 0.5rem; }
     .producto-card h4 { font-size: 1.2rem; color: white; text-shadow: 0 0 5px #00ff9f; margin-bottom: 0.25rem; }
     .producto-precio { font-size: 1.3rem; font-weight: 800; color: #00ff9f; background: rgba(255, 24, 208, 0.2); padding: 0.2rem 1rem; border-radius: 30px; border: 1px solid #ff18d0; display: inline-block; }
+    /* Estilo para productos sin imagen */
+    .producto-card.sin-imagen { background: linear-gradient(145deg, #0d0f1a, #1a1a2a); border: 2px solid #ffff00; min-height: 120px; justify-content: center; }
+    .producto-card.sin-imagen h4 { font-size: 1.5rem; margin-bottom: 0.8rem; color: #ffff00; text-shadow: 0 0 10px #ffff00; }
     .munchies-categoria { background: rgba(20, 5, 25, 0.7); border: 2px solid #ff18d0; border-radius: 30px; padding: 1.5rem 1.2rem; margin-bottom: 1.5rem; }
     .categoria-titulo { font-size: 2.6rem; color: #ff18d0; text-shadow: 0 0 15px #ff18d0; margin-bottom: 1.5rem; border-bottom: 3px dotted #00ff9f; padding-bottom: 0.5rem; display: inline-block; }
     .items-lista { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.2rem; }
@@ -86,6 +89,8 @@
               <div class="producto-card"><img src="images/image2.jpg"><h4>FORBBIDEN FROZEN</h4><div class="producto-precio">8€/g</div></div>
               <div class="producto-card"><img src="images/image3.jpg"><h4>OREO</h4><div class="producto-precio">6€/g</div></div>
               <div class="producto-card"><img src="images/image4.jpg"><h4>COOKIES</h4><div class="producto-precio">5€/g</div></div>
+              <!-- NUEVO: GORILA -->
+              <div class="producto-card"><img src="images/gorila.jpg"><h4>GORILA</h4><div class="producto-precio">Precio</div></div>
             </div>
           </div>
           <div class="subseccion">
@@ -100,6 +105,20 @@
               <div class="producto-card"><img src="images/image11.jpg"><h4>TROPICANA CHERRY</h4><div class="producto-precio">8€/g</div></div>
               <div class="producto-card"><img src="images/image12.jpg"><h4>GELATOxPURPLE</h4><div class="producto-precio">7€/g</div></div>
               <div class="producto-card"><img src="images/image13.jpg"><h4>JEALOUSY</h4><div class="producto-precio">7€/g</div></div>
+            </div>
+          </div>
+          <!-- NUEVA SECCIÓN: PORROS LIADOS (SIN IMAGEN) -->
+          <div class="subseccion">
+            <h3 class="subseccion-titulo">🚬 PORROS LIADOS</h3>
+            <div class="productos-grid">
+              <div class="producto-card sin-imagen">
+                <h4>CRITICAL x GORILA</h4>
+                <div class="producto-precio">1x3€ | 2x5€</div>
+              </div>
+              <div class="producto-card sin-imagen">
+                <h4>MAC 1</h4>
+                <div class="producto-precio">1x3€ | 2x5€</div>
+              </div>
             </div>
           </div>
         </div>
@@ -144,7 +163,57 @@
     </div>
   </main>
 
+  <!-- PANEL DE ADMINISTRACIÓN PARA TABLET - CONTRASEÑA: situs123 -->
+  <div style="position: fixed; bottom: 30px; right: 30px; z-index: 2000;">
+    <button id="btn-admin" onclick="mostrarLogin()" style="width: 70px; height: 70px; border-radius: 50%; background: #00ff9f; border: 4px solid #ff18d0; color: black; font-size: 30px; box-shadow: 0 0 30px #00ff9f; cursor: pointer;">⚙️</button>
+  </div>
+
+  <!-- PANEL LOGIN -->
+  <div id="panel-login" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2001; align-items: center; justify-content: center;">
+    <div style="background: #0b0c14; border: 4px solid #00ff9f; border-radius: 40px; padding: 40px; width: 90%; max-width: 500px; box-shadow: 0 0 60px #ff18d0;">
+      <h2 style="color: #00ff9f; text-align: center; font-size: 3rem; margin-bottom: 30px;">🔐 ADMIN</h2>
+      <input type="password" id="login-password" placeholder="Contraseña" style="width: 100%; padding: 25px; font-size: 2rem; background: #1a1a2a; border: 3px solid #ff18d0; border-radius: 30px; color: white; margin-bottom: 30px; text-align: center;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <button onclick="comprobarLogin()" style="background: #00ff9f; border: none; border-radius: 30px; padding: 25px; font-size: 2rem; font-weight: bold; cursor: pointer;">ENTRAR</button>
+        <button onclick="cerrarLogin()" style="background: #ff18d0; border: none; border-radius: 30px; padding: 25px; font-size: 2rem; font-weight: bold; color: white; cursor: pointer;">CERRAR</button>
+      </div>
+      <p id="login-error" style="color: #ff18d0; text-align: center; font-size: 1.8rem; margin-top: 20px; display: none;">❌ Contraseña incorrecta</p>
+    </div>
+  </div>
+
+  <!-- PANEL ADMIN PRINCIPAL -->
+  <div id="panel-admin" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0b0c14; z-index: 2002; overflow-y: auto; padding: 30px;">
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 4px solid #00ff9f; padding-bottom: 20px;">
+      <h1 style="color: #00ff9f; font-size: 3.5rem;">✏️ EDITAR CATÁLOGO</h1>
+      <button onclick="cerrarAdmin()" style="background: #ff18d0; border: none; border-radius: 60px; padding: 20px 40px; font-size: 2.2rem; color: white; cursor: pointer;">CERRAR</button>
+    </div>
+    
+    <div style="display: flex; gap: 20px; margin-bottom: 30px;">
+      <button id="admin-tab-productos" onclick="cambiarTabAdmin('productos')" style="flex: 1; background: #00ff9f; border: none; border-radius: 30px; padding: 20px; font-size: 2.2rem; font-weight: bold; cursor: pointer;">📦 PRODUCTOS</button>
+      <button id="admin-tab-munchies" onclick="cambiarTabAdmin('munchies')" style="flex: 1; background: #333; border: none; border-radius: 30px; padding: 20px; font-size: 2.2rem; color: white; cursor: pointer;">🍺 MUNCHIES</button>
+    </div>
+    
+    <div id="admin-productos" style="display: block;">
+      <div id="productos-editables" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px;"></div>
+      <button onclick="anadirProducto()" style="width: 100%; background: #00ff9f; border: none; border-radius: 40px; padding: 30px; font-size: 2.5rem; margin-top: 30px; cursor: pointer;">➕ AÑADIR NUEVO PRODUCTO</button>
+    </div>
+    
+    <div id="admin-munchies" style="display: none;">
+      <div id="munchies-editables" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px;"></div>
+      <button onclick="anadirMunchi()" style="width: 100%; background: #ff18d0; border: none; border-radius: 40px; padding: 30px; font-size: 2.5rem; margin-top: 30px; color: white; cursor: pointer;">➕ AÑADIR NUEVO MUNCHI</button>
+    </div>
+    
+    <div style="position: sticky; bottom: 30px; margin-top: 40px;">
+      <button onclick="guardarTodo()" style="width: 100%; background: #00ff9f; border: 4px solid #ff18d0; border-radius: 60px; padding: 30px; font-size: 3rem; font-weight: bold; box-shadow: 0 0 40px #00ff9f; cursor: pointer;">💾 GUARDAR TODOS LOS CAMBIOS</button>
+    </div>
+    
+  </div>
+
+  <input type="file" id="selector-imagen" accept="image/*" style="display: none;">
+
   <script>
+    // ===== FUNCIONES ORIGINALES DE PESTAÑAS =====
     (function() {
       const pestanas = document.querySelectorAll('.pestana');
       const paneles = {
@@ -169,6 +238,219 @@
       });
     })();
 
+    // ===== CONFIGURACIÓN ADMIN =====
+    const CONTRASENA = "situs123";
+    let productoEditando = null;
+
+    // ===== LOGIN =====
+    function mostrarLogin() {
+      document.getElementById('panel-login').style.display = 'flex';
+    }
+    function cerrarLogin() {
+      document.getElementById('panel-login').style.display = 'none';
+    }
+    function comprobarLogin() {
+      const pass = document.getElementById('login-password').value;
+      if (pass === CONTRASENA) {
+        document.getElementById('panel-login').style.display = 'none';
+        abrirAdmin();
+      } else {
+        document.getElementById('login-error').style.display = 'block';
+      }
+    }
+
+    // ===== ADMIN =====
+    function abrirAdmin() {
+      document.getElementById('panel-admin').style.display = 'block';
+      cargarDatosParaEditar();
+    }
+    function cerrarAdmin() {
+      document.getElementById('panel-admin').style.display = 'none';
+      document.getElementById('login-password').value = '';
+    }
+    function cambiarTabAdmin(tab) {
+      if (tab === 'productos') {
+        document.getElementById('admin-productos').style.display = 'block';
+        document.getElementById('admin-munchies').style.display = 'none';
+        document.getElementById('admin-tab-productos').style.background = '#00ff9f';
+        document.getElementById('admin-tab-munchies').style.background = '#333';
+      } else {
+        document.getElementById('admin-productos').style.display = 'none';
+        document.getElementById('admin-munchies').style.display = 'block';
+        document.getElementById('admin-tab-productos').style.background = '#333';
+        document.getElementById('admin-tab-munchies').style.background = '#ff18d0';
+      }
+    }
+
+    function cargarDatosParaEditar() {
+      // Productos (incluye los que tienen imagen y los que no)
+      let productosHtml = '';
+      document.querySelectorAll('#panel-genero .producto-card').forEach((card, index) => {
+        const img = card.querySelector('img');
+        const tieneImagen = img !== null;
+        const imgSrc = tieneImagen ? img.src : '';
+        const nombre = card.querySelector('h4').textContent;
+        const precio = card.querySelector('.producto-precio').textContent;
+        
+        if (tieneImagen) {
+          productosHtml += `
+            <div style="background: #1a1a2a; border: 3px solid #00ff9f; border-radius: 30px; padding: 25px;">
+              <div style="text-align: center; margin-bottom: 15px;">
+                <img id="preview-img-${index}" src="${imgSrc}" style="width: 150px; height: 150px; border-radius: 50%; border: 4px solid #ff18d0; object-fit: cover; cursor: pointer;" onclick="seleccionarImagen(${index})">
+                <div style="margin-top: 10px; color: #00ff9f;">👇 TOCA LA IMAGEN</div>
+              </div>
+              <label style="color: white; font-size: 1.8rem;">Nombre:</label>
+              <input type="text" id="prod-nombre-${index}" value="${nombre}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #00ff9f; border-radius: 20px; color: white; margin-bottom: 15px;">
+              <label style="color: white; font-size: 1.8rem;">Precio:</label>
+              <input type="text" id="prod-precio-${index}" value="${precio}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ff18d0; border-radius: 20px; color: #00ff9f; margin-bottom: 15px;">
+              <button onclick="eliminarProducto(${index})" style="width: 100%; background: #ff18d0; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; color: white; cursor: pointer;">🗑️ ELIMINAR</button>
+            </div>
+          `;
+        } else {
+          productosHtml += `
+            <div style="background: #1a1a2a; border: 3px solid #ffff00; border-radius: 30px; padding: 25px;">
+              <div style="text-align: center; margin-bottom: 15px;">
+                <div style="width: 150px; height: 150px; border-radius: 50%; border: 4px solid #ffff00; background: #000; margin: 0 auto; display: flex; align-items: center; justify-content: center; color: #ffff00; font-size: 3rem;">🚬</div>
+                <div style="margin-top: 10px; color: #ffff00;">SIN IMAGEN</div>
+              </div>
+              <label style="color: white; font-size: 1.8rem;">Nombre:</label>
+              <input type="text" id="prod-nombre-${index}" value="${nombre}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #00ff9f; border-radius: 20px; color: white; margin-bottom: 15px;">
+              <label style="color: white; font-size: 1.8rem;">Precio:</label>
+              <input type="text" id="prod-precio-${index}" value="${precio}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ff18d0; border-radius: 20px; color: #00ff9f; margin-bottom: 15px;">
+              <button onclick="eliminarProducto(${index})" style="width: 100%; background: #ff18d0; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; color: white; cursor: pointer;">🗑️ ELIMINAR</button>
+            </div>
+          `;
+        }
+      });
+      document.getElementById('productos-editables').innerHTML = productosHtml;
+      
+      // Munchies
+      let munchiesHtml = '';
+      document.querySelectorAll('#panel-munchies .item-munchi').forEach((item, index) => {
+        const nombre = item.querySelector('.item-nombre').textContent;
+        const precio = item.querySelector('.item-precio').textContent;
+        
+        munchiesHtml += `
+          <div style="background: #1a1a2a; border: 3px solid #ff18d0; border-radius: 30px; padding: 25px;">
+            <label style="color: white; font-size: 1.8rem;">Producto:</label>
+            <input type="text" id="munch-nombre-${index}" value="${nombre}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #00ff9f; border-radius: 20px; color: white; margin-bottom: 15px;">
+            <label style="color: white; font-size: 1.8rem;">Precio:</label>
+            <input type="text" id="munch-precio-${index}" value="${precio}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ff18d0; border-radius: 20px; color: #00ff9f; margin-bottom: 15px;">
+            <button onclick="eliminarMunchi(${index})" style="width: 100%; background: #ff18d0; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; color: white; cursor: pointer;">🗑️ ELIMINAR</button>
+          </div>
+        `;
+      });
+      document.getElementById('munchies-editables').innerHTML = munchiesHtml;
+    }
+
+    // ===== IMÁGENES =====
+    function seleccionarImagen(index) {
+      productoEditando = index;
+      document.getElementById('selector-imagen').click();
+    }
+
+    document.getElementById('selector-imagen').addEventListener('change', function(e) {
+      if (e.target.files && e.target.files[0] && productoEditando !== null) {
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+          const preview = document.getElementById(`preview-img-${productoEditando}`);
+          if (preview) preview.src = ev.target.result;
+          
+          let imagenes = localStorage.getItem('masquehigh_imagenes');
+          imagenes = imagenes ? JSON.parse(imagenes) : {};
+          imagenes[`prod_${productoEditando}`] = ev.target.result;
+          localStorage.setItem('masquehigh_imagenes', JSON.stringify(imagenes));
+        };
+        reader.readAsDataURL(e.target.files[0]);
+      }
+    });
+
+    // ===== AÑADIR/ELIMINAR =====
+    function anadirProducto() {
+      const nuevo = document.createElement('div');
+      nuevo.className = 'producto-card';
+      nuevo.innerHTML = '<img src="images/placeholder.jpg"><h4>NUEVO PRODUCTO</h4><div class="producto-precio">0€</div>';
+      document.querySelector('#panel-genero .subseccion .productos-grid').appendChild(nuevo);
+      cargarDatosParaEditar();
+    }
+
+    function anadirMunchi() {
+      const nuevo = document.createElement('div');
+      nuevo.className = 'item-munchi';
+      nuevo.innerHTML = '<span class="item-nombre">NUEVO</span><span class="item-precio">0€</span>';
+      document.querySelector('#panel-munchies .items-lista').appendChild(nuevo);
+      cargarDatosParaEditar();
+    }
+
+    function eliminarProducto(index) {
+      document.querySelectorAll('#panel-genero .producto-card')[index]?.remove();
+      cargarDatosParaEditar();
+    }
+
+    function eliminarMunchi(index) {
+      document.querySelectorAll('#panel-munchies .item-munchi')[index]?.remove();
+      cargarDatosParaEditar();
+    }
+
+    // ===== GUARDAR =====
+    function guardarTodo() {
+      // Productos
+      document.querySelectorAll('#panel-genero .producto-card').forEach((card, index) => {
+        const nombre = document.getElementById(`prod-nombre-${index}`)?.value;
+        const precio = document.getElementById(`prod-precio-${index}`)?.value;
+        const img = document.getElementById(`preview-img-${index}`)?.src;
+        if (nombre) card.querySelector('h4').textContent = nombre;
+        if (precio) card.querySelector('.producto-precio').textContent = precio;
+        if (img && card.querySelector('img')) card.querySelector('img').src = img;
+      });
+      
+      // Munchies
+      document.querySelectorAll('#panel-munchies .item-munchi').forEach((item, index) => {
+        const nombre = document.getElementById(`munch-nombre-${index}`)?.value;
+        const precio = document.getElementById(`munch-precio-${index}`)?.value;
+        if (nombre) item.querySelector('.item-nombre').textContent = nombre;
+        if (precio) item.querySelector('.item-precio').textContent = precio;
+      });
+      
+      // Guardar precios
+      const datos = {
+        productos: [],
+        munchies: []
+      };
+      document.querySelectorAll('.producto-precio').forEach(e => datos.productos.push(e.textContent));
+      document.querySelectorAll('.item-precio').forEach(e => datos.munchies.push(e.textContent));
+      localStorage.setItem('masquehigh_datos', JSON.stringify(datos));
+      
+      alert('✅ GUARDADO CORRECTO');
+      cerrarAdmin();
+    }
+
+    // ===== CARGAR DATOS GUARDADOS =====
+    function cargarDatosGuardados() {
+      // Precios
+      const guardados = localStorage.getItem('masquehigh_datos');
+      if (guardados) {
+        const datos = JSON.parse(guardados);
+        document.querySelectorAll('.producto-precio').forEach((e, i) => {
+          if (datos.productos[i]) e.textContent = datos.productos[i];
+        });
+        document.querySelectorAll('.item-precio').forEach((e, i) => {
+          if (datos.munchies[i]) e.textContent = datos.munchies[i];
+        });
+      }
+      
+      // Imágenes
+      const imagenes = localStorage.getItem('masquehigh_imagenes');
+      if (imagenes) {
+        const imgData = JSON.parse(imagenes);
+        document.querySelectorAll('#panel-genero .producto-card img').forEach((img, i) => {
+          if (imgData[`prod_${i}`]) img.src = imgData[`prod_${i}`];
+        });
+      }
+    }
+
+    window.addEventListener('load', cargarDatosGuardados);
+
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js');
@@ -177,4 +459,3 @@
   </script>
 </body>
 </html>
-
