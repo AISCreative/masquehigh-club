@@ -8,6 +8,7 @@ const ASSETS = [
   './images/image9.jpg', './images/image10.jpg', './images/image11.jpg', './images/image12.jpg',
   './images/image13.jpg', './images/image14.jpg', './images/image15.jpg', './images/image16.jpg',
   './images/image17.jpg'
+  // NO incluyas gorila.jpg ni placeholder.jpg porque se añadirán desde la tablet
 ];
 
 self.addEventListener('install', (e) => {
