@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" id="com.masquehigh.club" version="1.0.0">
+    <name>Masquehigh Club</name>
+    <description>Catálogo Masquehigh Club</description>
+    <author email="info@masquehigh.com">Masquehigh</author>
+    <content src="index.html" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    
+    <!-- Permisos necesarios -->
+    <preference name="AndroidPersistentFileLocation" value="Compatibility" />
+    <preference name="AndroidStoragePermission" value="true" />
+    <preference name="AllowFileAccess" value="true" />
+    <preference name="AllowUniversalAccessFromFileURLs" value="true" />
+    
+    <!-- Configuración para tablet -->
+    <preference name="TargetDevice" value="tablet" />
+    <preference name="Orientation" value="default" />
+    
+    <!-- Iconos (cámbialos por los tuyos) -->
+    <icon src="icon.png" />
+</widget>
