@@ -1,461 +1,582 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<!-- PANEL DE ADMINISTRACIÓN PARA TABLET - CONTRASEÑA: situs123 -->
+<div style="position: fixed; bottom: 30px; right: 30px; z-index: 2000;">
+  <button id="btn-admin" onclick="mostrarLogin()" style="width: 70px; height: 70px; border-radius: 50%; background: #00ff9f; border: 4px solid #ff18d0; color: black; font-size: 30px; box-shadow: 0 0 30px #00ff9f; cursor: pointer;">⚙️</button>
+</div>
+
+<!-- PANEL LOGIN -->
+<div id="panel-login" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2001; align-items: center; justify-content: center;">
+  <div style="background: #0b0c14; border: 4px solid #00ff9f; border-radius: 40px; padding: 40px; width: 90%; max-width: 500px; box-shadow: 0 0 60px #ff18d0;">
+    <h2 style="color: #00ff9f; text-align: center; font-size: 3rem; margin-bottom: 30px;">🔐 ADMIN</h2>
+    <input type="password" id="login-password" placeholder="Contraseña" style="width: 100%; padding: 25px; font-size: 2rem; background: #1a1a2a; border: 3px solid #ff18d0; border-radius: 30px; color: white; margin-bottom: 30px; text-align: center;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+      <button onclick="comprobarLogin()" style="background: #00ff9f; border: none; border-radius: 30px; padding: 25px; font-size: 2rem; font-weight: bold; cursor: pointer;">ENTRAR</button>
+      <button onclick="cerrarLogin()" style="background: #ff18d0; border: none; border-radius: 30px; padding: 25px; font-size: 2rem; font-weight: bold; color: white; cursor: pointer;">CERRAR</button>
+    </div>
+    <p id="login-error" style="color: #ff18d0; text-align: center; font-size: 1.8rem; margin-top: 20px; display: none;">❌ Contraseña incorrecta</p>
+  </div>
+</div>
+
+<!-- PANEL ADMIN PRINCIPAL -->
+<div id="panel-admin" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0b0c14; z-index: 2002; overflow-y: auto; padding: 30px;">
   
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="theme-color" content="#0b0c14">
-  <link rel="manifest" href="manifest.json">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 4px solid #00ff9f; padding-bottom: 20px;">
+    <h1 style="color: #00ff9f; font-size: 3.5rem;">✏️ EDITAR CATÁLOGO</h1>
+    <button onclick="cerrarAdmin()" style="background: #ff18d0; border: none; border-radius: 60px; padding: 20px 40px; font-size: 2.2rem; color: white; cursor: pointer;">CERRAR</button>
+  </div>
   
-  <title>Masquehigh Club · Catálogo</title>
-  <style>
-    /* Estilos originales preservados */
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-    html, body { width: 100%; height: 100%; overflow: hidden; background: #0b0c14; }
-    body { background: radial-gradient(circle at 30% 30%, #1a2a3a 0%, #030408 100%); display: flex; justify-content: center; align-items: center; padding: 8px; position: relative; }
-    body::before { content: "MASQUEHIGH CLUB"; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-12deg) scale(1.2); font-size: clamp(3rem, 15vw, 10rem); font-weight: 900; color: rgba(255, 24, 208, 0.08); white-space: nowrap; letter-spacing: 12px; text-transform: uppercase; pointer-events: none; z-index: 1; animation: floatLogo 20s infinite alternate ease-in-out; }
-    @keyframes floatLogo { 0% { transform: translate(-50%, -50%) rotate(-12deg) scale(1.2); opacity: 0.08; } 100% { transform: translate(-48%, -52%) rotate(-8deg) scale(1.25); opacity: 0.12; } }
-    .kiosco { width: 100%; max-width: 1280px; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); border: 2px solid #00ff9f; border-radius: 30px; box-shadow: 0 0 40px #00ff9f66; display: flex; flex-direction: column; overflow: hidden; position: relative; z-index: 10; }
-    .header { padding: 1.5rem 1.5rem 0.8rem; text-align: center; border-bottom: 2px solid #ff18d0; }
-    .logo-masquehigh { font-size: 4.8rem; font-weight: 900; color: #00ff9f; text-shadow: 0 0 25px #00ff9f; line-height: 1.1; }
-    .logo-club { font-size: 3.5rem; font-weight: 900; letter-spacing: 12px; color: #ff44e0; margin-top: -0.5rem; }
-    .welcome { font-size: 1.6rem; color: #ffffff; background: linear-gradient(90deg, transparent, rgba(255, 24, 208, 0.2), transparent); padding: 0.3rem 1rem; border-radius: 40px; display: inline-block; }
-    .pestanas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; padding: 0.8rem 1.5rem; }
-    .pestana { background: rgba(10, 10, 20, 0.9); border: 2px solid; border-radius: 15px; padding: 0.7rem 0.2rem; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
-    .pestana.genero { border-color: #00ff9f; color: #00ff9f; }
-    .pestana.munchies { border-color: #ff18d0; color: #ff18d0; }
-    .pestana.eventos { border-color: #ffff00; color: #ffff00; }
-    .pestana.activa { transform: scale(1.02); box-shadow: 0 0 20px currentColor; border-width: 3px; }
-    .pestana-icon { font-size: 2.2rem; }
-    .pestana-text { font-size: 1.3rem; font-weight: 700; }
-    .contenido { flex: 1; overflow-y: auto; padding: 1rem 1.5rem; }
-    .panel { display: none; }
-    .panel.activo { display: block; }
-    .subseccion { background: rgba(0, 0, 0, 0.5); border: 1px solid #ff18d0; border-radius: 20px; padding: 1rem; margin-bottom: 1.2rem; }
-    .subseccion-titulo { font-size: 2rem; color: #ff18d0; text-shadow: 0 0 10px #ff18d0; margin-bottom: 1rem; padding-left: 0.8rem; border-left: 6px solid #00ff9f; }
-    .productos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
-    .producto-card { background: #0d0f1a; border: 2px solid #3a2b4a; border-radius: 18px; padding: 0.8rem 0.5rem; display: flex; flex-direction: column; align-items: center; text-align: center; }
-    .producto-card img { width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 3px solid #00ff9f; box-shadow: 0 0 0 2px #ff18d0; margin-bottom: 0.5rem; }
-    .producto-card h4 { font-size: 1.2rem; color: white; text-shadow: 0 0 5px #00ff9f; margin-bottom: 0.25rem; }
-    .producto-precio { font-size: 1.3rem; font-weight: 800; color: #00ff9f; background: rgba(255, 24, 208, 0.2); padding: 0.2rem 1rem; border-radius: 30px; border: 1px solid #ff18d0; display: inline-block; }
-    /* Estilo para productos sin imagen */
-    .producto-card.sin-imagen { background: linear-gradient(145deg, #0d0f1a, #1a1a2a); border: 2px solid #ffff00; min-height: 120px; justify-content: center; }
-    .producto-card.sin-imagen h4 { font-size: 1.5rem; margin-bottom: 0.8rem; color: #ffff00; text-shadow: 0 0 10px #ffff00; }
-    .munchies-categoria { background: rgba(20, 5, 25, 0.7); border: 2px solid #ff18d0; border-radius: 30px; padding: 1.5rem 1.2rem; margin-bottom: 1.5rem; }
-    .categoria-titulo { font-size: 2.6rem; color: #ff18d0; text-shadow: 0 0 15px #ff18d0; margin-bottom: 1.5rem; border-bottom: 3px dotted #00ff9f; padding-bottom: 0.5rem; display: inline-block; }
-    .items-lista { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.2rem; }
-    .item-munchi { display: flex; justify-content: space-between; align-items: center; background: rgba(0, 0, 0, 0.6); padding: 0.8rem 1.2rem; border-radius: 60px; border: 1px solid #00ff9f; }
-    .item-nombre { font-size: 1.4rem; color: white; text-transform: uppercase; }
-    .item-precio { font-size: 1.5rem; font-weight: 800; color: #00ff9f; }
-    .eventos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
-    .evento-card img { width: 100%; border-radius: 20px; border: 3px solid #ffff00; }
-  </style>
-</head>
-<body>
-  <main class="kiosco">
-    <div class="header">
-      <div class="logo">
-        <div class="logo-masquehigh">MASQUEHIGH</div>
-        <div class="logo-club">CLUB</div>
-      </div>
-      <div class="welcome">✨ Bienvenido a Masquehigh Club ✨</div>
-    </div>
-
-    <div class="pestanas">
-      <div class="pestana genero activa" data-pestana="genero">
-        <div class="pestana-icon">🌿</div>
-        <div class="pestana-text">GÉNERO</div>
-      </div>
-      <div class="pestana munchies" data-pestana="munchies">
-        <div class="pestana-icon">🍕</div>
-        <div class="pestana-text">MUNCHIES</div>
-      </div>
-      <div class="pestana eventos" data-pestana="eventos">
-        <div class="pestana-icon">🎉</div>
-        <div class="pestana-text">EVENTOS</div>
-      </div>
-    </div>
-
-    <div class="contenido">
-      <div id="panel-genero" class="panel activo">
-        <div class="catalogo-grid">
-          <div class="subseccion">
-            <h3 class="subseccion-titulo">⚡ EXTRACCIÓN</h3>
-            <div class="productos-grid">
-              <div class="producto-card"><img src="images/image1.jpg"><h4>BHO TROPICANA CHERRY</h4><div class="producto-precio">28€/g</div></div>
-              <div class="producto-card"><img src="images/image2.jpg"><h4>FORBBIDEN FROZEN</h4><div class="producto-precio">8€/g</div></div>
-              <div class="producto-card"><img src="images/image3.jpg"><h4>OREO</h4><div class="producto-precio">6€/g</div></div>
-              <div class="producto-card"><img src="images/image4.jpg"><h4>COOKIES</h4><div class="producto-precio">5€/g</div></div>
-              <!-- NUEVO: GORILA -->
-              <div class="producto-card"><img src="images/gorila.jpg"><h4>GORILA</h4><div class="producto-precio">Precio</div></div>
-            </div>
-          </div>
-          <div class="subseccion">
-            <h3 class="subseccion-titulo">🌿 HIERBAS</h3>
-            <div class="productos-grid">
-              <div class="producto-card"><img src="images/image5.jpg"><h4>LONDON CAKE</h4><div class="producto-precio">8€/g</div></div>
-              <div class="producto-card"><img src="images/image6.jpg"><h4>CREAM CARAMEL</h4><div class="producto-precio">6€/g</div></div>
-              <div class="producto-card"><img src="images/image7.jpg"><h4>AMNESIA</h4><div class="producto-precio">4€/g</div></div>
-              <div class="producto-card"><img src="images/image8.jpg"><h4>TANGIE</h4><div class="producto-precio">7€/g</div></div>
-              <div class="producto-card"><img src="images/image9.jpg"><h4>DANCE HALL</h4><div class="producto-precio">6€/g</div></div>
-              <div class="producto-card"><img src="images/image10.jpg"><h4>MELON</h4><div class="producto-precio">5€/g</div></div>
-              <div class="producto-card"><img src="images/image11.jpg"><h4>TROPICANA CHERRY</h4><div class="producto-precio">8€/g</div></div>
-              <div class="producto-card"><img src="images/image12.jpg"><h4>GELATOxPURPLE</h4><div class="producto-precio">7€/g</div></div>
-              <div class="producto-card"><img src="images/image13.jpg"><h4>JEALOUSY</h4><div class="producto-precio">7€/g</div></div>
-            </div>
-          </div>
-          <!-- NUEVA SECCIÓN: PORROS LIADOS (SIN IMAGEN) -->
-          <div class="subseccion">
-            <h3 class="subseccion-titulo">🚬 PORROS LIADOS</h3>
-            <div class="productos-grid">
-              <div class="producto-card sin-imagen">
-                <h4>CRITICAL x GORILA</h4>
-                <div class="producto-precio">1x3€ | 2x5€</div>
-              </div>
-              <div class="producto-card sin-imagen">
-                <h4>MAC 1</h4>
-                <div class="producto-precio">1x3€ | 2x5€</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div id="panel-munchies" class="panel">
-        <div class="munchies-grid">
-          <div class="munchies-categoria">
-            <div class="categoria-titulo">🥤 REFRESCOS</div>
-            <div class="items-lista">
-              <div class="item-munchi"><span class="item-nombre">AQUARIUS</span><span class="item-precio">2€</span></div>
-              <div class="item-munchi"><span class="item-nombre">COCACOLA</span><span class="item-precio">2€</span></div>
-              <div class="item-munchi"><span class="item-nombre">FANTA</span><span class="item-precio">2€</span></div>
-              <div class="item-munchi"><span class="item-nombre">MONSTER</span><span class="item-precio">2.50€</span></div>
-              <div class="item-munchi"><span class="item-nombre">NESTEA</span><span class="item-precio">2€</span></div>
-              <div class="item-munchi"><span class="item-nombre">AGUA</span><span class="item-precio">1.50€</span></div>
-              <div class="item-munchi"><span class="item-nombre">ESTRELLA</span><span class="item-precio">2€</span></div>
-              <div class="item-munchi"><span class="item-nombre">HEINEKEN</span><span class="item-precio">2€</span></div>
-              <div class="item-munchi"><span class="item-nombre">REDBULL</span><span class="item-precio">2.50€</span></div>
-              <div class="item-munchi"><span class="item-nombre">COMB.LATA</span><span class="item-precio">5€</span></div>
-            </div>
-          </div>
-          <div class="munchies-categoria">
-            <div class="categoria-titulo">🍟 PARA PICAR</div>
-            <div class="items-lista">
-              <div class="item-munchi"><span class="item-nombre">PATATAS</span><span class="item-precio">1.50€</span></div>
-              <div class="item-munchi"><span class="item-nombre">CHUCHES</span><span class="item-precio">1.50€</span></div>
-              <div class="item-munchi"><span class="item-nombre">PALOMITAS</span><span class="item-precio">1.20€</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div id="panel-eventos" class="panel">
-        <div class="eventos-grid">
-          <div class="evento-card"><img src="images/image14.jpg"></div>
-          <div class="evento-card"><img src="images/image15.jpg"></div>
-          <div class="evento-card"><img src="images/image16.jpg"></div>
-          <div class="evento-card"><img src="images/image17.jpg"></div>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <!-- PANEL DE ADMINISTRACIÓN PARA TABLET - CONTRASEÑA: situs123 -->
-  <div style="position: fixed; bottom: 30px; right: 30px; z-index: 2000;">
-    <button id="btn-admin" onclick="mostrarLogin()" style="width: 70px; height: 70px; border-radius: 50%; background: #00ff9f; border: 4px solid #ff18d0; color: black; font-size: 30px; box-shadow: 0 0 30px #00ff9f; cursor: pointer;">⚙️</button>
+  <!-- Pestañas principales del admin -->
+  <div style="display: flex; gap: 20px; margin-bottom: 30px;">
+    <button id="admin-tab-productos" onclick="cambiarTabAdmin('productos')" style="flex: 1; background: #00ff9f; border: none; border-radius: 30px; padding: 20px; font-size: 2.2rem; font-weight: bold; cursor: pointer;">📦 PRODUCTOS</button>
+    <button id="admin-tab-munchies" onclick="cambiarTabAdmin('munchies')" style="flex: 1; background: #333; border: none; border-radius: 30px; padding: 20px; font-size: 2.2rem; color: white; cursor: pointer;">🍺 MUNCHIES</button>
+    <button id="admin-tab-eventos" onclick="cambiarTabAdmin('eventos')" style="flex: 1; background: #333; border: none; border-radius: 30px; padding: 20px; font-size: 2.2rem; color: white; cursor: pointer;">🎉 EVENTOS</button>
   </div>
-
-  <!-- PANEL LOGIN -->
-  <div id="panel-login" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2001; align-items: center; justify-content: center;">
-    <div style="background: #0b0c14; border: 4px solid #00ff9f; border-radius: 40px; padding: 40px; width: 90%; max-width: 500px; box-shadow: 0 0 60px #ff18d0;">
-      <h2 style="color: #00ff9f; text-align: center; font-size: 3rem; margin-bottom: 30px;">🔐 ADMIN</h2>
-      <input type="password" id="login-password" placeholder="Contraseña" style="width: 100%; padding: 25px; font-size: 2rem; background: #1a1a2a; border: 3px solid #ff18d0; border-radius: 30px; color: white; margin-bottom: 30px; text-align: center;">
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-        <button onclick="comprobarLogin()" style="background: #00ff9f; border: none; border-radius: 30px; padding: 25px; font-size: 2rem; font-weight: bold; cursor: pointer;">ENTRAR</button>
-        <button onclick="cerrarLogin()" style="background: #ff18d0; border: none; border-radius: 30px; padding: 25px; font-size: 2rem; font-weight: bold; color: white; cursor: pointer;">CERRAR</button>
-      </div>
-      <p id="login-error" style="color: #ff18d0; text-align: center; font-size: 1.8rem; margin-top: 20px; display: none;">❌ Contraseña incorrecta</p>
-    </div>
-  </div>
-
-  <!-- PANEL ADMIN PRINCIPAL -->
-  <div id="panel-admin" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0b0c14; z-index: 2002; overflow-y: auto; padding: 30px;">
+  
+  <!-- PANEL DE PRODUCTOS -->
+  <div id="admin-productos" style="display: block;">
     
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 4px solid #00ff9f; padding-bottom: 20px;">
-      <h1 style="color: #00ff9f; font-size: 3.5rem;">✏️ EDITAR CATÁLOGO</h1>
-      <button onclick="cerrarAdmin()" style="background: #ff18d0; border: none; border-radius: 60px; padding: 20px 40px; font-size: 2.2rem; color: white; cursor: pointer;">CERRAR</button>
+    <!-- Subpestañas dentro de productos -->
+    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+      <button id="subtab-extract" onclick="cambiarSubTab('extract')" style="flex: 1; background: #00ff9f; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; font-weight: bold; cursor: pointer;">⚡ EXTRACCIÓN</button>
+      <button id="subtab-hierbas" onclick="cambiarSubTab('hierbas')" style="flex: 1; background: #333; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; color: white; cursor: pointer;">🌿 HIERBAS</button>
+      <button id="subtab-liados" onclick="cambiarSubTab('liados')" style="flex: 1; background: #333; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; color: white; cursor: pointer;">🚬 LIADOS</button>
     </div>
     
-    <div style="display: flex; gap: 20px; margin-bottom: 30px;">
-      <button id="admin-tab-productos" onclick="cambiarTabAdmin('productos')" style="flex: 1; background: #00ff9f; border: none; border-radius: 30px; padding: 20px; font-size: 2.2rem; font-weight: bold; cursor: pointer;">📦 PRODUCTOS</button>
-      <button id="admin-tab-munchies" onclick="cambiarTabAdmin('munchies')" style="flex: 1; background: #333; border: none; border-radius: 30px; padding: 20px; font-size: 2.2rem; color: white; cursor: pointer;">🍺 MUNCHIES</button>
+    <!-- Contenedor de extracción -->
+    <div id="admin-extract" style="display: block;">
+      <div id="extract-editables" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px;"></div>
+      <button onclick="anadirProductoEn('extract')" style="width: 100%; background: #00ff9f; border: none; border-radius: 40px; padding: 30px; font-size: 2.5rem; margin-top: 20px; cursor: pointer;">➕ AÑADIR PRODUCTO A EXTRACCIÓN</button>
     </div>
     
-    <div id="admin-productos" style="display: block;">
-      <div id="productos-editables" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px;"></div>
-      <button onclick="anadirProducto()" style="width: 100%; background: #00ff9f; border: none; border-radius: 40px; padding: 30px; font-size: 2.5rem; margin-top: 30px; cursor: pointer;">➕ AÑADIR NUEVO PRODUCTO</button>
+    <!-- Contenedor de hierbas -->
+    <div id="admin-hierbas" style="display: none;">
+      <div id="hierbas-editables" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px;"></div>
+      <button onclick="anadirProductoEn('hierbas')" style="width: 100%; background: #00ff9f; border: none; border-radius: 40px; padding: 30px; font-size: 2.5rem; margin-top: 20px; cursor: pointer;">➕ AÑADIR PRODUCTO A HIERBAS</button>
     </div>
     
-    <div id="admin-munchies" style="display: none;">
-      <div id="munchies-editables" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px;"></div>
-      <button onclick="anadirMunchi()" style="width: 100%; background: #ff18d0; border: none; border-radius: 40px; padding: 30px; font-size: 2.5rem; margin-top: 30px; color: white; cursor: pointer;">➕ AÑADIR NUEVO MUNCHI</button>
-    </div>
-    
-    <div style="position: sticky; bottom: 30px; margin-top: 40px;">
-      <button onclick="guardarTodo()" style="width: 100%; background: #00ff9f; border: 4px solid #ff18d0; border-radius: 60px; padding: 30px; font-size: 3rem; font-weight: bold; box-shadow: 0 0 40px #00ff9f; cursor: pointer;">💾 GUARDAR TODOS LOS CAMBIOS</button>
+    <!-- Contenedor de liados -->
+    <div id="admin-liados" style="display: none;">
+      <div id="liados-editables" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px;"></div>
+      <button onclick="anadirProductoEn('liados')" style="width: 100%; background: #ffff00; border: none; border-radius: 40px; padding: 30px; font-size: 2.5rem; margin-top: 20px; cursor: pointer;">➕ AÑADIR PRODUCTO A LIADOS</button>
     </div>
     
   </div>
+  
+  <!-- PANEL DE MUNCHIES -->
+  <div id="admin-munchies" style="display: none;">
+    
+    <!-- Subpestañas dentro de munchies -->
+    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+      <button id="subtab-refrescos" onclick="cambiarSubTabMunchies('refrescos')" style="flex: 1; background: #ff18d0; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; font-weight: bold; color: white; cursor: pointer;">🥤 REFRESCOS</button>
+      <button id="subtab-picar" onclick="cambiarSubTabMunchies('picar')" style="flex: 1; background: #333; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; color: white; cursor: pointer;">🍟 PARA PICAR</button>
+    </div>
+    
+    <!-- Contenedor de refrescos -->
+    <div id="admin-refrescos" style="display: block;">
+      <div id="refrescos-editables" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px;"></div>
+      <button onclick="anadirMunchiEn('refrescos')" style="width: 100%; background: #ff18d0; border: none; border-radius: 40px; padding: 30px; font-size: 2.5rem; margin-top: 20px; color: white; cursor: pointer;">➕ AÑADIR REFRESCO</button>
+    </div>
+    
+    <!-- Contenedor de picar -->
+    <div id="admin-picar" style="display: none;">
+      <div id="picar-editables" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px;"></div>
+      <button onclick="anadirMunchiEn('picar')" style="width: 100%; background: #ff18d0; border: none; border-radius: 40px; padding: 30px; font-size: 2.5rem; margin-top: 20px; color: white; cursor: pointer;">➕ AÑADIR PRODUCTO</button>
+    </div>
+    
+  </div>
+  
+  <!-- PANEL DE EVENTOS -->
+  <div id="admin-eventos" style="display: none;">
+    <div id="eventos-editables" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px;"></div>
+    <button onclick="anadirEvento()" style="width: 100%; background: #ffff00; border: none; border-radius: 40px; padding: 30px; font-size: 2.5rem; margin-top: 20px; cursor: pointer;">➕ AÑADIR CARTEL DE EVENTO</button>
+  </div>
+  
+  <!-- Botón guardar todo -->
+  <div style="position: sticky; bottom: 30px; margin-top: 40px;">
+    <button onclick="guardarTodo()" style="width: 100%; background: #00ff9f; border: 4px solid #ff18d0; border-radius: 60px; padding: 30px; font-size: 3rem; font-weight: bold; box-shadow: 0 0 40px #00ff9f; cursor: pointer;">💾 GUARDAR TODOS LOS CAMBIOS</button>
+  </div>
+  
+</div>
 
-  <input type="file" id="selector-imagen" accept="image/*" style="display: none;">
+<input type="file" id="selector-imagen" accept="image/*" style="display: none;">
 
-  <script>
-    // ===== FUNCIONES ORIGINALES DE PESTAÑAS =====
-    (function() {
-      const pestanas = document.querySelectorAll('.pestana');
-      const paneles = {
-        genero: document.getElementById('panel-genero'),
-        munchies: document.getElementById('panel-munchies'),
-        eventos: document.getElementById('panel-eventos')
-      };
+<script>
+// ===== CONFIGURACIÓN =====
+const CONTRASENA = "situs123";
+let productoEditando = null;
+let currentSeccion = 'extract';
 
-      function abrirPestana(pestanaId) {
-        pestanas.forEach(p => p.classList.remove('activa'));
-        Object.values(paneles).forEach(panel => panel.classList.remove('activo'));
-        const pestanaActiva = document.querySelector(`.pestana[data-pestana="${pestanaId}"]`);
-        if (pestanaActiva) pestanaActiva.classList.add('activa');
-        if (paneles[pestanaId]) paneles[pestanaId].classList.add('activo');
-      }
+// ===== LOGIN =====
+function mostrarLogin() {
+  document.getElementById('panel-login').style.display = 'flex';
+}
+function cerrarLogin() {
+  document.getElementById('panel-login').style.display = 'none';
+}
+function comprobarLogin() {
+  const pass = document.getElementById('login-password').value;
+  if (pass === CONTRASENA) {
+    document.getElementById('panel-login').style.display = 'none';
+    abrirAdmin();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+  }
+}
 
-      pestanas.forEach(p => {
-        p.addEventListener('click', (e) => {
-          e.preventDefault();
-          abrirPestana(p.getAttribute('data-pestana'));
-        });
-      });
-    })();
+// ===== ADMIN =====
+function abrirAdmin() {
+  document.getElementById('panel-admin').style.display = 'block';
+  cargarTodosLosDatos();
+}
+function cerrarAdmin() {
+  document.getElementById('panel-admin').style.display = 'none';
+  document.getElementById('login-password').value = '';
+}
 
-    // ===== CONFIGURACIÓN ADMIN =====
-    const CONTRASENA = "situs123";
-    let productoEditando = null;
+function cambiarTabAdmin(tab) {
+  // Ocultar todos los paneles principales
+  document.getElementById('admin-productos').style.display = 'none';
+  document.getElementById('admin-munchies').style.display = 'none';
+  document.getElementById('admin-eventos').style.display = 'none';
+  
+  // Resetear colores de pestañas
+  document.getElementById('admin-tab-productos').style.background = '#333';
+  document.getElementById('admin-tab-munchies').style.background = '#333';
+  document.getElementById('admin-tab-eventos').style.background = '#333';
+  
+  // Mostrar el seleccionado
+  if (tab === 'productos') {
+    document.getElementById('admin-productos').style.display = 'block';
+    document.getElementById('admin-tab-productos').style.background = '#00ff9f';
+    cargarProductos();
+  } else if (tab === 'munchies') {
+    document.getElementById('admin-munchies').style.display = 'block';
+    document.getElementById('admin-tab-munchies').style.background = '#ff18d0';
+    cargarMunchies();
+  } else if (tab === 'eventos') {
+    document.getElementById('admin-eventos').style.display = 'block';
+    document.getElementById('admin-tab-eventos').style.background = '#ffff00';
+    cargarEventos();
+  }
+}
 
-    // ===== LOGIN =====
-    function mostrarLogin() {
-      document.getElementById('panel-login').style.display = 'flex';
-    }
-    function cerrarLogin() {
-      document.getElementById('panel-login').style.display = 'none';
-    }
-    function comprobarLogin() {
-      const pass = document.getElementById('login-password').value;
-      if (pass === CONTRASENA) {
-        document.getElementById('panel-login').style.display = 'none';
-        abrirAdmin();
-      } else {
-        document.getElementById('login-error').style.display = 'block';
-      }
-    }
+function cambiarSubTab(subtab) {
+  // Ocultar todos
+  document.getElementById('admin-extract').style.display = 'none';
+  document.getElementById('admin-hierbas').style.display = 'none';
+  document.getElementById('admin-liados').style.display = 'none';
+  
+  // Resetear colores
+  document.getElementById('subtab-extract').style.background = '#333';
+  document.getElementById('subtab-hierbas').style.background = '#333';
+  document.getElementById('subtab-liados').style.background = '#333';
+  
+  // Mostrar el seleccionado
+  if (subtab === 'extract') {
+    document.getElementById('admin-extract').style.display = 'block';
+    document.getElementById('subtab-extract').style.background = '#00ff9f';
+    currentSeccion = 'extract';
+    cargarExtract();
+  } else if (subtab === 'hierbas') {
+    document.getElementById('admin-hierbas').style.display = 'block';
+    document.getElementById('subtab-hierbas').style.background = '#00ff9f';
+    currentSeccion = 'hierbas';
+    cargarHierbas();
+  } else if (subtab === 'liados') {
+    document.getElementById('admin-liados').style.display = 'block';
+    document.getElementById('subtab-liados').style.background = '#ffff00';
+    currentSeccion = 'liados';
+    cargarLiados();
+  }
+}
 
-    // ===== ADMIN =====
-    function abrirAdmin() {
-      document.getElementById('panel-admin').style.display = 'block';
-      cargarDatosParaEditar();
-    }
-    function cerrarAdmin() {
-      document.getElementById('panel-admin').style.display = 'none';
-      document.getElementById('login-password').value = '';
-    }
-    function cambiarTabAdmin(tab) {
-      if (tab === 'productos') {
-        document.getElementById('admin-productos').style.display = 'block';
-        document.getElementById('admin-munchies').style.display = 'none';
-        document.getElementById('admin-tab-productos').style.background = '#00ff9f';
-        document.getElementById('admin-tab-munchies').style.background = '#333';
-      } else {
-        document.getElementById('admin-productos').style.display = 'none';
-        document.getElementById('admin-munchies').style.display = 'block';
-        document.getElementById('admin-tab-productos').style.background = '#333';
-        document.getElementById('admin-tab-munchies').style.background = '#ff18d0';
-      }
-    }
+function cambiarSubTabMunchies(subtab) {
+  document.getElementById('admin-refrescos').style.display = 'none';
+  document.getElementById('admin-picar').style.display = 'none';
+  
+  document.getElementById('subtab-refrescos').style.background = '#333';
+  document.getElementById('subtab-picar').style.background = '#333';
+  
+  if (subtab === 'refrescos') {
+    document.getElementById('admin-refrescos').style.display = 'block';
+    document.getElementById('subtab-refrescos').style.background = '#ff18d0';
+    cargarRefrescos();
+  } else {
+    document.getElementById('admin-picar').style.display = 'block';
+    document.getElementById('subtab-picar').style.background = '#ff18d0';
+    cargarPicar();
+  }
+}
 
-    function cargarDatosParaEditar() {
-      // Productos (incluye los que tienen imagen y los que no)
-      let productosHtml = '';
-      document.querySelectorAll('#panel-genero .producto-card').forEach((card, index) => {
-        const img = card.querySelector('img');
-        const tieneImagen = img !== null;
-        const imgSrc = tieneImagen ? img.src : '';
-        const nombre = card.querySelector('h4').textContent;
-        const precio = card.querySelector('.producto-precio').textContent;
-        
-        if (tieneImagen) {
-          productosHtml += `
-            <div style="background: #1a1a2a; border: 3px solid #00ff9f; border-radius: 30px; padding: 25px;">
-              <div style="text-align: center; margin-bottom: 15px;">
-                <img id="preview-img-${index}" src="${imgSrc}" style="width: 150px; height: 150px; border-radius: 50%; border: 4px solid #ff18d0; object-fit: cover; cursor: pointer;" onclick="seleccionarImagen(${index})">
-                <div style="margin-top: 10px; color: #00ff9f;">👇 TOCA LA IMAGEN</div>
-              </div>
-              <label style="color: white; font-size: 1.8rem;">Nombre:</label>
-              <input type="text" id="prod-nombre-${index}" value="${nombre}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #00ff9f; border-radius: 20px; color: white; margin-bottom: 15px;">
-              <label style="color: white; font-size: 1.8rem;">Precio:</label>
-              <input type="text" id="prod-precio-${index}" value="${precio}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ff18d0; border-radius: 20px; color: #00ff9f; margin-bottom: 15px;">
-              <button onclick="eliminarProducto(${index})" style="width: 100%; background: #ff18d0; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; color: white; cursor: pointer;">🗑️ ELIMINAR</button>
-            </div>
-          `;
-        } else {
-          productosHtml += `
-            <div style="background: #1a1a2a; border: 3px solid #ffff00; border-radius: 30px; padding: 25px;">
-              <div style="text-align: center; margin-bottom: 15px;">
-                <div style="width: 150px; height: 150px; border-radius: 50%; border: 4px solid #ffff00; background: #000; margin: 0 auto; display: flex; align-items: center; justify-content: center; color: #ffff00; font-size: 3rem;">🚬</div>
-                <div style="margin-top: 10px; color: #ffff00;">SIN IMAGEN</div>
-              </div>
-              <label style="color: white; font-size: 1.8rem;">Nombre:</label>
-              <input type="text" id="prod-nombre-${index}" value="${nombre}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #00ff9f; border-radius: 20px; color: white; margin-bottom: 15px;">
-              <label style="color: white; font-size: 1.8rem;">Precio:</label>
-              <input type="text" id="prod-precio-${index}" value="${precio}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ff18d0; border-radius: 20px; color: #00ff9f; margin-bottom: 15px;">
-              <button onclick="eliminarProducto(${index})" style="width: 100%; background: #ff18d0; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; color: white; cursor: pointer;">🗑️ ELIMINAR</button>
-            </div>
-          `;
-        }
-      });
-      document.getElementById('productos-editables').innerHTML = productosHtml;
+// ===== CARGAR DATOS =====
+function cargarTodosLosDatos() {
+  cargarExtract();
+  cargarHierbas();
+  cargarLiados();
+  cargarRefrescos();
+  cargarPicar();
+  cargarEventos();
+}
+
+function cargarExtract() {
+  let html = '';
+  document.querySelectorAll('#panel-genero .subseccion:first-child .producto-card').forEach((card, index) => {
+    html += generarCardProducto(card, index, 'extract');
+  });
+  document.getElementById('extract-editables').innerHTML = html;
+}
+
+function cargarHierbas() {
+  let html = '';
+  document.querySelectorAll('#panel-genero .subseccion:nth-child(2) .producto-card').forEach((card, index) => {
+    html += generarCardProducto(card, index, 'hierbas');
+  });
+  document.getElementById('hierbas-editables').innerHTML = html;
+}
+
+function cargarLiados() {
+  let html = '';
+  document.querySelectorAll('#panel-genero .subseccion:nth-child(3) .producto-card').forEach((card, index) => {
+    const img = card.querySelector('img');
+    const tieneImagen = img !== null;
+    const nombre = card.querySelector('h4').textContent;
+    const precio = card.querySelector('.producto-precio').textContent;
+    
+    html += `
+      <div style="background: #1a1a2a; border: 3px solid #ffff00; border-radius: 30px; padding: 25px;">
+        <div style="text-align: center; margin-bottom: 15px;">
+          <div style="width: 150px; height: 150px; border-radius: 50%; border: 4px solid #ffff00; background: #000; margin: 0 auto; display: flex; align-items: center; justify-content: center; color: #ffff00; font-size: 3rem;">🚬</div>
+          <div style="margin-top: 10px; color: #ffff00;">SIN IMAGEN</div>
+        </div>
+        <label style="color: white; font-size: 1.8rem;">Nombre:</label>
+        <input type="text" id="liados-nombre-${index}" value="${nombre}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #00ff9f; border-radius: 20px; color: white; margin-bottom: 15px;">
+        <label style="color: white; font-size: 1.8rem;">Precio:</label>
+        <input type="text" id="liados-precio-${index}" value="${precio}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ff18d0; border-radius: 20px; color: #00ff9f; margin-bottom: 15px;">
+        <button onclick="eliminarProducto('liados', ${index})" style="width: 100%; background: #ff18d0; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; color: white; cursor: pointer;">🗑️ ELIMINAR</button>
+      </div>
+    `;
+  });
+  document.getElementById('liados-editables').innerHTML = html;
+}
+
+function generarCardProducto(card, index, seccion) {
+  const img = card.querySelector('img');
+  const imgSrc = img ? img.src : '';
+  const nombre = card.querySelector('h4').textContent;
+  const precio = card.querySelector('.producto-precio').textContent;
+  
+  return `
+    <div style="background: #1a1a2a; border: 3px solid #00ff9f; border-radius: 30px; padding: 25px;">
+      <div style="text-align: center; margin-bottom: 15px;">
+        <img id="preview-${seccion}-${index}" src="${imgSrc}" style="width: 150px; height: 150px; border-radius: 50%; border: 4px solid #ff18d0; object-fit: cover; cursor: pointer;" onclick="seleccionarImagen('${seccion}', ${index})">
+        <div style="margin-top: 10px; color: #00ff9f;">👇 TOCA LA IMAGEN</div>
+      </div>
+      <label style="color: white; font-size: 1.8rem;">Nombre:</label>
+      <input type="text" id="${seccion}-nombre-${index}" value="${nombre}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #00ff9f; border-radius: 20px; color: white; margin-bottom: 15px;">
+      <label style="color: white; font-size: 1.8rem;">Precio:</label>
+      <input type="text" id="${seccion}-precio-${index}" value="${precio}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ff18d0; border-radius: 20px; color: #00ff9f; margin-bottom: 15px;">
+      <button onclick="eliminarProducto('${seccion}', ${index})" style="width: 100%; background: #ff18d0; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; color: white; cursor: pointer;">🗑️ ELIMINAR</button>
+    </div>
+  `;
+}
+
+function cargarRefrescos() {
+  let html = '';
+  document.querySelectorAll('#panel-munchies .munchies-categoria:first-child .item-munchi').forEach((item, index) => {
+    const nombre = item.querySelector('.item-nombre').textContent;
+    const precio = item.querySelector('.item-precio').textContent;
+    
+    html += `
+      <div style="background: #1a1a2a; border: 3px solid #ff18d0; border-radius: 30px; padding: 25px;">
+        <label style="color: white; font-size: 1.8rem;">Producto:</label>
+        <input type="text" id="refresco-nombre-${index}" value="${nombre}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #00ff9f; border-radius: 20px; color: white; margin-bottom: 15px;">
+        <label style="color: white; font-size: 1.8rem;">Precio:</label>
+        <input type="text" id="refresco-precio-${index}" value="${precio}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ff18d0; border-radius: 20px; color: #00ff9f; margin-bottom: 15px;">
+        <button onclick="eliminarMunchi('refrescos', ${index})" style="width: 100%; background: #ff18d0; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; color: white; cursor: pointer;">🗑️ ELIMINAR</button>
+      </div>
+    `;
+  });
+  document.getElementById('refrescos-editables').innerHTML = html;
+}
+
+function cargarPicar() {
+  let html = '';
+  document.querySelectorAll('#panel-munchies .munchies-categoria:nth-child(2) .item-munchi').forEach((item, index) => {
+    const nombre = item.querySelector('.item-nombre').textContent;
+    const precio = item.querySelector('.item-precio').textContent;
+    
+    html += `
+      <div style="background: #1a1a2a; border: 3px solid #ff18d0; border-radius: 30px; padding: 25px;">
+        <label style="color: white; font-size: 1.8rem;">Producto:</label>
+        <input type="text" id="picar-nombre-${index}" value="${nombre}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #00ff9f; border-radius: 20px; color: white; margin-bottom: 15px;">
+        <label style="color: white; font-size: 1.8rem;">Precio:</label>
+        <input type="text" id="picar-precio-${index}" value="${precio}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ff18d0; border-radius: 20px; color: #00ff9f; margin-bottom: 15px;">
+        <button onclick="eliminarMunchi('picar', ${index})" style="width: 100%; background: #ff18d0; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; color: white; cursor: pointer;">🗑️ ELIMINAR</button>
+      </div>
+    `;
+  });
+  document.getElementById('picar-editables').innerHTML = html;
+}
+
+function cargarEventos() {
+  let html = '';
+  document.querySelectorAll('#panel-eventos .evento-card').forEach((card, index) => {
+    const imgSrc = card.querySelector('img').src;
+    
+    html += `
+      <div style="background: #1a1a2a; border: 3px solid #ffff00; border-radius: 30px; padding: 25px;">
+        <div style="text-align: center; margin-bottom: 15px;">
+          <img id="evento-img-${index}" src="${imgSrc}" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 20px; border: 4px solid #ffff00; cursor: pointer;" onclick="seleccionarImagenEvento(${index})">
+          <div style="margin-top: 10px; color: #ffff00;">👇 TOCA LA IMAGEN</div>
+        </div>
+        <button onclick="eliminarEvento(${index})" style="width: 100%; background: #ff18d0; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; color: white; cursor: pointer;">🗑️ ELIMINAR</button>
+      </div>
+    `;
+  });
+  document.getElementById('eventos-editables').innerHTML = html;
+}
+
+// ===== IMÁGENES =====
+function seleccionarImagen(seccion, index) {
+  productoEditando = { seccion, index };
+  document.getElementById('selector-imagen').click();
+}
+
+function seleccionarImagenEvento(index) {
+  productoEditando = { seccion: 'eventos', index };
+  document.getElementById('selector-imagen').click();
+}
+
+document.getElementById('selector-imagen').addEventListener('change', function(e) {
+  if (e.target.files && e.target.files[0] && productoEditando) {
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      const preview = document.getElementById(`preview-${productoEditando.seccion}-${productoEditando.index}`);
+      if (preview) preview.src = ev.target.result;
       
-      // Munchies
-      let munchiesHtml = '';
-      document.querySelectorAll('#panel-munchies .item-munchi').forEach((item, index) => {
-        const nombre = item.querySelector('.item-nombre').textContent;
-        const precio = item.querySelector('.item-precio').textContent;
-        
-        munchiesHtml += `
-          <div style="background: #1a1a2a; border: 3px solid #ff18d0; border-radius: 30px; padding: 25px;">
-            <label style="color: white; font-size: 1.8rem;">Producto:</label>
-            <input type="text" id="munch-nombre-${index}" value="${nombre}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #00ff9f; border-radius: 20px; color: white; margin-bottom: 15px;">
-            <label style="color: white; font-size: 1.8rem;">Precio:</label>
-            <input type="text" id="munch-precio-${index}" value="${precio}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ff18d0; border-radius: 20px; color: #00ff9f; margin-bottom: 15px;">
-            <button onclick="eliminarMunchi(${index})" style="width: 100%; background: #ff18d0; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; color: white; cursor: pointer;">🗑️ ELIMINAR</button>
-          </div>
-        `;
-      });
-      document.getElementById('munchies-editables').innerHTML = munchiesHtml;
-    }
+      let imagenes = localStorage.getItem('masquehigh_imagenes');
+      imagenes = imagenes ? JSON.parse(imagenes) : {};
+      imagenes[`${productoEditando.seccion}_${productoEditando.index}`] = ev.target.result;
+      localStorage.setItem('masquehigh_imagenes', JSON.stringify(imagenes));
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  }
+});
 
-    // ===== IMÁGENES =====
-    function seleccionarImagen(index) {
-      productoEditando = index;
-      document.getElementById('selector-imagen').click();
-    }
+// ===== AÑADIR PRODUCTOS =====
+function anadirProductoEn(seccion) {
+  let contenedor;
+  let nuevoProducto;
+  
+  if (seccion === 'extract') {
+    contenedor = document.querySelector('#panel-genero .subseccion:first-child .productos-grid');
+    nuevoProducto = document.createElement('div');
+    nuevoProducto.className = 'producto-card';
+    nuevoProducto.innerHTML = '<img src="images/placeholder.jpg"><h4>NUEVA EXTRACCIÓN</h4><div class="producto-precio">0€</div>';
+  } else if (seccion === 'hierbas') {
+    contenedor = document.querySelector('#panel-genero .subseccion:nth-child(2) .productos-grid');
+    nuevoProducto = document.createElement('div');
+    nuevoProducto.className = 'producto-card';
+    nuevoProducto.innerHTML = '<img src="images/placeholder.jpg"><h4>NUEVA HIERBA</h4><div class="producto-precio">0€</div>';
+  } else if (seccion === 'liados') {
+    contenedor = document.querySelector('#panel-genero .subseccion:nth-child(3) .productos-grid');
+    nuevoProducto = document.createElement('div');
+    nuevoProducto.className = 'producto-card sin-imagen';
+    nuevoProducto.innerHTML = '<h4>NUEVO LIADO</h4><div class="producto-precio">0€</div>';
+  }
+  
+  if (contenedor && nuevoProducto) {
+    contenedor.appendChild(nuevoProducto);
+    cargarTodosLosDatos();
+  }
+}
 
-    document.getElementById('selector-imagen').addEventListener('change', function(e) {
-      if (e.target.files && e.target.files[0] && productoEditando !== null) {
-        const reader = new FileReader();
-        reader.onload = function(ev) {
-          const preview = document.getElementById(`preview-img-${productoEditando}`);
-          if (preview) preview.src = ev.target.result;
-          
-          let imagenes = localStorage.getItem('masquehigh_imagenes');
-          imagenes = imagenes ? JSON.parse(imagenes) : {};
-          imagenes[`prod_${productoEditando}`] = ev.target.result;
-          localStorage.setItem('masquehigh_imagenes', JSON.stringify(imagenes));
-        };
-        reader.readAsDataURL(e.target.files[0]);
-      }
+function anadirMunchiEn(seccion) {
+  let contenedor;
+  let nuevoMunchi;
+  
+  if (seccion === 'refrescos') {
+    contenedor = document.querySelector('#panel-munchies .munchies-categoria:first-child .items-lista');
+    nuevoMunchi = document.createElement('div');
+    nuevoMunchi.className = 'item-munchi';
+    nuevoMunchi.innerHTML = '<span class="item-nombre">NUEVO REFRESCO</span><span class="item-precio">0€</span>';
+  } else {
+    contenedor = document.querySelector('#panel-munchies .munchies-categoria:nth-child(2) .items-lista');
+    nuevoMunchi = document.createElement('div');
+    nuevoMunchi.className = 'item-munchi';
+    nuevoMunchi.innerHTML = '<span class="item-nombre">NUEVO PRODUCTO</span><span class="item-precio">0€</span>';
+  }
+  
+  if (contenedor && nuevoMunchi) {
+    contenedor.appendChild(nuevoMunchi);
+    cargarTodosLosDatos();
+  }
+}
+
+function anadirEvento() {
+  const contenedor = document.querySelector('#panel-eventos .eventos-grid');
+  const nuevoEvento = document.createElement('div');
+  nuevoEvento.className = 'evento-card';
+  nuevoEvento.innerHTML = '<img src="images/placeholder.jpg">';
+  
+  if (contenedor) {
+    contenedor.appendChild(nuevoEvento);
+    cargarTodosLosDatos();
+  }
+}
+
+// ===== ELIMINAR =====
+function eliminarProducto(seccion, index) {
+  if (seccion === 'extract') {
+    document.querySelectorAll('#panel-genero .subseccion:first-child .producto-card')[index]?.remove();
+  } else if (seccion === 'hierbas') {
+    document.querySelectorAll('#panel-genero .subseccion:nth-child(2) .producto-card')[index]?.remove();
+  } else if (seccion === 'liados') {
+    document.querySelectorAll('#panel-genero .subseccion:nth-child(3) .producto-card')[index]?.remove();
+  }
+  cargarTodosLosDatos();
+}
+
+function eliminarMunchi(seccion, index) {
+  if (seccion === 'refrescos') {
+    document.querySelectorAll('#panel-munchies .munchies-categoria:first-child .item-munchi')[index]?.remove();
+  } else {
+    document.querySelectorAll('#panel-munchies .munchies-categoria:nth-child(2) .item-munchi')[index]?.remove();
+  }
+  cargarTodosLosDatos();
+}
+
+function eliminarEvento(index) {
+  document.querySelectorAll('#panel-eventos .evento-card')[index]?.remove();
+  cargarTodosLosDatos();
+}
+
+// ===== GUARDAR =====
+function guardarTodo() {
+  // Guardar extracción
+  document.querySelectorAll('#panel-genero .subseccion:first-child .producto-card').forEach((card, index) => {
+    const nombre = document.getElementById(`extract-nombre-${index}`)?.value;
+    const precio = document.getElementById(`extract-precio-${index}`)?.value;
+    const img = document.getElementById(`preview-extract-${index}`)?.src;
+    if (nombre) card.querySelector('h4').textContent = nombre;
+    if (precio) card.querySelector('.producto-precio').textContent = precio;
+    if (img) card.querySelector('img').src = img;
+  });
+  
+  // Guardar hierbas
+  document.querySelectorAll('#panel-genero .subseccion:nth-child(2) .producto-card').forEach((card, index) => {
+    const nombre = document.getElementById(`hierbas-nombre-${index}`)?.value;
+    const precio = document.getElementById(`hierbas-precio-${index}`)?.value;
+    const img = document.getElementById(`preview-hierbas-${index}`)?.src;
+    if (nombre) card.querySelector('h4').textContent = nombre;
+    if (precio) card.querySelector('.producto-precio').textContent = precio;
+    if (img) card.querySelector('img').src = img;
+  });
+  
+  // Guardar liados
+  document.querySelectorAll('#panel-genero .subseccion:nth-child(3) .producto-card').forEach((card, index) => {
+    const nombre = document.getElementById(`liados-nombre-${index}`)?.value;
+    const precio = document.getElementById(`liados-precio-${index}`)?.value;
+    if (nombre) card.querySelector('h4').textContent = nombre;
+    if (precio) card.querySelector('.producto-precio').textContent = precio;
+  });
+  
+  // Guardar refrescos
+  document.querySelectorAll('#panel-munchies .munchies-categoria:first-child .item-munchi').forEach((item, index) => {
+    const nombre = document.getElementById(`refresco-nombre-${index}`)?.value;
+    const precio = document.getElementById(`refresco-precio-${index}`)?.value;
+    if (nombre) item.querySelector('.item-nombre').textContent = nombre;
+    if (precio) item.querySelector('.item-precio').textContent = precio;
+  });
+  
+  // Guardar picar
+  document.querySelectorAll('#panel-munchies .munchies-categoria:nth-child(2) .item-munchi').forEach((item, index) => {
+    const nombre = document.getElementById(`picar-nombre-${index}`)?.value;
+    const precio = document.getElementById(`picar-precio-${index}`)?.value;
+    if (nombre) item.querySelector('.item-nombre').textContent = nombre;
+    if (precio) item.querySelector('.item-precio').textContent = precio;
+  });
+  
+  // Guardar eventos
+  document.querySelectorAll('#panel-eventos .evento-card').forEach((card, index) => {
+    const img = document.getElementById(`evento-img-${index}`)?.src;
+    if (img) card.querySelector('img').src = img;
+  });
+  
+  // Guardar en localStorage
+  const datos = {
+    extract: [],
+    hierbas: [],
+    liados: [],
+    refrescos: [],
+    picar: []
+  };
+  
+  document.querySelectorAll('#panel-genero .subseccion:first-child .producto-precio').forEach(e => datos.extract.push(e.textContent));
+  document.querySelectorAll('#panel-genero .subseccion:nth-child(2) .producto-precio').forEach(e => datos.hierbas.push(e.textContent));
+  document.querySelectorAll('#panel-genero .subseccion:nth-child(3) .producto-precio').forEach(e => datos.liados.push(e.textContent));
+  document.querySelectorAll('#panel-munchies .munchies-categoria:first-child .item-precio').forEach(e => datos.refrescos.push(e.textContent));
+  document.querySelectorAll('#panel-munchies .munchies-categoria:nth-child(2) .item-precio').forEach(e => datos.picar.push(e.textContent));
+  
+  localStorage.setItem('masquehigh_datos', JSON.stringify(datos));
+  
+  alert('✅ TODO GUARDADO CORRECTAMENTE');
+  cerrarAdmin();
+}
+
+// ===== CARGAR DATOS GUARDADOS =====
+function cargarDatosGuardados() {
+  const guardados = localStorage.getItem('masquehigh_datos');
+  if (guardados) {
+    const datos = JSON.parse(guardados);
+    
+    let index = 0;
+    document.querySelectorAll('#panel-genero .subseccion:first-child .producto-precio').forEach(e => {
+      if (datos.extract[index]) e.textContent = datos.extract[index];
+      index++;
     });
+    
+    index = 0;
+    document.querySelectorAll('#panel-genero .subseccion:nth-child(2) .producto-precio').forEach(e => {
+      if (datos.hierbas[index]) e.textContent = datos.hierbas[index];
+      index++;
+    });
+    
+    index = 0;
+    document.querySelectorAll('#panel-genero .subseccion:nth-child(3) .producto-precio').forEach(e => {
+      if (datos.liados[index]) e.textContent = datos.liados[index];
+      index++;
+    });
+    
+    index = 0;
+    document.querySelectorAll('#panel-munchies .munchies-categoria:first-child .item-precio').forEach(e => {
+      if (datos.refrescos[index]) e.textContent = datos.refrescos[index];
+      index++;
+    });
+    
+    index = 0;
+    document.querySelectorAll('#panel-munchies .munchies-categoria:nth-child(2) .item-precio').forEach(e => {
+      if (datos.picar[index]) e.textContent = datos.picar[index];
+      index++;
+    });
+  }
+  
+  const imagenes = localStorage.getItem('masquehigh_imagenes');
+  if (imagenes) {
+    const imgData = JSON.parse(imagenes);
+    
+    document.querySelectorAll('#panel-genero .subseccion:first-child .producto-card img').forEach((img, i) => {
+      if (imgData[`extract_${i}`]) img.src = imgData[`extract_${i}`];
+    });
+    
+    document.querySelectorAll('#panel-genero .subseccion:nth-child(2) .producto-card img').forEach((img, i) => {
+      if (imgData[`hierbas_${i}`]) img.src = imgData[`hierbas_${i}`];
+    });
+    
+    document.querySelectorAll('#panel-eventos .evento-card img').forEach((img, i) => {
+      if (imgData[`eventos_${i}`]) img.src = imgData[`eventos_${i}`];
+    });
+  }
+}
 
-    // ===== AÑADIR/ELIMINAR =====
-    function anadirProducto() {
-      const nuevo = document.createElement('div');
-      nuevo.className = 'producto-card';
-      nuevo.innerHTML = '<img src="images/placeholder.jpg"><h4>NUEVO PRODUCTO</h4><div class="producto-precio">0€</div>';
-      document.querySelector('#panel-genero .subseccion .productos-grid').appendChild(nuevo);
-      cargarDatosParaEditar();
-    }
-
-    function anadirMunchi() {
-      const nuevo = document.createElement('div');
-      nuevo.className = 'item-munchi';
-      nuevo.innerHTML = '<span class="item-nombre">NUEVO</span><span class="item-precio">0€</span>';
-      document.querySelector('#panel-munchies .items-lista').appendChild(nuevo);
-      cargarDatosParaEditar();
-    }
-
-    function eliminarProducto(index) {
-      document.querySelectorAll('#panel-genero .producto-card')[index]?.remove();
-      cargarDatosParaEditar();
-    }
-
-    function eliminarMunchi(index) {
-      document.querySelectorAll('#panel-munchies .item-munchi')[index]?.remove();
-      cargarDatosParaEditar();
-    }
-
-    // ===== GUARDAR =====
-    function guardarTodo() {
-      // Productos
-      document.querySelectorAll('#panel-genero .producto-card').forEach((card, index) => {
-        const nombre = document.getElementById(`prod-nombre-${index}`)?.value;
-        const precio = document.getElementById(`prod-precio-${index}`)?.value;
-        const img = document.getElementById(`preview-img-${index}`)?.src;
-        if (nombre) card.querySelector('h4').textContent = nombre;
-        if (precio) card.querySelector('.producto-precio').textContent = precio;
-        if (img && card.querySelector('img')) card.querySelector('img').src = img;
-      });
-      
-      // Munchies
-      document.querySelectorAll('#panel-munchies .item-munchi').forEach((item, index) => {
-        const nombre = document.getElementById(`munch-nombre-${index}`)?.value;
-        const precio = document.getElementById(`munch-precio-${index}`)?.value;
-        if (nombre) item.querySelector('.item-nombre').textContent = nombre;
-        if (precio) item.querySelector('.item-precio').textContent = precio;
-      });
-      
-      // Guardar precios
-      const datos = {
-        productos: [],
-        munchies: []
-      };
-      document.querySelectorAll('.producto-precio').forEach(e => datos.productos.push(e.textContent));
-      document.querySelectorAll('.item-precio').forEach(e => datos.munchies.push(e.textContent));
-      localStorage.setItem('masquehigh_datos', JSON.stringify(datos));
-      
-      alert('✅ GUARDADO CORRECTO');
-      cerrarAdmin();
-    }
-
-    // ===== CARGAR DATOS GUARDADOS =====
-    function cargarDatosGuardados() {
-      // Precios
-      const guardados = localStorage.getItem('masquehigh_datos');
-      if (guardados) {
-        const datos = JSON.parse(guardados);
-        document.querySelectorAll('.producto-precio').forEach((e, i) => {
-          if (datos.productos[i]) e.textContent = datos.productos[i];
-        });
-        document.querySelectorAll('.item-precio').forEach((e, i) => {
-          if (datos.munchies[i]) e.textContent = datos.munchies[i];
-        });
-      }
-      
-      // Imágenes
-      const imagenes = localStorage.getItem('masquehigh_imagenes');
-      if (imagenes) {
-        const imgData = JSON.parse(imagenes);
-        document.querySelectorAll('#panel-genero .producto-card img').forEach((img, i) => {
-          if (imgData[`prod_${i}`]) img.src = imgData[`prod_${i}`];
-        });
-      }
-    }
-
-    window.addEventListener('load', cargarDatosGuardados);
-
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js');
-      });
-    }
-  </script>
-</body>
-</html>
+window.addEventListener('load', cargarDatosGuardados);
+</script>
