@@ -56,6 +56,8 @@
     .item-precio { font-size: 1.5rem; font-weight: 800; color: #00ff9f; }
     .eventos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
     .evento-card img { width: 100%; border-radius: 20px; border: 3px solid #ffff00; }
+    .save-indicator { position: fixed; bottom: 100px; right: 30px; background: #00ff9f; color: black; padding: 15px 25px; border-radius: 50px; font-size: 1.6rem; font-weight: bold; box-shadow: 0 0 20px #00ff9f; z-index: 2100; display: none; }
+    .test-btn { position: fixed; bottom: 120px; left: 30px; background: #ff18d0; color: white; border: none; border-radius: 30px; padding: 10px 20px; font-size: 1.4rem; z-index: 2000; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -185,12 +187,18 @@
     </div>
   </main>
 
+  <!-- Botón de prueba de guardado -->
+  <button class="test-btn" onclick="testGuardado()">🔍 TEST GUARDADO</button>
+
   <!-- ===== PANEL DE ADMINISTRACIÓN ===== -->
   <!-- CONTRASEÑA: situs123 -->
   
   <div style="position: fixed; bottom: 30px; right: 30px; z-index: 2000;">
     <button id="btn-admin" onclick="mostrarLogin()" style="width: 70px; height: 70px; border-radius: 50%; background: #00ff9f; border: 4px solid #ff18d0; color: black; font-size: 30px; box-shadow: 0 0 30px #00ff9f; cursor: pointer;">⚙️</button>
   </div>
+
+  <!-- Indicador de guardado -->
+  <div id="saveIndicator" class="save-indicator">💾 Guardado</div>
 
   <!-- PANEL LOGIN -->
   <div id="panel-login" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2001; align-items: center; justify-content: center;">
@@ -275,9 +283,6 @@
       <button onclick="guardarTodo()" style="width: 100%; background: #00ff9f; border: 4px solid #ff18d0; border-radius: 60px; padding: 30px; font-size: 3rem; font-weight: bold; box-shadow: 0 0 40px #00ff9f; cursor: pointer;">💾 GUARDAR TODOS LOS CAMBIOS</button>
     </div>
     
-    <!-- Indicador de autoguardado -->
-    <div id="autosave-indicator" style="position: fixed; bottom: 120px; right: 30px; background: #00ff9f; color: black; padding: 10px 20px; border-radius: 30px; font-size: 1.4rem; font-weight: bold; display: none; z-index: 2100;">💾 Cambios guardados</div>
-    
   </div>
 
   <input type="file" id="selector-imagen" accept="image/*" style="display: none;">
@@ -285,198 +290,195 @@
   <script>
     // ===== CONFIGURACIÓN =====
     const CONTRASENA = "situs123";
-    const STORAGE_KEY = 'masquehigh_datos_completos_v3';
-    let productoEditando = null;
-    let autosaveTimeout = null;
-
-    // ===== FUNCIONES DE PESTAÑAS =====
-    (function() {
-      const pestanas = document.querySelectorAll('.pestana');
-      const paneles = {
-        genero: document.getElementById('panel-genero'),
-        liados: document.getElementById('panel-liados'),
-        munchies: document.getElementById('panel-munchies'),
-        eventos: document.getElementById('panel-eventos')
-      };
-
-      function abrirPestana(pestanaId) {
-        pestanas.forEach(p => p.classList.remove('activa'));
-        Object.values(paneles).forEach(panel => panel.classList.remove('activo'));
-        const pestanaActiva = document.querySelector(`.pestana[data-pestana="${pestanaId}"]`);
-        if (pestanaActiva) pestanaActiva.classList.add('activa');
-        if (paneles[pestanaId]) paneles[pestanaId].classList.add('activo');
-      }
-
-      pestanas.forEach(p => {
-        p.addEventListener('click', (e) => {
-          e.preventDefault();
-          abrirPestana(p.getAttribute('data-pestana'));
-        });
-      });
-    })();
-
-    // ===== FUNCIONES DE AUTO-GUARDADO =====
-    function mostrarAutoguardado() {
-      const indicator = document.getElementById('autosave-indicator');
-      if (indicator) {
-        indicator.style.display = 'block';
-        setTimeout(() => {
-          indicator.style.display = 'none';
-        }, 2000);
-      }
-    }
-
-    function guardarEstadoCompleto() {
-      const estado = {
-        genero: { extract: [], hierbas: [] },
+    const STORAGE_KEY = 'masquehigh_datos_simple';
+    
+    // ===== FUNCIÓN DE GUARDADO SIMPLE =====
+    function guardarTodo() {
+      console.log('💾 GUARDANDO...');
+      
+      // Crear objeto con todos los datos
+      const datos = {
+        extract: [],
+        hierbas: [],
         liados: [],
-        munchies: { refrescos: [], picar: [] },
+        refrescos: [],
+        picar: [],
         eventos: []
       };
-
+      
       // Guardar extracción
-      document.querySelectorAll('#panel-genero #extract-grid .producto-card').forEach((card) => {
-        const img = card.querySelector('img')?.src || '';
-        const nombre = card.querySelector('h4')?.textContent || '';
-        const precio = card.querySelector('.producto-precio')?.textContent || '';
-        estado.genero.extract.push({ id: card.dataset.id, nombre, precio, img });
+      document.querySelectorAll('#extract-grid .producto-card').forEach(card => {
+        datos.extract.push({
+          nombre: card.querySelector('h4').textContent,
+          precio: card.querySelector('.producto-precio').textContent,
+          img: card.querySelector('img')?.src || ''
+        });
       });
-
+      
       // Guardar hierbas
-      document.querySelectorAll('#panel-genero #hierbas-grid .producto-card').forEach((card) => {
-        const img = card.querySelector('img')?.src || '';
-        const nombre = card.querySelector('h4')?.textContent || '';
-        const precio = card.querySelector('.producto-precio')?.textContent || '';
-        estado.genero.hierbas.push({ id: card.dataset.id, nombre, precio, img });
+      document.querySelectorAll('#hierbas-grid .producto-card').forEach(card => {
+        datos.hierbas.push({
+          nombre: card.querySelector('h4').textContent,
+          precio: card.querySelector('.producto-precio').textContent,
+          img: card.querySelector('img')?.src || ''
+        });
       });
-
+      
       // Guardar liados
-      document.querySelectorAll('#panel-liados #liados-grid .liado-card').forEach((card) => {
-        const nombre = card.querySelector('h4')?.textContent || '';
-        const precio = card.querySelector('.liado-precio')?.textContent || '';
-        estado.liados.push({ id: card.dataset.id, nombre, precio });
+      document.querySelectorAll('#liados-grid .liado-card').forEach(card => {
+        datos.liados.push({
+          nombre: card.querySelector('h4').textContent,
+          precio: card.querySelector('.liado-precio').textContent
+        });
       });
-
+      
       // Guardar refrescos
-      document.querySelectorAll('#panel-munchies #refrescos-lista .item-munchi').forEach((item) => {
-        const nombre = item.querySelector('.item-nombre')?.textContent || '';
-        const precio = item.querySelector('.item-precio')?.textContent || '';
-        estado.munchies.refrescos.push({ id: item.dataset.id, nombre, precio });
+      document.querySelectorAll('#refrescos-lista .item-munchi').forEach(item => {
+        datos.refrescos.push({
+          nombre: item.querySelector('.item-nombre').textContent,
+          precio: item.querySelector('.item-precio').textContent
+        });
       });
-
+      
       // Guardar picar
-      document.querySelectorAll('#panel-munchies #picar-lista .item-munchi').forEach((item) => {
-        const nombre = item.querySelector('.item-nombre')?.textContent || '';
-        const precio = item.querySelector('.item-precio')?.textContent || '';
-        estado.munchies.picar.push({ id: item.dataset.id, nombre, precio });
+      document.querySelectorAll('#picar-lista .item-munchi').forEach(item => {
+        datos.picar.push({
+          nombre: item.querySelector('.item-nombre').textContent,
+          precio: item.querySelector('.item-precio').textContent
+        });
       });
-
+      
       // Guardar eventos
-      document.querySelectorAll('#panel-eventos #eventos-grid .evento-card').forEach((card) => {
-        const img = card.querySelector('img')?.src || '';
-        estado.eventos.push({ id: card.dataset.id, img });
+      document.querySelectorAll('#eventos-grid .evento-card img').forEach((img, index) => {
+        datos.eventos.push({
+          img: img.src
+        });
       });
-
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(estado));
-      console.log('Guardado automático:', new Date().toLocaleTimeString());
-      mostrarAutoguardado();
+      
+      // Guardar en localStorage
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(datos));
+      
+      // Mostrar indicador
+      const indicator = document.getElementById('saveIndicator');
+      indicator.style.display = 'block';
+      setTimeout(() => {
+        indicator.style.display = 'none';
+      }, 2000);
+      
+      console.log('✅ GUARDADO COMPLETO', datos);
+      alert('✅ Datos guardados correctamente');
+      
+      // Cerrar admin si está abierto
+      cerrarAdmin();
     }
-
-    // ===== CARGAR DATOS GUARDADOS =====
-    function cargarEstadoGuardado() {
+    
+    // ===== FUNCIÓN DE CARGA SIMPLE =====
+    function cargarDatos() {
+      console.log('📂 CARGANDO DATOS...');
       const guardado = localStorage.getItem(STORAGE_KEY);
+      
       if (!guardado) {
-        console.log('No hay datos guardados');
+        console.log('ℹ️ No hay datos guardados');
         return;
       }
-
+      
       try {
-        const estado = JSON.parse(guardado);
-        console.log('Cargando datos guardados:', estado);
-
-        // Restaurar extracción
-        if (estado.genero?.extract) {
-          estado.genero.extract.forEach(prod => {
-            const elemento = document.querySelector(`[data-id="${prod.id}"]`);
-            if (elemento && elemento.closest('#extract-grid')) {
-              elemento.querySelector('h4').textContent = prod.nombre;
-              elemento.querySelector('.producto-precio').textContent = prod.precio;
-              if (prod.img && elemento.querySelector('img')) {
-                elemento.querySelector('img').src = prod.img;
+        const datos = JSON.parse(guardado);
+        console.log('📦 Datos cargados:', datos);
+        
+        // Cargar extracción
+        if (datos.extract) {
+          document.querySelectorAll('#extract-grid .producto-card').forEach((card, index) => {
+            if (datos.extract[index]) {
+              card.querySelector('h4').textContent = datos.extract[index].nombre;
+              card.querySelector('.producto-precio').textContent = datos.extract[index].precio;
+              if (datos.extract[index].img && card.querySelector('img')) {
+                card.querySelector('img').src = datos.extract[index].img;
               }
             }
           });
         }
-
-        // Restaurar hierbas
-        if (estado.genero?.hierbas) {
-          estado.genero.hierbas.forEach(prod => {
-            const elemento = document.querySelector(`[data-id="${prod.id}"]`);
-            if (elemento && elemento.closest('#hierbas-grid')) {
-              elemento.querySelector('h4').textContent = prod.nombre;
-              elemento.querySelector('.producto-precio').textContent = prod.precio;
-              if (prod.img && elemento.querySelector('img')) {
-                elemento.querySelector('img').src = prod.img;
+        
+        // Cargar hierbas
+        if (datos.hierbas) {
+          document.querySelectorAll('#hierbas-grid .producto-card').forEach((card, index) => {
+            if (datos.hierbas[index]) {
+              card.querySelector('h4').textContent = datos.hierbas[index].nombre;
+              card.querySelector('.producto-precio').textContent = datos.hierbas[index].precio;
+              if (datos.hierbas[index].img && card.querySelector('img')) {
+                card.querySelector('img').src = datos.hierbas[index].img;
               }
             }
           });
         }
-
-        // Restaurar liados
-        if (estado.liados) {
-          estado.liados.forEach(liado => {
-            const elemento = document.querySelector(`[data-id="${liado.id}"]`);
-            if (elemento && elemento.closest('#liados-grid')) {
-              elemento.querySelector('h4').textContent = liado.nombre;
-              elemento.querySelector('.liado-precio').textContent = liado.precio;
+        
+        // Cargar liados
+        if (datos.liados) {
+          document.querySelectorAll('#liados-grid .liado-card').forEach((card, index) => {
+            if (datos.liados[index]) {
+              card.querySelector('h4').textContent = datos.liados[index].nombre;
+              card.querySelector('.liado-precio').textContent = datos.liados[index].precio;
             }
           });
         }
-
-        // Restaurar refrescos
-        if (estado.munchies?.refrescos) {
-          estado.munchies.refrescos.forEach(item => {
-            const elemento = document.querySelector(`[data-id="${item.id}"]`);
-            if (elemento && elemento.closest('#refrescos-lista')) {
-              elemento.querySelector('.item-nombre').textContent = item.nombre;
-              elemento.querySelector('.item-precio').textContent = item.precio;
+        
+        // Cargar refrescos
+        if (datos.refrescos) {
+          document.querySelectorAll('#refrescos-lista .item-munchi').forEach((item, index) => {
+            if (datos.refrescos[index]) {
+              item.querySelector('.item-nombre').textContent = datos.refrescos[index].nombre;
+              item.querySelector('.item-precio').textContent = datos.refrescos[index].precio;
             }
           });
         }
-
-        // Restaurar picar
-        if (estado.munchies?.picar) {
-          estado.munchies.picar.forEach(item => {
-            const elemento = document.querySelector(`[data-id="${item.id}"]`);
-            if (elemento && elemento.closest('#picar-lista')) {
-              elemento.querySelector('.item-nombre').textContent = item.nombre;
-              elemento.querySelector('.item-precio').textContent = item.precio;
+        
+        // Cargar picar
+        if (datos.picar) {
+          document.querySelectorAll('#picar-lista .item-munchi').forEach((item, index) => {
+            if (datos.picar[index]) {
+              item.querySelector('.item-nombre').textContent = datos.picar[index].nombre;
+              item.querySelector('.item-precio').textContent = datos.picar[index].precio;
             }
           });
         }
-
-        // Restaurar eventos
-        if (estado.eventos) {
-          estado.eventos.forEach(evento => {
-            const elemento = document.querySelector(`[data-id="${evento.id}"]`);
-            if (elemento && evento.img) {
-              elemento.querySelector('img').src = evento.img;
+        
+        // Cargar eventos
+        if (datos.eventos) {
+          document.querySelectorAll('#eventos-grid .evento-card img').forEach((img, index) => {
+            if (datos.eventos[index]) {
+              img.src = datos.eventos[index].img;
             }
           });
         }
-
+        
+        console.log('✅ DATOS CARGADOS CORRECTAMENTE');
+        
       } catch (e) {
-        console.error('Error cargando datos:', e);
+        console.error('❌ Error al cargar:', e);
       }
     }
-
+    
+    // ===== FUNCIÓN DE PRUEBA =====
+    function testGuardado() {
+      const guardado = localStorage.getItem(STORAGE_KEY);
+      if (guardado) {
+        alert('✅ HAY DATOS GUARDADOS\n\n' + guardado.substring(0, 100) + '...');
+        console.log('Datos en localStorage:', JSON.parse(guardado));
+      } else {
+        alert('❌ NO HAY DATOS GUARDADOS');
+      }
+    }
+    
     // ===== LOGIN =====
     function mostrarLogin() {
       document.getElementById('panel-login').style.display = 'flex';
     }
+    
     function cerrarLogin() {
       document.getElementById('panel-login').style.display = 'none';
+      document.getElementById('login-password').value = '';
     }
+    
     function comprobarLogin() {
       const pass = document.getElementById('login-password').value;
       if (pass === CONTRASENA) {
@@ -486,17 +488,17 @@
         document.getElementById('login-error').style.display = 'block';
       }
     }
-
+    
     // ===== ADMIN =====
     function abrirAdmin() {
       document.getElementById('panel-admin').style.display = 'block';
-      cargarTodosLosDatos();
+      cargarTodosLosDatosAdmin();
     }
+    
     function cerrarAdmin() {
       document.getElementById('panel-admin').style.display = 'none';
-      document.getElementById('login-password').value = '';
     }
-
+    
     function cambiarTabAdmin(tab) {
       document.getElementById('admin-genero').style.display = 'none';
       document.getElementById('admin-liados').style.display = 'none';
@@ -511,24 +513,24 @@
       if (tab === 'genero') {
         document.getElementById('admin-genero').style.display = 'block';
         document.getElementById('admin-tab-genero').style.background = '#00ff9f';
-        cargarExtract();
-        cargarHierbas();
+        cargarExtractAdmin();
+        cargarHierbasAdmin();
       } else if (tab === 'liados') {
         document.getElementById('admin-liados').style.display = 'block';
         document.getElementById('admin-tab-liados').style.background = '#ffaa00';
-        cargarLiados();
+        cargarLiadosAdmin();
       } else if (tab === 'munchies') {
         document.getElementById('admin-munchies').style.display = 'block';
         document.getElementById('admin-tab-munchies').style.background = '#ff18d0';
-        cargarRefrescos();
-        cargarPicar();
+        cargarRefrescosAdmin();
+        cargarPicarAdmin();
       } else if (tab === 'eventos') {
         document.getElementById('admin-eventos').style.display = 'block';
         document.getElementById('admin-tab-eventos').style.background = '#ffff00';
-        cargarEventos();
+        cargarEventosAdmin();
       }
     }
-
+    
     function cambiarSubTab(subtab) {
       document.getElementById('admin-extract').style.display = 'none';
       document.getElementById('admin-hierbas').style.display = 'none';
@@ -539,14 +541,14 @@
       if (subtab === 'extract') {
         document.getElementById('admin-extract').style.display = 'block';
         document.getElementById('subtab-extract').style.background = '#00ff9f';
-        cargarExtract();
+        cargarExtractAdmin();
       } else {
         document.getElementById('admin-hierbas').style.display = 'block';
         document.getElementById('subtab-hierbas').style.background = '#00ff9f';
-        cargarHierbas();
+        cargarHierbasAdmin();
       }
     }
-
+    
     function cambiarSubTabMunchies(subtab) {
       document.getElementById('admin-refrescos').style.display = 'none';
       document.getElementById('admin-picar').style.display = 'none';
@@ -557,441 +559,166 @@
       if (subtab === 'refrescos') {
         document.getElementById('admin-refrescos').style.display = 'block';
         document.getElementById('subtab-refrescos').style.background = '#ff18d0';
-        cargarRefrescos();
+        cargarRefrescosAdmin();
       } else {
         document.getElementById('admin-picar').style.display = 'block';
         document.getElementById('subtab-picar').style.background = '#ff18d0';
-        cargarPicar();
+        cargarPicarAdmin();
       }
     }
-
-    // ===== CARGAR DATOS EN ADMIN =====
-    function cargarTodosLosDatos() {
-      cargarExtract();
-      cargarHierbas();
-      cargarLiados();
-      cargarRefrescos();
-      cargarPicar();
-      cargarEventos();
+    
+    // Funciones de carga para admin
+    function cargarTodosLosDatosAdmin() {
+      cargarExtractAdmin();
+      cargarHierbasAdmin();
+      cargarLiadosAdmin();
+      cargarRefrescosAdmin();
+      cargarPicarAdmin();
+      cargarEventosAdmin();
     }
-
-    function cargarExtract() {
+    
+    function cargarExtractAdmin() {
       let html = '';
-      document.querySelectorAll('#panel-genero #extract-grid .producto-card').forEach((card, index) => {
-        html += generarCardProducto(card, index, 'extract');
-      });
-      document.getElementById('extract-editables').innerHTML = html;
-      agregarEventosInputs('extract');
-    }
-
-    function cargarHierbas() {
-      let html = '';
-      document.querySelectorAll('#panel-genero #hierbas-grid .producto-card').forEach((card, index) => {
-        html += generarCardProducto(card, index, 'hierbas');
-      });
-      document.getElementById('hierbas-editables').innerHTML = html;
-      agregarEventosInputs('hierbas');
-    }
-
-    function cargarLiados() {
-      let html = '';
-      document.querySelectorAll('#panel-liados #liados-grid .liado-card').forEach((card, index) => {
+      document.querySelectorAll('#extract-grid .producto-card').forEach((card, index) => {
         const nombre = card.querySelector('h4').textContent;
-        const precio = card.querySelector('.liado-precio').textContent;
-        const cardId = card.dataset.id;
+        const precio = card.querySelector('.producto-precio').textContent;
+        const imgSrc = card.querySelector('img')?.src || '';
         
         html += `
-          <div style="background: #1a1a2a; border: 3px solid #ffaa00; border-radius: 30px; padding: 25px;" data-id="${cardId}">
+          <div style="background: #1a1a2a; border: 3px solid #00ff9f; border-radius: 30px; padding: 25px;">
+            <div style="text-align: center; margin-bottom: 15px;">
+              <img src="${imgSrc}" style="width: 150px; height: 150px; border-radius: 50%; border: 4px solid #ff18d0; object-fit: cover;">
+            </div>
+            <label style="color: white; font-size: 1.8rem;">Nombre:</label>
+            <input type="text" id="extract-nombre-${index}" value="${nombre}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #00ff9f; border-radius: 20px; color: white; margin-bottom: 15px;">
+            <label style="color: white; font-size: 1.8rem;">Precio:</label>
+            <input type="text" id="extract-precio-${index}" value="${precio}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ff18d0; border-radius: 20px; color: #00ff9f; margin-bottom: 15px;">
+          </div>
+        `;
+      });
+      document.getElementById('extract-editables').innerHTML = html;
+    }
+    
+    function cargarHierbasAdmin() {
+      let html = '';
+      document.querySelectorAll('#hierbas-grid .producto-card').forEach((card, index) => {
+        const nombre = card.querySelector('h4').textContent;
+        const precio = card.querySelector('.producto-precio').textContent;
+        const imgSrc = card.querySelector('img')?.src || '';
+        
+        html += `
+          <div style="background: #1a1a2a; border: 3px solid #00ff9f; border-radius: 30px; padding: 25px;">
+            <div style="text-align: center; margin-bottom: 15px;">
+              <img src="${imgSrc}" style="width: 150px; height: 150px; border-radius: 50%; border: 4px solid #ff18d0; object-fit: cover;">
+            </div>
+            <label style="color: white; font-size: 1.8rem;">Nombre:</label>
+            <input type="text" id="hierbas-nombre-${index}" value="${nombre}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #00ff9f; border-radius: 20px; color: white; margin-bottom: 15px;">
+            <label style="color: white; font-size: 1.8rem;">Precio:</label>
+            <input type="text" id="hierbas-precio-${index}" value="${precio}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ff18d0; border-radius: 20px; color: #00ff9f; margin-bottom: 15px;">
+          </div>
+        `;
+      });
+      document.getElementById('hierbas-editables').innerHTML = html;
+    }
+    
+    function cargarLiadosAdmin() {
+      let html = '';
+      document.querySelectorAll('#liados-grid .liado-card').forEach((card, index) => {
+        const nombre = card.querySelector('h4').textContent;
+        const precio = card.querySelector('.liado-precio').textContent;
+        
+        html += `
+          <div style="background: #1a1a2a; border: 3px solid #ffaa00; border-radius: 30px; padding: 25px;">
             <div style="text-align: center; margin-bottom: 15px;">
               <div style="width: 150px; height: 150px; border-radius: 50%; border: 4px solid #ffaa00; background: #000; margin: 0 auto; display: flex; align-items: center; justify-content: center; color: #ffaa00; font-size: 5rem;">🚬</div>
             </div>
             <label style="color: white; font-size: 1.8rem;">Nombre:</label>
-            <input type="text" class="admin-input-nombre" data-seccion="liados" data-index="${index}" value="${nombre}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ffaa00; border-radius: 20px; color: #ffaa00; margin-bottom: 15px;">
+            <input type="text" id="liados-nombre-${index}" value="${nombre}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ffaa00; border-radius: 20px; color: #ffaa00; margin-bottom: 15px;">
             <label style="color: white; font-size: 1.8rem;">Precio:</label>
-            <input type="text" class="admin-input-precio" data-seccion="liados" data-index="${index}" value="${precio}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ffaa00; border-radius: 20px; color: #ffaa00; margin-bottom: 15px;">
-            <button onclick="eliminarLiado(${index})" style="width: 100%; background: #ff18d0; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; color: white; cursor: pointer;">🗑️ ELIMINAR</button>
+            <input type="text" id="liados-precio-${index}" value="${precio}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ffaa00; border-radius: 20px; color: #ffaa00; margin-bottom: 15px;">
           </div>
         `;
       });
       document.getElementById('liados-editables').innerHTML = html;
-      agregarEventosInputs('liados');
     }
-
-    function generarCardProducto(card, index, seccion) {
-      const img = card.querySelector('img');
-      const imgSrc = img ? img.src : '';
-      const nombre = card.querySelector('h4').textContent;
-      const precio = card.querySelector('.producto-precio').textContent;
-      const cardId = card.dataset.id;
-      
-      return `
-        <div style="background: #1a1a2a; border: 3px solid #00ff9f; border-radius: 30px; padding: 25px;" data-id="${cardId}">
-          <div style="text-align: center; margin-bottom: 15px;">
-            <img id="preview-${seccion}-${index}" src="${imgSrc}" style="width: 150px; height: 150px; border-radius: 50%; border: 4px solid #ff18d0; object-fit: cover; cursor: pointer;" onclick="seleccionarImagen('${seccion}', ${index})">
-            <div style="margin-top: 10px; color: #00ff9f;">👇 TOCA LA IMAGEN</div>
-          </div>
-          <label style="color: white; font-size: 1.8rem;">Nombre:</label>
-          <input type="text" class="admin-input-nombre" data-seccion="${seccion}" data-index="${index}" value="${nombre}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #00ff9f; border-radius: 20px; color: white; margin-bottom: 15px;">
-          <label style="color: white; font-size: 1.8rem;">Precio:</label>
-          <input type="text" class="admin-input-precio" data-seccion="${seccion}" data-index="${index}" value="${precio}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ff18d0; border-radius: 20px; color: #00ff9f; margin-bottom: 15px;">
-          <button onclick="eliminarProducto('${seccion}', ${index})" style="width: 100%; background: #ff18d0; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; color: white; cursor: pointer;">🗑️ ELIMINAR</button>
-        </div>
-      `;
-    }
-
-    function cargarRefrescos() {
+    
+    function cargarRefrescosAdmin() {
       let html = '';
-      document.querySelectorAll('#panel-munchies #refrescos-lista .item-munchi').forEach((item, index) => {
+      document.querySelectorAll('#refrescos-lista .item-munchi').forEach((item, index) => {
         const nombre = item.querySelector('.item-nombre').textContent;
         const precio = item.querySelector('.item-precio').textContent;
-        const itemId = item.dataset.id;
         
         html += `
-          <div style="background: #1a1a2a; border: 3px solid #ff18d0; border-radius: 30px; padding: 25px;" data-id="${itemId}">
+          <div style="background: #1a1a2a; border: 3px solid #ff18d0; border-radius: 30px; padding: 25px;">
             <label style="color: white; font-size: 1.8rem;">Producto:</label>
-            <input type="text" class="admin-input-nombre" data-seccion="refrescos" data-index="${index}" value="${nombre}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #00ff9f; border-radius: 20px; color: white; margin-bottom: 15px;">
+            <input type="text" id="refresco-nombre-${index}" value="${nombre}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #00ff9f; border-radius: 20px; color: white; margin-bottom: 15px;">
             <label style="color: white; font-size: 1.8rem;">Precio:</label>
-            <input type="text" class="admin-input-precio" data-seccion="refrescos" data-index="${index}" value="${precio}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ff18d0; border-radius: 20px; color: #00ff9f; margin-bottom: 15px;">
-            <button onclick="eliminarMunchi('refrescos', ${index})" style="width: 100%; background: #ff18d0; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; color: white; cursor: pointer;">🗑️ ELIMINAR</button>
+            <input type="text" id="refresco-precio-${index}" value="${precio}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ff18d0; border-radius: 20px; color: #00ff9f; margin-bottom: 15px;">
           </div>
         `;
       });
       document.getElementById('refrescos-editables').innerHTML = html;
-      agregarEventosInputs('refrescos');
     }
-
-    function cargarPicar() {
+    
+    function cargarPicarAdmin() {
       let html = '';
-      document.querySelectorAll('#panel-munchies #picar-lista .item-munchi').forEach((item, index) => {
+      document.querySelectorAll('#picar-lista .item-munchi').forEach((item, index) => {
         const nombre = item.querySelector('.item-nombre').textContent;
         const precio = item.querySelector('.item-precio').textContent;
-        const itemId = item.dataset.id;
         
         html += `
-          <div style="background: #1a1a2a; border: 3px solid #ff18d0; border-radius: 30px; padding: 25px;" data-id="${itemId}">
+          <div style="background: #1a1a2a; border: 3px solid #ff18d0; border-radius: 30px; padding: 25px;">
             <label style="color: white; font-size: 1.8rem;">Producto:</label>
-            <input type="text" class="admin-input-nombre" data-seccion="picar" data-index="${index}" value="${nombre}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #00ff9f; border-radius: 20px; color: white; margin-bottom: 15px;">
+            <input type="text" id="picar-nombre-${index}" value="${nombre}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #00ff9f; border-radius: 20px; color: white; margin-bottom: 15px;">
             <label style="color: white; font-size: 1.8rem;">Precio:</label>
-            <input type="text" class="admin-input-precio" data-seccion="picar" data-index="${index}" value="${precio}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ff18d0; border-radius: 20px; color: #00ff9f; margin-bottom: 15px;">
-            <button onclick="eliminarMunchi('picar', ${index})" style="width: 100%; background: #ff18d0; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; color: white; cursor: pointer;">🗑️ ELIMINAR</button>
+            <input type="text" id="picar-precio-${index}" value="${precio}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ff18d0; border-radius: 20px; color: #00ff9f; margin-bottom: 15px;">
           </div>
         `;
       });
       document.getElementById('picar-editables').innerHTML = html;
-      agregarEventosInputs('picar');
     }
-
-    function cargarEventos() {
+    
+    function cargarEventosAdmin() {
       let html = '';
-      document.querySelectorAll('#panel-eventos #eventos-grid .evento-card').forEach((card, index) => {
-        const imgSrc = card.querySelector('img').src;
-        const cardId = card.dataset.id;
-        
+      document.querySelectorAll('#eventos-grid .evento-card img').forEach((img, index) => {
         html += `
-          <div style="background: #1a1a2a; border: 3px solid #ffff00; border-radius: 30px; padding: 25px;" data-id="${cardId}">
+          <div style="background: #1a1a2a; border: 3px solid #ffff00; border-radius: 30px; padding: 25px;">
             <div style="text-align: center; margin-bottom: 15px;">
-              <img id="evento-img-${index}" src="${imgSrc}" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 20px; border: 4px solid #ffff00; cursor: pointer;" onclick="seleccionarImagenEvento(${index})">
-              <div style="margin-top: 10px; color: #ffff00;">👇 TOCA LA IMAGEN</div>
+              <img src="${img.src}" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 20px; border: 4px solid #ffff00;">
             </div>
-            <button onclick="eliminarEvento(${index})" style="width: 100%; background: #ff18d0; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; color: white; cursor: pointer;">🗑️ ELIMINAR</button>
           </div>
         `;
       });
       document.getElementById('eventos-editables').innerHTML = html;
     }
-
-    // ===== AGREGAR EVENTOS DE AUTO-GUARDADO =====
-    function agregarEventosInputs(seccion) {
-      setTimeout(() => {
-        document.querySelectorAll(`.admin-input-nombre[data-seccion="${seccion}"], .admin-input-precio[data-seccion="${seccion}"]`).forEach(input => {
-          input.removeEventListener('input', autoSaveHandler);
-          input.addEventListener('input', autoSaveHandler);
-        });
-      }, 100);
-    }
-
-    function autoSaveHandler() {
-      if (autosaveTimeout) clearTimeout(autosaveTimeout);
-      autosaveTimeout = setTimeout(() => {
-        actualizarVistaPrevia();
-        guardarEstadoCompleto();
-      }, 500);
-    }
-
-    function actualizarVistaPrevia() {
-      // Actualizar extract y hierbas
-      document.querySelectorAll('#admin-genero input').forEach(input => {
-        const seccion = input.dataset.seccion;
-        const index = input.dataset.index;
-        const tipo = input.classList.contains('admin-input-nombre') ? 'nombre' : 'precio';
-        
-        if (seccion && index !== undefined) {
-          let elemento;
-          if (seccion === 'extract') {
-            elemento = document.querySelectorAll('#panel-genero #extract-grid .producto-card')[index];
-          } else if (seccion === 'hierbas') {
-            elemento = document.querySelectorAll('#panel-genero #hierbas-grid .producto-card')[index];
-          }
-          
-          if (elemento) {
-            if (tipo === 'nombre') {
-              elemento.querySelector('h4').textContent = input.value;
-            } else {
-              elemento.querySelector('.producto-precio').textContent = input.value;
-            }
-          }
-        }
-      });
-
-      // Actualizar liados
-      document.querySelectorAll('#admin-liados input').forEach(input => {
-        const index = input.dataset.index;
-        const tipo = input.classList.contains('admin-input-nombre') ? 'nombre' : 'precio';
-        
-        if (index !== undefined) {
-          const elemento = document.querySelectorAll('#panel-liados #liados-grid .liado-card')[index];
-          if (elemento) {
-            if (tipo === 'nombre') {
-              elemento.querySelector('h4').textContent = input.value;
-            } else {
-              elemento.querySelector('.liado-precio').textContent = input.value;
-            }
-          }
-        }
-      });
-
-      // Actualizar munchies
-      document.querySelectorAll('#admin-munchies input').forEach(input => {
-        const seccion = input.dataset.seccion;
-        const index = input.dataset.index;
-        const tipo = input.classList.contains('admin-input-nombre') ? 'nombre' : 'precio';
-        
-        if (seccion && index !== undefined) {
-          let elemento;
-          if (seccion === 'refrescos') {
-            elemento = document.querySelectorAll('#panel-munchies #refrescos-lista .item-munchi')[index];
-          } else if (seccion === 'picar') {
-            elemento = document.querySelectorAll('#panel-munchies #picar-lista .item-munchi')[index];
-          }
-          
-          if (elemento) {
-            if (tipo === 'nombre') {
-              elemento.querySelector('.item-nombre').textContent = input.value;
-            } else {
-              elemento.querySelector('.item-precio').textContent = input.value;
-            }
-          }
-        }
-      });
-    }
-
-    // ===== IMÁGENES =====
-    function seleccionarImagen(seccion, index) {
-      productoEditando = { seccion, index };
-      document.getElementById('selector-imagen').click();
-    }
-
-    function seleccionarImagenEvento(index) {
-      productoEditando = { seccion: 'eventos', index };
-      document.getElementById('selector-imagen').click();
-    }
-
-    document.getElementById('selector-imagen').addEventListener('change', function(e) {
-      if (e.target.files && e.target.files[0] && productoEditando) {
-        const reader = new FileReader();
-        reader.onload = function(ev) {
-          const preview = document.getElementById(`preview-${productoEditando.seccion}-${productoEditando.index}`);
-          if (preview) preview.src = ev.target.result;
-          
-          if (productoEditando.seccion === 'eventos') {
-            const eventoImg = document.querySelectorAll('#panel-eventos #eventos-grid .evento-card img')[productoEditando.index];
-            if (eventoImg) eventoImg.src = ev.target.result;
-          } else {
-            let elemento;
-            if (productoEditando.seccion === 'extract') {
-              elemento = document.querySelectorAll('#panel-genero #extract-grid .producto-card img')[productoEditando.index];
-            } else if (productoEditando.seccion === 'hierbas') {
-              elemento = document.querySelectorAll('#panel-genero #hierbas-grid .producto-card img')[productoEditando.index];
-            }
-            if (elemento) elemento.src = ev.target.result;
-          }
-          
-          guardarEstadoCompleto();
-        };
-        reader.readAsDataURL(e.target.files[0]);
-      }
-    });
-
-    // ===== AÑADIR PRODUCTOS =====
+    
+    // Funciones para añadir
     function anadirProductoEn(seccion) {
-      let contenedor;
-      let nuevoId = `${seccion}-${Date.now()}`;
-      
-      if (seccion === 'extract') {
-        contenedor = document.querySelector('#panel-genero #extract-grid');
-        if (contenedor) {
-          const nuevoProducto = document.createElement('div');
-          nuevoProducto.className = 'producto-card';
-          nuevoProducto.dataset.id = nuevoId;
-          nuevoProducto.innerHTML = '<img src="images/placeholder.jpg"><h4>NUEVA EXTRACCIÓN</h4><div class="producto-precio">0€</div>';
-          contenedor.appendChild(nuevoProducto);
-        }
-      } else if (seccion === 'hierbas') {
-        contenedor = document.querySelector('#panel-genero #hierbas-grid');
-        if (contenedor) {
-          const nuevoProducto = document.createElement('div');
-          nuevoProducto.className = 'producto-card';
-          nuevoProducto.dataset.id = nuevoId;
-          nuevoProducto.innerHTML = '<img src="images/placeholder.jpg"><h4>NUEVA HIERBA</h4><div class="producto-precio">0€</div>';
-          contenedor.appendChild(nuevoProducto);
-        }
-      }
-      
-      guardarEstadoCompleto();
-      cargarTodosLosDatos();
+      alert('Para añadir productos usa el botón GUARDAR después de editar');
     }
-
+    
     function anadirLiado() {
-      const contenedor = document.querySelector('#panel-liados #liados-grid');
-      const nuevoId = `liados-${Date.now()}`;
-      
-      if (contenedor) {
-        const nuevoLiado = document.createElement('div');
-        nuevoLiado.className = 'liado-card';
-        nuevoLiado.dataset.id = nuevoId;
-        nuevoLiado.innerHTML = `
-          <div class="liado-icon">🚬</div>
-          <h4>NUEVO LIADO</h4>
-          <div class="liado-precio">0€</div>
-        `;
-        contenedor.appendChild(nuevoLiado);
-      }
-      
-      guardarEstadoCompleto();
-      cargarTodosLosDatos();
+      alert('Para añadir liados usa el botón GUARDAR después de editar');
     }
-
+    
     function anadirMunchiEn(seccion) {
-      let contenedor;
-      let nuevoId = `${seccion}-${Date.now()}`;
-      
-      if (seccion === 'refrescos') {
-        contenedor = document.querySelector('#panel-munchies #refrescos-lista');
-        if (contenedor) {
-          const nuevoMunchi = document.createElement('div');
-          nuevoMunchi.className = 'item-munchi';
-          nuevoMunchi.dataset.id = nuevoId;
-          nuevoMunchi.innerHTML = '<span class="item-nombre">NUEVO REFRESCO</span><span class="item-precio">0€</span>';
-          contenedor.appendChild(nuevoMunchi);
-        }
-      } else {
-        contenedor = document.querySelector('#panel-munchies #picar-lista');
-        if (contenedor) {
-          const nuevoMunchi = document.createElement('div');
-          nuevoMunchi.className = 'item-munchi';
-          nuevoMunchi.dataset.id = nuevoId;
-          nuevoMunchi.innerHTML = '<span class="item-nombre">NUEVO PRODUCTO</span><span class="item-precio">0€</span>';
-          contenedor.appendChild(nuevoMunchi);
-        }
-      }
-      
-      guardarEstadoCompleto();
-      cargarTodosLosDatos();
+      alert('Para añadir productos usa el botón GUARDAR después de editar');
     }
-
+    
     function anadirEvento() {
-      const contenedor = document.querySelector('#panel-eventos #eventos-grid');
-      const nuevoId = `evento-${Date.now()}`;
-      
-      if (contenedor) {
-        const nuevoEvento = document.createElement('div');
-        nuevoEvento.className = 'evento-card';
-        nuevoEvento.dataset.id = nuevoId;
-        nuevoEvento.innerHTML = '<img src="images/placeholder.jpg">';
-        contenedor.appendChild(nuevoEvento);
-      }
-      
-      guardarEstadoCompleto();
-      cargarTodosLosDatos();
+      alert('Para añadir eventos usa el botón GUARDAR después de editar');
     }
-
-    // ===== ELIMINAR =====
-    function eliminarProducto(seccion, index) {
-      if (seccion === 'extract') {
-        document.querySelectorAll('#panel-genero #extract-grid .producto-card')[index]?.remove();
-      } else if (seccion === 'hierbas') {
-        document.querySelectorAll('#panel-genero #hierbas-grid .producto-card')[index]?.remove();
-      }
-      guardarEstadoCompleto();
-      cargarTodosLosDatos();
-    }
-
-    function eliminarLiado(index) {
-      document.querySelectorAll('#panel-liados #liados-grid .liado-card')[index]?.remove();
-      guardarEstadoCompleto();
-      cargarTodosLosDatos();
-    }
-
-    function eliminarMunchi(seccion, index) {
-      if (seccion === 'refrescos') {
-        document.querySelectorAll('#panel-munchies #refrescos-lista .item-munchi')[index]?.remove();
-      } else {
-        document.querySelectorAll('#panel-munchies #picar-lista .item-munchi')[index]?.remove();
-      }
-      guardarEstadoCompleto();
-      cargarTodosLosDatos();
-    }
-
-    function eliminarEvento(index) {
-      document.querySelectorAll('#panel-eventos #eventos-grid .evento-card')[index]?.remove();
-      guardarEstadoCompleto();
-      cargarTodosLosDatos();
-    }
-
-    // ===== GUARDAR TODO =====
-    function guardarTodo() {
-      actualizarVistaPrevia();
-      guardarEstadoCompleto();
-      alert('✅ TODOS LOS CAMBIOS GUARDADOS');
-      cerrarAdmin();
-    }
-
+    
     // ===== INICIALIZACIÓN =====
     window.addEventListener('load', () => {
-      // Asignar IDs si no existen
-      document.querySelectorAll('#panel-genero .producto-card').forEach((card, index) => {
-        if (!card.dataset.id) {
-          const tipo = card.closest('#extract-grid') ? 'extract' : 'hierbas';
-          card.dataset.id = `${tipo}-${index}`;
-        }
-      });
+      console.log('🚀 App iniciada');
+      cargarDatos();
       
-      document.querySelectorAll('#panel-liados .liado-card').forEach((card, index) => {
-        if (!card.dataset.id) {
-          card.dataset.id = `liados-${index}`;
-        }
+      // Guardar al cerrar la app (para WEBINTOAPP)
+      window.addEventListener('beforeunload', () => {
+        console.log('💾 Guardando antes de cerrar...');
+        guardarTodo();
       });
-      
-      document.querySelectorAll('#panel-munchies .item-munchi').forEach((item, index) => {
-        if (!item.dataset.id) {
-          const tipo = item.closest('#refrescos-lista') ? 'refresco' : 'picar';
-          item.dataset.id = `${tipo}-${index}`;
-        }
-      });
-      
-      document.querySelectorAll('#panel-eventos .evento-card').forEach((card, index) => {
-        if (!card.dataset.id) {
-          card.dataset.id = `evento-${index}`;
-        }
-      });
-
-      // Cargar datos guardados
-      cargarEstadoGuardado();
-      
-      // Guardar cada 30 segundos por si acaso
-      setInterval(() => {
-        guardarEstadoCompleto();
-      }, 30000);
     });
   </script>
 </body>
