@@ -23,12 +23,13 @@
     .logo-masquehigh { font-size: 4.8rem; font-weight: 900; color: #00ff9f; text-shadow: 0 0 25px #00ff9f; line-height: 1.1; }
     .logo-club { font-size: 3.5rem; font-weight: 900; letter-spacing: 12px; color: #ff44e0; margin-top: -0.5rem; }
     .welcome { font-size: 1.6rem; color: #ffffff; background: linear-gradient(90deg, transparent, rgba(255, 24, 208, 0.2), transparent); padding: 0.3rem 1rem; border-radius: 40px; display: inline-block; }
-    .pestanas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; padding: 0.8rem 1.5rem; }
-    .pestana { background: rgba(10, 10, 20, 0.9); border: 2px solid; border-radius: 15px; padding: 0.7rem 0.2rem; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
+    .pestanas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; padding: 0.8rem 1.5rem; }
+    .pestana { background: rgba(10, 10, 20, 0.9); border: 2px solid; border-radius: 15px; padding: 0.7rem 0.2rem; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; }
     .pestana.genero { border-color: #00ff9f; color: #00ff9f; }
+    .pestana.petas { border-color: #ffaa00; color: #ffaa00; }
     .pestana.munchies { border-color: #ff18d0; color: #ff18d0; }
     .pestana.eventos { border-color: #ffff00; color: #ffff00; }
-    .pestana.activa { transform: scale(1.02); box-shadow: 0 0 20px currentColor; border-width: 3px; }
+    .pestana.activa { transform: scale(1.02); box-shadow: 0 0 20px currentColor; border-width: 3px; background: rgba(20, 20, 30, 0.95); }
     .pestana-icon { font-size: 2.2rem; }
     .pestana-text { font-size: 1.3rem; font-weight: 700; }
     .contenido { flex: 1; overflow-y: auto; padding: 1rem 1.5rem; }
@@ -41,9 +42,12 @@
     .producto-card img { width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 3px solid #00ff9f; box-shadow: 0 0 0 2px #ff18d0; margin-bottom: 0.5rem; }
     .producto-card h4 { font-size: 1.2rem; color: white; text-shadow: 0 0 5px #00ff9f; margin-bottom: 0.25rem; }
     .producto-precio { font-size: 1.3rem; font-weight: 800; color: #00ff9f; background: rgba(255, 24, 208, 0.2); padding: 0.2rem 1rem; border-radius: 30px; border: 1px solid #ff18d0; display: inline-block; }
-    /* Estilo para productos sin imagen */
-    .producto-card.sin-imagen { background: linear-gradient(145deg, #0d0f1a, #1a1a2a); border: 2px solid #ffff00; min-height: 120px; justify-content: center; }
-    .producto-card.sin-imagen h4 { font-size: 1.5rem; margin-bottom: 0.8rem; color: #ffff00; text-shadow: 0 0 10px #ffff00; }
+    /* Estilo para petas liadas */
+    .petas-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.2rem; }
+    .peta-card { background: linear-gradient(145deg, #1a1a2a, #0d0f1a); border: 3px solid #ffaa00; border-radius: 20px; padding: 1.2rem 0.8rem; display: flex; flex-direction: column; align-items: center; text-align: center; box-shadow: 0 0 15px rgba(255, 170, 0, 0.3); }
+    .peta-icon { font-size: 4rem; margin-bottom: 0.5rem; filter: drop-shadow(0 0 10px #ffaa00); }
+    .peta-card h4 { font-size: 1.5rem; color: #ffaa00; text-shadow: 0 0 10px #ffaa00; margin-bottom: 0.5rem; }
+    .peta-precio { font-size: 1.4rem; font-weight: 800; color: white; background: rgba(255, 170, 0, 0.3); padding: 0.3rem 1.2rem; border-radius: 30px; border: 2px solid #ffaa00; display: inline-block; }
     .munchies-categoria { background: rgba(20, 5, 25, 0.7); border: 2px solid #ff18d0; border-radius: 30px; padding: 1.5rem 1.2rem; margin-bottom: 1.5rem; }
     .categoria-titulo { font-size: 2.6rem; color: #ff18d0; text-shadow: 0 0 15px #ff18d0; margin-bottom: 1.5rem; border-bottom: 3px dotted #00ff9f; padding-bottom: 0.5rem; display: inline-block; }
     .items-lista { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.2rem; }
@@ -69,6 +73,10 @@
         <div class="pestana-icon">🌿</div>
         <div class="pestana-text">GÉNERO</div>
       </div>
+      <div class="pestana petas" data-pestana="petas">
+        <div class="pestana-icon">🚬</div>
+        <div class="pestana-text">PETAS LIADAS</div>
+      </div>
       <div class="pestana munchies" data-pestana="munchies">
         <div class="pestana-icon">🍕</div>
         <div class="pestana-text">MUNCHIES</div>
@@ -80,93 +88,104 @@
     </div>
 
     <div class="contenido">
+      <!-- PANEL GÉNERO (con extracción y hierbas) -->
       <div id="panel-genero" class="panel activo">
         <div class="catalogo-grid">
           <!-- EXTRACCIÓN -->
           <div class="subseccion">
             <h3 class="subseccion-titulo">⚡ EXTRACCIÓN</h3>
-            <div class="productos-grid">
-              <div class="producto-card"><img src="images/image1.jpg"><h4>BHO TROPICANA CHERRY</h4><div class="producto-precio">28€/g</div></div>
-              <div class="producto-card"><img src="images/image2.jpg"><h4>FORBBIDEN FROZEN</h4><div class="producto-precio">8€/g</div></div>
-              <div class="producto-card"><img src="images/image3.jpg"><h4>OREO</h4><div class="producto-precio">6€/g</div></div>
-              <div class="producto-card"><img src="images/image4.jpg"><h4>COOKIES</h4><div class="producto-precio">5€/g</div></div>
-              <div class="producto-card"><img src="images/gorila.jpg"><h4>GORILA</h4><div class="producto-precio">Precio</div></div>
+            <div class="productos-grid" id="extract-grid">
+              <div class="producto-card" data-id="extract-0"><img src="images/image1.jpg"><h4>BHO TROPICANA CHERRY</h4><div class="producto-precio">28€/g</div></div>
+              <div class="producto-card" data-id="extract-1"><img src="images/image2.jpg"><h4>FORBBIDEN FROZEN</h4><div class="producto-precio">8€/g</div></div>
+              <div class="producto-card" data-id="extract-2"><img src="images/image3.jpg"><h4>OREO</h4><div class="producto-precio">6€/g</div></div>
+              <div class="producto-card" data-id="extract-3"><img src="images/image4.jpg"><h4>COOKIES</h4><div class="producto-precio">5€/g</div></div>
+              <div class="producto-card" data-id="extract-4"><img src="images/gorila.jpg"><h4>GORILA</h4><div class="producto-precio">Precio</div></div>
             </div>
           </div>
           <!-- HIERBAS -->
           <div class="subseccion">
             <h3 class="subseccion-titulo">🌿 HIERBAS</h3>
-            <div class="productos-grid">
-              <div class="producto-card"><img src="images/image5.jpg"><h4>LONDON CAKE</h4><div class="producto-precio">8€/g</div></div>
-              <div class="producto-card"><img src="images/image6.jpg"><h4>CREAM CARAMEL</h4><div class="producto-precio">6€/g</div></div>
-              <div class="producto-card"><img src="images/image7.jpg"><h4>AMNESIA</h4><div class="producto-precio">4€/g</div></div>
-              <div class="producto-card"><img src="images/image8.jpg"><h4>TANGIE</h4><div class="producto-precio">7€/g</div></div>
-              <div class="producto-card"><img src="images/image9.jpg"><h4>DANCE HALL</h4><div class="producto-precio">6€/g</div></div>
-              <div class="producto-card"><img src="images/image10.jpg"><h4>MELON</h4><div class="producto-precio">5€/g</div></div>
-              <div class="producto-card"><img src="images/image11.jpg"><h4>TROPICANA CHERRY</h4><div class="producto-precio">8€/g</div></div>
-              <div class="producto-card"><img src="images/image12.jpg"><h4>GELATOxPURPLE</h4><div class="producto-precio">7€/g</div></div>
-              <div class="producto-card"><img src="images/image13.jpg"><h4>JEALOUSY</h4><div class="producto-precio">7€/g</div></div>
-            </div>
-          </div>
-          <!-- PORROS LIADOS (SIN IMAGEN) -->
-          <div class="subseccion">
-            <h3 class="subseccion-titulo">🚬 PORROS LIADOS</h3>
-            <div class="productos-grid">
-              <div class="producto-card sin-imagen">
-                <h4>CRITICAL x GORILA</h4>
-                <div class="producto-precio">1x3€ | 2x5€</div>
-              </div>
-              <div class="producto-card sin-imagen">
-                <h4>MAC 1</h4>
-                <div class="producto-precio">1x3€ | 2x5€</div>
-              </div>
+            <div class="productos-grid" id="hierbas-grid">
+              <div class="producto-card" data-id="hierbas-0"><img src="images/image5.jpg"><h4>LONDON CAKE</h4><div class="producto-precio">8€/g</div></div>
+              <div class="producto-card" data-id="hierbas-1"><img src="images/image6.jpg"><h4>CREAM CARAMEL</h4><div class="producto-precio">6€/g</div></div>
+              <div class="producto-card" data-id="hierbas-2"><img src="images/image7.jpg"><h4>AMNESIA</h4><div class="producto-precio">4€/g</div></div>
+              <div class="producto-card" data-id="hierbas-3"><img src="images/image8.jpg"><h4>TANGIE</h4><div class="producto-precio">7€/g</div></div>
+              <div class="producto-card" data-id="hierbas-4"><img src="images/image9.jpg"><h4>DANCE HALL</h4><div class="producto-precio">6€/g</div></div>
+              <div class="producto-card" data-id="hierbas-5"><img src="images/image10.jpg"><h4>MELON</h4><div class="producto-precio">5€/g</div></div>
+              <div class="producto-card" data-id="hierbas-6"><img src="images/image11.jpg"><h4>TROPICANA CHERRY</h4><div class="producto-precio">8€/g</div></div>
+              <div class="producto-card" data-id="hierbas-7"><img src="images/image12.jpg"><h4>GELATOxPURPLE</h4><div class="producto-precio">7€/g</div></div>
+              <div class="producto-card" data-id="hierbas-8"><img src="images/image13.jpg"><h4>JEALOUSY</h4><div class="producto-precio">7€/g</div></div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- MUNCHIES -->
+      <!-- PANEL PETAS LIADOS (nuevo panel independiente) -->
+      <div id="panel-petas" class="panel">
+        <div class="subseccion" style="border-color: #ffaa00;">
+          <h3 class="subseccion-titulo" style="color: #ffaa00; border-left-color: #ffaa00;">🚬 PORROS LIADOS</h3>
+          <div class="petas-grid" id="petas-grid">
+            <div class="peta-card" data-id="petas-0">
+              <div class="peta-icon">🚬</div>
+              <h4>CRITICAL x GORILA</h4>
+              <div class="peta-precio">1x3€ | 2x5€</div>
+            </div>
+            <div class="peta-card" data-id="petas-1">
+              <div class="peta-icon">🚬</div>
+              <h4>MAC 1</h4>
+              <div class="peta-precio">1x3€ | 2x5€</div>
+            </div>
+            <div class="peta-card" data-id="petas-2">
+              <div class="peta-icon">🚬</div>
+              <h4>ZKITTLEZ</h4>
+              <div class="peta-precio">1x3.5€ | 2x6€</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL MUNCHIES -->
       <div id="panel-munchies" class="panel">
         <div class="munchies-grid">
           <div class="munchies-categoria">
             <div class="categoria-titulo">🥤 REFRESCOS</div>
-            <div class="items-lista">
-              <div class="item-munchi"><span class="item-nombre">AQUARIUS</span><span class="item-precio">2€</span></div>
-              <div class="item-munchi"><span class="item-nombre">COCACOLA</span><span class="item-precio">2€</span></div>
-              <div class="item-munchi"><span class="item-nombre">FANTA</span><span class="item-precio">2€</span></div>
-              <div class="item-munchi"><span class="item-nombre">MONSTER</span><span class="item-precio">2.50€</span></div>
-              <div class="item-munchi"><span class="item-nombre">NESTEA</span><span class="item-precio">2€</span></div>
-              <div class="item-munchi"><span class="item-nombre">AGUA</span><span class="item-precio">1.50€</span></div>
-              <div class="item-munchi"><span class="item-nombre">ESTRELLA</span><span class="item-precio">2€</span></div>
-              <div class="item-munchi"><span class="item-nombre">HEINEKEN</span><span class="item-precio">2€</span></div>
-              <div class="item-munchi"><span class="item-nombre">REDBULL</span><span class="item-precio">2.50€</span></div>
-              <div class="item-munchi"><span class="item-nombre">COMB.LATA</span><span class="item-precio">5€</span></div>
+            <div class="items-lista" id="refrescos-lista">
+              <div class="item-munchi" data-id="refresco-0"><span class="item-nombre">AQUARIUS</span><span class="item-precio">2€</span></div>
+              <div class="item-munchi" data-id="refresco-1"><span class="item-nombre">COCACOLA</span><span class="item-precio">2€</span></div>
+              <div class="item-munchi" data-id="refresco-2"><span class="item-nombre">FANTA</span><span class="item-precio">2€</span></div>
+              <div class="item-munchi" data-id="refresco-3"><span class="item-nombre">MONSTER</span><span class="item-precio">2.50€</span></div>
+              <div class="item-munchi" data-id="refresco-4"><span class="item-nombre">NESTEA</span><span class="item-precio">2€</span></div>
+              <div class="item-munchi" data-id="refresco-5"><span class="item-nombre">AGUA</span><span class="item-precio">1.50€</span></div>
+              <div class="item-munchi" data-id="refresco-6"><span class="item-nombre">ESTRELLA</span><span class="item-precio">2€</span></div>
+              <div class="item-munchi" data-id="refresco-7"><span class="item-nombre">HEINEKEN</span><span class="item-precio">2€</span></div>
+              <div class="item-munchi" data-id="refresco-8"><span class="item-nombre">REDBULL</span><span class="item-precio">2.50€</span></div>
+              <div class="item-munchi" data-id="refresco-9"><span class="item-nombre">COMB.LATA</span><span class="item-precio">5€</span></div>
             </div>
           </div>
           <div class="munchies-categoria">
             <div class="categoria-titulo">🍟 PARA PICAR</div>
-            <div class="items-lista">
-              <div class="item-munchi"><span class="item-nombre">PATATAS</span><span class="item-precio">1.50€</span></div>
-              <div class="item-munchi"><span class="item-nombre">CHUCHES</span><span class="item-precio">1.50€</span></div>
-              <div class="item-munchi"><span class="item-nombre">PALOMITAS</span><span class="item-precio">1.20€</span></div>
+            <div class="items-lista" id="picar-lista">
+              <div class="item-munchi" data-id="picar-0"><span class="item-nombre">PATATAS</span><span class="item-precio">1.50€</span></div>
+              <div class="item-munchi" data-id="picar-1"><span class="item-nombre">CHUCHES</span><span class="item-precio">1.50€</span></div>
+              <div class="item-munchi" data-id="picar-2"><span class="item-nombre">PALOMITAS</span><span class="item-precio">1.20€</span></div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- EVENTOS -->
+      <!-- PANEL EVENTOS -->
       <div id="panel-eventos" class="panel">
-        <div class="eventos-grid">
-          <div class="evento-card"><img src="images/image14.jpg"></div>
-          <div class="evento-card"><img src="images/image15.jpg"></div>
-          <div class="evento-card"><img src="images/image16.jpg"></div>
-          <div class="evento-card"><img src="images/image17.jpg"></div>
+        <div class="eventos-grid" id="eventos-grid">
+          <div class="evento-card" data-id="evento-0"><img src="images/image14.jpg"></div>
+          <div class="evento-card" data-id="evento-1"><img src="images/image15.jpg"></div>
+          <div class="evento-card" data-id="evento-2"><img src="images/image16.jpg"></div>
+          <div class="evento-card" data-id="evento-3"><img src="images/image17.jpg"></div>
         </div>
       </div>
     </div>
   </main>
 
-  <!-- ===== PANEL DE ADMINISTRACIÓN COMPLETO ===== -->
+  <!-- ===== PANEL DE ADMINISTRACIÓN ===== -->
   <!-- CONTRASEÑA: situs123 -->
   
   <div style="position: fixed; bottom: 30px; right: 30px; z-index: 2000;">
@@ -194,64 +213,55 @@
       <button onclick="cerrarAdmin()" style="background: #ff18d0; border: none; border-radius: 60px; padding: 20px 40px; font-size: 2.2rem; color: white; cursor: pointer;">CERRAR</button>
     </div>
     
-    <!-- Pestañas principales del admin -->
-    <div style="display: flex; gap: 20px; margin-bottom: 30px;">
-      <button id="admin-tab-productos" onclick="cambiarTabAdmin('productos')" style="flex: 1; background: #00ff9f; border: none; border-radius: 30px; padding: 20px; font-size: 2.2rem; font-weight: bold; cursor: pointer;">📦 PRODUCTOS</button>
-      <button id="admin-tab-munchies" onclick="cambiarTabAdmin('munchies')" style="flex: 1; background: #333; border: none; border-radius: 30px; padding: 20px; font-size: 2.2rem; color: white; cursor: pointer;">🍺 MUNCHIES</button>
-      <button id="admin-tab-eventos" onclick="cambiarTabAdmin('eventos')" style="flex: 1; background: #333; border: none; border-radius: 30px; padding: 20px; font-size: 2.2rem; color: white; cursor: pointer;">🎉 EVENTOS</button>
+    <!-- Pestañas principales del admin (ahora con 4 opciones) -->
+    <div style="display: flex; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
+      <button id="admin-tab-genero" onclick="cambiarTabAdmin('genero')" style="flex: 1; min-width: 150px; background: #00ff9f; border: none; border-radius: 30px; padding: 20px; font-size: 2.2rem; font-weight: bold; cursor: pointer;">🌿 GÉNERO</button>
+      <button id="admin-tab-petas" onclick="cambiarTabAdmin('petas')" style="flex: 1; min-width: 150px; background: #333; border: none; border-radius: 30px; padding: 20px; font-size: 2.2rem; color: white; cursor: pointer;">🚬 PETAS</button>
+      <button id="admin-tab-munchies" onclick="cambiarTabAdmin('munchies')" style="flex: 1; min-width: 150px; background: #333; border: none; border-radius: 30px; padding: 20px; font-size: 2.2rem; color: white; cursor: pointer;">🍺 MUNCHIES</button>
+      <button id="admin-tab-eventos" onclick="cambiarTabAdmin('eventos')" style="flex: 1; min-width: 150px; background: #333; border: none; border-radius: 30px; padding: 20px; font-size: 2.2rem; color: white; cursor: pointer;">🎉 EVENTOS</button>
     </div>
     
-    <!-- PANEL DE PRODUCTOS -->
-    <div id="admin-productos" style="display: block;">
-      
-      <!-- Subpestañas dentro de productos -->
+    <!-- PANEL DE GÉNERO (EXTRACCIÓN + HIERBAS) -->
+    <div id="admin-genero" style="display: block;">
       <div style="display: flex; gap: 10px; margin-bottom: 20px;">
         <button id="subtab-extract" onclick="cambiarSubTab('extract')" style="flex: 1; background: #00ff9f; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; font-weight: bold; cursor: pointer;">⚡ EXTRACCIÓN</button>
         <button id="subtab-hierbas" onclick="cambiarSubTab('hierbas')" style="flex: 1; background: #333; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; color: white; cursor: pointer;">🌿 HIERBAS</button>
-        <button id="subtab-liados" onclick="cambiarSubTab('liados')" style="flex: 1; background: #333; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; color: white; cursor: pointer;">🚬 LIADOS</button>
       </div>
       
-      <!-- Contenedor de extracción -->
       <div id="admin-extract" style="display: block;">
         <div id="extract-editables" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px;"></div>
         <button onclick="anadirProductoEn('extract')" style="width: 100%; background: #00ff9f; border: none; border-radius: 40px; padding: 30px; font-size: 2.5rem; margin-top: 20px; cursor: pointer;">➕ AÑADIR PRODUCTO A EXTRACCIÓN</button>
       </div>
       
-      <!-- Contenedor de hierbas -->
       <div id="admin-hierbas" style="display: none;">
         <div id="hierbas-editables" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px;"></div>
         <button onclick="anadirProductoEn('hierbas')" style="width: 100%; background: #00ff9f; border: none; border-radius: 40px; padding: 30px; font-size: 2.5rem; margin-top: 20px; cursor: pointer;">➕ AÑADIR PRODUCTO A HIERBAS</button>
       </div>
-      
-      <!-- Contenedor de liados -->
-      <div id="admin-liados" style="display: none;">
-        <div id="liados-editables" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px;"></div>
-        <button onclick="anadirProductoEn('liados')" style="width: 100%; background: #ffff00; border: none; border-radius: 40px; padding: 30px; font-size: 2.5rem; margin-top: 20px; cursor: pointer;">➕ AÑADIR PRODUCTO A LIADOS</button>
-      </div>
-      
+    </div>
+    
+    <!-- PANEL DE PETAS LIADAS (NUEVO - independiente) -->
+    <div id="admin-petas" style="display: none;">
+      <h2 style="color: #ffaa00; font-size: 2.8rem; margin-bottom: 20px; text-align: center;">🚬 PORROS LIADOS</h2>
+      <div id="petas-editables" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; margin-bottom: 20px;"></div>
+      <button onclick="anadirPeta()" style="width: 100%; background: #ffaa00; border: none; border-radius: 40px; padding: 30px; font-size: 2.5rem; margin-top: 10px; cursor: pointer; color: black; font-weight: bold;">➕ AÑADIR PETA LÍADA</button>
     </div>
     
     <!-- PANEL DE MUNCHIES -->
     <div id="admin-munchies" style="display: none;">
-      
-      <!-- Subpestañas dentro de munchies -->
       <div style="display: flex; gap: 10px; margin-bottom: 20px;">
         <button id="subtab-refrescos" onclick="cambiarSubTabMunchies('refrescos')" style="flex: 1; background: #ff18d0; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; font-weight: bold; color: white; cursor: pointer;">🥤 REFRESCOS</button>
         <button id="subtab-picar" onclick="cambiarSubTabMunchies('picar')" style="flex: 1; background: #333; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; color: white; cursor: pointer;">🍟 PARA PICAR</button>
       </div>
       
-      <!-- Contenedor de refrescos -->
       <div id="admin-refrescos" style="display: block;">
         <div id="refrescos-editables" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px;"></div>
         <button onclick="anadirMunchiEn('refrescos')" style="width: 100%; background: #ff18d0; border: none; border-radius: 40px; padding: 30px; font-size: 2.5rem; margin-top: 20px; color: white; cursor: pointer;">➕ AÑADIR REFRESCO</button>
       </div>
       
-      <!-- Contenedor de picar -->
       <div id="admin-picar" style="display: none;">
         <div id="picar-editables" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px;"></div>
         <button onclick="anadirMunchiEn('picar')" style="width: 100%; background: #ff18d0; border: none; border-radius: 40px; padding: 30px; font-size: 2.5rem; margin-top: 20px; color: white; cursor: pointer;">➕ AÑADIR PRODUCTO</button>
       </div>
-      
     </div>
     
     <!-- PANEL DE EVENTOS -->
@@ -265,16 +275,26 @@
       <button onclick="guardarTodo()" style="width: 100%; background: #00ff9f; border: 4px solid #ff18d0; border-radius: 60px; padding: 30px; font-size: 3rem; font-weight: bold; box-shadow: 0 0 40px #00ff9f; cursor: pointer;">💾 GUARDAR TODOS LOS CAMBIOS</button>
     </div>
     
+    <!-- Indicador de autoguardado -->
+    <div id="autosave-indicator" style="position: fixed; bottom: 120px; right: 30px; background: #00ff9f; color: black; padding: 10px 20px; border-radius: 30px; font-size: 1.4rem; font-weight: bold; display: none; z-index: 2100;">💾 Cambios guardados</div>
+    
   </div>
 
   <input type="file" id="selector-imagen" accept="image/*" style="display: none;">
 
   <script>
-    // ===== FUNCIONES ORIGINALES DE PESTAÑAS =====
+    // ===== CONFIGURACIÓN =====
+    const CONTRASENA = "situs123";
+    const STORAGE_KEY = 'masquehigh_datos_completos_v2';
+    let productoEditando = null;
+    let autosaveTimeout = null;
+
+    // ===== FUNCIONES DE PESTAÑAS (ahora con 4) =====
     (function() {
       const pestanas = document.querySelectorAll('.pestana');
       const paneles = {
         genero: document.getElementById('panel-genero'),
+        petas: document.getElementById('panel-petas'),
         munchies: document.getElementById('panel-munchies'),
         eventos: document.getElementById('panel-eventos')
       };
@@ -295,9 +315,151 @@
       });
     })();
 
-    // ===== CONFIGURACIÓN ADMIN =====
-    const CONTRASENA = "situs123";
-    let productoEditando = null;
+    // ===== FUNCIONES DE AUTO-GUARDADO =====
+    function mostrarAutoguardado() {
+      const indicator = document.getElementById('autosave-indicator');
+      if (indicator) {
+        indicator.style.display = 'block';
+        setTimeout(() => {
+          indicator.style.display = 'none';
+        }, 2000);
+      }
+    }
+
+    function guardarEstadoCompleto() {
+      const estado = {
+        genero: { extract: [], hierbas: [] },
+        petas: [],
+        munchies: { refrescos: [], picar: [] },
+        eventos: []
+      };
+
+      // Guardar extracción
+      document.querySelectorAll('#panel-genero #extract-grid .producto-card').forEach((card, index) => {
+        const img = card.querySelector('img')?.src || '';
+        const nombre = card.querySelector('h4')?.textContent || '';
+        const precio = card.querySelector('.producto-precio')?.textContent || '';
+        estado.genero.extract.push({ id: card.dataset.id, nombre, precio, img });
+      });
+
+      // Guardar hierbas
+      document.querySelectorAll('#panel-genero #hierbas-grid .producto-card').forEach((card, index) => {
+        const img = card.querySelector('img')?.src || '';
+        const nombre = card.querySelector('h4')?.textContent || '';
+        const precio = card.querySelector('.producto-precio')?.textContent || '';
+        estado.genero.hierbas.push({ id: card.dataset.id, nombre, precio, img });
+      });
+
+      // Guardar petas liadas
+      document.querySelectorAll('#panel-petas #petas-grid .peta-card').forEach((card, index) => {
+        const nombre = card.querySelector('h4')?.textContent || '';
+        const precio = card.querySelector('.peta-precio')?.textContent || '';
+        estado.petas.push({ id: card.dataset.id, nombre, precio });
+      });
+
+      // Guardar refrescos
+      document.querySelectorAll('#panel-munchies #refrescos-lista .item-munchi').forEach((item, index) => {
+        const nombre = item.querySelector('.item-nombre')?.textContent || '';
+        const precio = item.querySelector('.item-precio')?.textContent || '';
+        estado.munchies.refrescos.push({ id: item.dataset.id, nombre, precio });
+      });
+
+      // Guardar picar
+      document.querySelectorAll('#panel-munchies #picar-lista .item-munchi').forEach((item, index) => {
+        const nombre = item.querySelector('.item-nombre')?.textContent || '';
+        const precio = item.querySelector('.item-precio')?.textContent || '';
+        estado.munchies.picar.push({ id: item.dataset.id, nombre, precio });
+      });
+
+      // Guardar eventos
+      document.querySelectorAll('#panel-eventos #eventos-grid .evento-card').forEach((card, index) => {
+        const img = card.querySelector('img')?.src || '';
+        estado.eventos.push({ id: card.dataset.id, img });
+      });
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(estado));
+      mostrarAutoguardado();
+    }
+
+    // ===== CARGAR DATOS GUARDADOS =====
+    function cargarEstadoGuardado() {
+      const guardado = localStorage.getItem(STORAGE_KEY);
+      if (!guardado) return;
+
+      try {
+        const estado = JSON.parse(guardado);
+
+        // Restaurar extracción
+        if (estado.genero?.extract) {
+          estado.genero.extract.forEach(prod => {
+            const elemento = document.querySelector(`[data-id="${prod.id}"]`);
+            if (elemento && elemento.closest('#extract-grid')) {
+              elemento.querySelector('h4').textContent = prod.nombre;
+              elemento.querySelector('.producto-precio').textContent = prod.precio;
+              if (prod.img) elemento.querySelector('img').src = prod.img;
+            }
+          });
+        }
+
+        // Restaurar hierbas
+        if (estado.genero?.hierbas) {
+          estado.genero.hierbas.forEach(prod => {
+            const elemento = document.querySelector(`[data-id="${prod.id}"]`);
+            if (elemento && elemento.closest('#hierbas-grid')) {
+              elemento.querySelector('h4').textContent = prod.nombre;
+              elemento.querySelector('.producto-precio').textContent = prod.precio;
+              if (prod.img) elemento.querySelector('img').src = prod.img;
+            }
+          });
+        }
+
+        // Restaurar petas
+        if (estado.petas) {
+          estado.petas.forEach(peta => {
+            const elemento = document.querySelector(`[data-id="${peta.id}"]`);
+            if (elemento && elemento.closest('#petas-grid')) {
+              elemento.querySelector('h4').textContent = peta.nombre;
+              elemento.querySelector('.peta-precio').textContent = peta.precio;
+            }
+          });
+        }
+
+        // Restaurar refrescos
+        if (estado.munchies?.refrescos) {
+          estado.munchies.refrescos.forEach(item => {
+            const elemento = document.querySelector(`[data-id="${item.id}"]`);
+            if (elemento && elemento.closest('#refrescos-lista')) {
+              elemento.querySelector('.item-nombre').textContent = item.nombre;
+              elemento.querySelector('.item-precio').textContent = item.precio;
+            }
+          });
+        }
+
+        // Restaurar picar
+        if (estado.munchies?.picar) {
+          estado.munchies.picar.forEach(item => {
+            const elemento = document.querySelector(`[data-id="${item.id}"]`);
+            if (elemento && elemento.closest('#picar-lista')) {
+              elemento.querySelector('.item-nombre').textContent = item.nombre;
+              elemento.querySelector('.item-precio').textContent = item.precio;
+            }
+          });
+        }
+
+        // Restaurar eventos
+        if (estado.eventos) {
+          estado.eventos.forEach(evento => {
+            const elemento = document.querySelector(`[data-id="${evento.id}"]`);
+            if (elemento && evento.img) {
+              elemento.querySelector('img').src = evento.img;
+            }
+          });
+        }
+
+      } catch (e) {
+        console.error('Error cargando datos:', e);
+      }
+    }
 
     // ===== LOGIN =====
     function mostrarLogin() {
@@ -327,22 +489,30 @@
     }
 
     function cambiarTabAdmin(tab) {
-      document.getElementById('admin-productos').style.display = 'none';
+      document.getElementById('admin-genero').style.display = 'none';
+      document.getElementById('admin-petas').style.display = 'none';
       document.getElementById('admin-munchies').style.display = 'none';
       document.getElementById('admin-eventos').style.display = 'none';
       
-      document.getElementById('admin-tab-productos').style.background = '#333';
+      document.getElementById('admin-tab-genero').style.background = '#333';
+      document.getElementById('admin-tab-petas').style.background = '#333';
       document.getElementById('admin-tab-munchies').style.background = '#333';
       document.getElementById('admin-tab-eventos').style.background = '#333';
       
-      if (tab === 'productos') {
-        document.getElementById('admin-productos').style.display = 'block';
-        document.getElementById('admin-tab-productos').style.background = '#00ff9f';
-        cargarProductos();
+      if (tab === 'genero') {
+        document.getElementById('admin-genero').style.display = 'block';
+        document.getElementById('admin-tab-genero').style.background = '#00ff9f';
+        cargarExtract();
+        cargarHierbas();
+      } else if (tab === 'petas') {
+        document.getElementById('admin-petas').style.display = 'block';
+        document.getElementById('admin-tab-petas').style.background = '#ffaa00';
+        cargarPetas();
       } else if (tab === 'munchies') {
         document.getElementById('admin-munchies').style.display = 'block';
         document.getElementById('admin-tab-munchies').style.background = '#ff18d0';
-        cargarMunchies();
+        cargarRefrescos();
+        cargarPicar();
       } else if (tab === 'eventos') {
         document.getElementById('admin-eventos').style.display = 'block';
         document.getElementById('admin-tab-eventos').style.background = '#ffff00';
@@ -353,24 +523,18 @@
     function cambiarSubTab(subtab) {
       document.getElementById('admin-extract').style.display = 'none';
       document.getElementById('admin-hierbas').style.display = 'none';
-      document.getElementById('admin-liados').style.display = 'none';
       
       document.getElementById('subtab-extract').style.background = '#333';
       document.getElementById('subtab-hierbas').style.background = '#333';
-      document.getElementById('subtab-liados').style.background = '#333';
       
       if (subtab === 'extract') {
         document.getElementById('admin-extract').style.display = 'block';
         document.getElementById('subtab-extract').style.background = '#00ff9f';
         cargarExtract();
-      } else if (subtab === 'hierbas') {
+      } else {
         document.getElementById('admin-hierbas').style.display = 'block';
         document.getElementById('subtab-hierbas').style.background = '#00ff9f';
         cargarHierbas();
-      } else if (subtab === 'liados') {
-        document.getElementById('admin-liados').style.display = 'block';
-        document.getElementById('subtab-liados').style.background = '#ffff00';
-        cargarLiados();
       }
     }
 
@@ -392,11 +556,11 @@
       }
     }
 
-    // ===== CARGAR DATOS =====
+    // ===== CARGAR DATOS EN ADMIN =====
     function cargarTodosLosDatos() {
       cargarExtract();
       cargarHierbas();
-      cargarLiados();
+      cargarPetas();
       cargarRefrescos();
       cargarPicar();
       cargarEventos();
@@ -404,41 +568,44 @@
 
     function cargarExtract() {
       let html = '';
-      document.querySelectorAll('#panel-genero .subseccion:first-child .producto-card').forEach((card, index) => {
+      document.querySelectorAll('#panel-genero #extract-grid .producto-card').forEach((card, index) => {
         html += generarCardProducto(card, index, 'extract');
       });
       document.getElementById('extract-editables').innerHTML = html;
+      agregarEventosInputs('extract');
     }
 
     function cargarHierbas() {
       let html = '';
-      document.querySelectorAll('#panel-genero .subseccion:nth-child(2) .producto-card').forEach((card, index) => {
+      document.querySelectorAll('#panel-genero #hierbas-grid .producto-card').forEach((card, index) => {
         html += generarCardProducto(card, index, 'hierbas');
       });
       document.getElementById('hierbas-editables').innerHTML = html;
+      agregarEventosInputs('hierbas');
     }
 
-    function cargarLiados() {
+    function cargarPetas() {
       let html = '';
-      document.querySelectorAll('#panel-genero .subseccion:nth-child(3) .producto-card').forEach((card, index) => {
+      document.querySelectorAll('#panel-petas #petas-grid .peta-card').forEach((card, index) => {
         const nombre = card.querySelector('h4').textContent;
-        const precio = card.querySelector('.producto-precio').textContent;
+        const precio = card.querySelector('.peta-precio').textContent;
+        const cardId = card.dataset.id;
         
         html += `
-          <div style="background: #1a1a2a; border: 3px solid #ffff00; border-radius: 30px; padding: 25px;">
+          <div style="background: #1a1a2a; border: 3px solid #ffaa00; border-radius: 30px; padding: 25px;" data-id="${cardId}">
             <div style="text-align: center; margin-bottom: 15px;">
-              <div style="width: 150px; height: 150px; border-radius: 50%; border: 4px solid #ffff00; background: #000; margin: 0 auto; display: flex; align-items: center; justify-content: center; color: #ffff00; font-size: 3rem;">🚬</div>
-              <div style="margin-top: 10px; color: #ffff00;">SIN IMAGEN</div>
+              <div style="width: 150px; height: 150px; border-radius: 50%; border: 4px solid #ffaa00; background: #000; margin: 0 auto; display: flex; align-items: center; justify-content: center; color: #ffaa00; font-size: 5rem;">🚬</div>
             </div>
             <label style="color: white; font-size: 1.8rem;">Nombre:</label>
-            <input type="text" id="liados-nombre-${index}" value="${nombre}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #00ff9f; border-radius: 20px; color: white; margin-bottom: 15px;">
+            <input type="text" class="admin-input-nombre" data-seccion="petas" data-index="${index}" value="${nombre}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ffaa00; border-radius: 20px; color: #ffaa00; margin-bottom: 15px;">
             <label style="color: white; font-size: 1.8rem;">Precio:</label>
-            <input type="text" id="liados-precio-${index}" value="${precio}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ff18d0; border-radius: 20px; color: #00ff9f; margin-bottom: 15px;">
-            <button onclick="eliminarProducto('liados', ${index})" style="width: 100%; background: #ff18d0; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; color: white; cursor: pointer;">🗑️ ELIMINAR</button>
+            <input type="text" class="admin-input-precio" data-seccion="petas" data-index="${index}" value="${precio}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ffaa00; border-radius: 20px; color: #ffaa00; margin-bottom: 15px;">
+            <button onclick="eliminarPeta(${index})" style="width: 100%; background: #ff18d0; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; color: white; cursor: pointer;">🗑️ ELIMINAR</button>
           </div>
         `;
       });
-      document.getElementById('liados-editables').innerHTML = html;
+      document.getElementById('petas-editables').innerHTML = html;
+      agregarEventosInputs('petas');
     }
 
     function generarCardProducto(card, index, seccion) {
@@ -446,17 +613,18 @@
       const imgSrc = img ? img.src : '';
       const nombre = card.querySelector('h4').textContent;
       const precio = card.querySelector('.producto-precio').textContent;
+      const cardId = card.dataset.id;
       
       return `
-        <div style="background: #1a1a2a; border: 3px solid #00ff9f; border-radius: 30px; padding: 25px;">
+        <div style="background: #1a1a2a; border: 3px solid #00ff9f; border-radius: 30px; padding: 25px;" data-id="${cardId}">
           <div style="text-align: center; margin-bottom: 15px;">
             <img id="preview-${seccion}-${index}" src="${imgSrc}" style="width: 150px; height: 150px; border-radius: 50%; border: 4px solid #ff18d0; object-fit: cover; cursor: pointer;" onclick="seleccionarImagen('${seccion}', ${index})">
             <div style="margin-top: 10px; color: #00ff9f;">👇 TOCA LA IMAGEN</div>
           </div>
           <label style="color: white; font-size: 1.8rem;">Nombre:</label>
-          <input type="text" id="${seccion}-nombre-${index}" value="${nombre}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #00ff9f; border-radius: 20px; color: white; margin-bottom: 15px;">
+          <input type="text" class="admin-input-nombre" data-seccion="${seccion}" data-index="${index}" value="${nombre}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #00ff9f; border-radius: 20px; color: white; margin-bottom: 15px;">
           <label style="color: white; font-size: 1.8rem;">Precio:</label>
-          <input type="text" id="${seccion}-precio-${index}" value="${precio}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ff18d0; border-radius: 20px; color: #00ff9f; margin-bottom: 15px;">
+          <input type="text" class="admin-input-precio" data-seccion="${seccion}" data-index="${index}" value="${precio}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ff18d0; border-radius: 20px; color: #00ff9f; margin-bottom: 15px;">
           <button onclick="eliminarProducto('${seccion}', ${index})" style="width: 100%; background: #ff18d0; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; color: white; cursor: pointer;">🗑️ ELIMINAR</button>
         </div>
       `;
@@ -464,49 +632,54 @@
 
     function cargarRefrescos() {
       let html = '';
-      document.querySelectorAll('#panel-munchies .munchies-categoria:first-child .item-munchi').forEach((item, index) => {
+      document.querySelectorAll('#panel-munchies #refrescos-lista .item-munchi').forEach((item, index) => {
         const nombre = item.querySelector('.item-nombre').textContent;
         const precio = item.querySelector('.item-precio').textContent;
+        const itemId = item.dataset.id;
         
         html += `
-          <div style="background: #1a1a2a; border: 3px solid #ff18d0; border-radius: 30px; padding: 25px;">
+          <div style="background: #1a1a2a; border: 3px solid #ff18d0; border-radius: 30px; padding: 25px;" data-id="${itemId}">
             <label style="color: white; font-size: 1.8rem;">Producto:</label>
-            <input type="text" id="refresco-nombre-${index}" value="${nombre}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #00ff9f; border-radius: 20px; color: white; margin-bottom: 15px;">
+            <input type="text" class="admin-input-nombre" data-seccion="refrescos" data-index="${index}" value="${nombre}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #00ff9f; border-radius: 20px; color: white; margin-bottom: 15px;">
             <label style="color: white; font-size: 1.8rem;">Precio:</label>
-            <input type="text" id="refresco-precio-${index}" value="${precio}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ff18d0; border-radius: 20px; color: #00ff9f; margin-bottom: 15px;">
+            <input type="text" class="admin-input-precio" data-seccion="refrescos" data-index="${index}" value="${precio}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ff18d0; border-radius: 20px; color: #00ff9f; margin-bottom: 15px;">
             <button onclick="eliminarMunchi('refrescos', ${index})" style="width: 100%; background: #ff18d0; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; color: white; cursor: pointer;">🗑️ ELIMINAR</button>
           </div>
         `;
       });
       document.getElementById('refrescos-editables').innerHTML = html;
+      agregarEventosInputs('refrescos');
     }
 
     function cargarPicar() {
       let html = '';
-      document.querySelectorAll('#panel-munchies .munchies-categoria:nth-child(2) .item-munchi').forEach((item, index) => {
+      document.querySelectorAll('#panel-munchies #picar-lista .item-munchi').forEach((item, index) => {
         const nombre = item.querySelector('.item-nombre').textContent;
         const precio = item.querySelector('.item-precio').textContent;
+        const itemId = item.dataset.id;
         
         html += `
-          <div style="background: #1a1a2a; border: 3px solid #ff18d0; border-radius: 30px; padding: 25px;">
+          <div style="background: #1a1a2a; border: 3px solid #ff18d0; border-radius: 30px; padding: 25px;" data-id="${itemId}">
             <label style="color: white; font-size: 1.8rem;">Producto:</label>
-            <input type="text" id="picar-nombre-${index}" value="${nombre}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #00ff9f; border-radius: 20px; color: white; margin-bottom: 15px;">
+            <input type="text" class="admin-input-nombre" data-seccion="picar" data-index="${index}" value="${nombre}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #00ff9f; border-radius: 20px; color: white; margin-bottom: 15px;">
             <label style="color: white; font-size: 1.8rem;">Precio:</label>
-            <input type="text" id="picar-precio-${index}" value="${precio}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ff18d0; border-radius: 20px; color: #00ff9f; margin-bottom: 15px;">
+            <input type="text" class="admin-input-precio" data-seccion="picar" data-index="${index}" value="${precio}" style="width: 100%; padding: 15px; font-size: 1.8rem; background: #000; border: 2px solid #ff18d0; border-radius: 20px; color: #00ff9f; margin-bottom: 15px;">
             <button onclick="eliminarMunchi('picar', ${index})" style="width: 100%; background: #ff18d0; border: none; border-radius: 20px; padding: 15px; font-size: 1.8rem; color: white; cursor: pointer;">🗑️ ELIMINAR</button>
           </div>
         `;
       });
       document.getElementById('picar-editables').innerHTML = html;
+      agregarEventosInputs('picar');
     }
 
     function cargarEventos() {
       let html = '';
-      document.querySelectorAll('#panel-eventos .evento-card').forEach((card, index) => {
+      document.querySelectorAll('#panel-eventos #eventos-grid .evento-card').forEach((card, index) => {
         const imgSrc = card.querySelector('img').src;
+        const cardId = card.dataset.id;
         
         html += `
-          <div style="background: #1a1a2a; border: 3px solid #ffff00; border-radius: 30px; padding: 25px;">
+          <div style="background: #1a1a2a; border: 3px solid #ffff00; border-radius: 30px; padding: 25px;" data-id="${cardId}">
             <div style="text-align: center; margin-bottom: 15px;">
               <img id="evento-img-${index}" src="${imgSrc}" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 20px; border: 4px solid #ffff00; cursor: pointer;" onclick="seleccionarImagenEvento(${index})">
               <div style="margin-top: 10px; color: #ffff00;">👇 TOCA LA IMAGEN</div>
@@ -516,6 +689,91 @@
         `;
       });
       document.getElementById('eventos-editables').innerHTML = html;
+    }
+
+    // ===== AGREGAR EVENTOS DE AUTO-GUARDADO =====
+    function agregarEventosInputs(seccion) {
+      setTimeout(() => {
+        document.querySelectorAll(`.admin-input-nombre[data-seccion="${seccion}"], .admin-input-precio[data-seccion="${seccion}"]`).forEach(input => {
+          input.removeEventListener('input', autoSaveHandler);
+          input.addEventListener('input', autoSaveHandler);
+        });
+      }, 100);
+    }
+
+    function autoSaveHandler() {
+      if (autosaveTimeout) clearTimeout(autosaveTimeout);
+      autosaveTimeout = setTimeout(() => {
+        actualizarVistaPrevia();
+        guardarEstadoCompleto();
+      }, 500);
+    }
+
+    function actualizarVistaPrevia() {
+      // Actualizar extract y hierbas
+      document.querySelectorAll('#admin-genero input').forEach(input => {
+        const seccion = input.dataset.seccion;
+        const index = input.dataset.index;
+        const tipo = input.classList.contains('admin-input-nombre') ? 'nombre' : 'precio';
+        
+        if (seccion && index !== undefined) {
+          let elemento;
+          if (seccion === 'extract') {
+            elemento = document.querySelectorAll('#panel-genero #extract-grid .producto-card')[index];
+          } else if (seccion === 'hierbas') {
+            elemento = document.querySelectorAll('#panel-genero #hierbas-grid .producto-card')[index];
+          }
+          
+          if (elemento) {
+            if (tipo === 'nombre') {
+              elemento.querySelector('h4').textContent = input.value;
+            } else {
+              elemento.querySelector('.producto-precio').textContent = input.value;
+            }
+          }
+        }
+      });
+
+      // Actualizar petas
+      document.querySelectorAll('#admin-petas input').forEach(input => {
+        const index = input.dataset.index;
+        const tipo = input.classList.contains('admin-input-nombre') ? 'nombre' : 'precio';
+        
+        if (index !== undefined) {
+          const elemento = document.querySelectorAll('#panel-petas #petas-grid .peta-card')[index];
+          if (elemento) {
+            if (tipo === 'nombre') {
+              elemento.querySelector('h4').textContent = input.value;
+            } else {
+              elemento.querySelector('.peta-precio').textContent = input.value;
+            }
+          }
+        }
+      });
+
+      // Actualizar munchies
+      document.querySelectorAll('#admin-munchies input').forEach(input => {
+        const seccion = input.dataset.seccion;
+        const index = input.dataset.index;
+        const tipo = input.classList.contains('admin-input-nombre') ? 'nombre' : 'precio';
+        
+        if (seccion && index !== undefined) {
+          let elemento;
+          if (seccion === 'refrescos') {
+            elemento = document.querySelectorAll('#panel-munchies #refrescos-lista .item-munchi')[index];
+          } else if (seccion === 'picar') {
+            elemento = document.querySelectorAll('#panel-munchies #picar-lista .item-munchi')[index];
+          }
+          
+          if (elemento) {
+            if (tipo === 'nombre') {
+              elemento.querySelector('.item-nombre').textContent = input.value;
+            } else {
+              elemento.querySelector('.item-precio').textContent = input.value;
+            }
+          }
+        }
+      });
     }
 
     // ===== IMÁGENES =====
@@ -536,10 +794,20 @@
           const preview = document.getElementById(`preview-${productoEditando.seccion}-${productoEditando.index}`);
           if (preview) preview.src = ev.target.result;
           
-          let imagenes = localStorage.getItem('masquehigh_imagenes');
-          imagenes = imagenes ? JSON.parse(imagenes) : {};
-          imagenes[`${productoEditando.seccion}_${productoEditando.index}`] = ev.target.result;
-          localStorage.setItem('masquehigh_imagenes', JSON.stringify(imagenes));
+          if (productoEditando.seccion === 'eventos') {
+            const eventoImg = document.querySelectorAll('#panel-eventos #eventos-grid .evento-card img')[productoEditando.index];
+            if (eventoImg) eventoImg.src = ev.target.result;
+          } else {
+            let elemento;
+            if (productoEditando.seccion === 'extract') {
+              elemento = document.querySelectorAll('#panel-genero #extract-grid .producto-card img')[productoEditando.index];
+            } else if (productoEditando.seccion === 'hierbas') {
+              elemento = document.querySelectorAll('#panel-genero #hierbas-grid .producto-card img')[productoEditando.index];
+            }
+            if (elemento) elemento.src = ev.target.result;
+          }
+          
+          guardarEstadoCompleto();
         };
         reader.readAsDataURL(e.target.files[0]);
       }
@@ -548,220 +816,168 @@
     // ===== AÑADIR PRODUCTOS =====
     function anadirProductoEn(seccion) {
       let contenedor;
-      let nuevoProducto;
+      let nuevoId = `${seccion}-${Date.now()}`;
       
       if (seccion === 'extract') {
-        contenedor = document.querySelector('#panel-genero .subseccion:first-child .productos-grid');
-        nuevoProducto = document.createElement('div');
-        nuevoProducto.className = 'producto-card';
-        nuevoProducto.innerHTML = '<img src="images/placeholder.jpg"><h4>NUEVA EXTRACCIÓN</h4><div class="producto-precio">0€</div>';
+        contenedor = document.querySelector('#panel-genero #extract-grid');
+        if (contenedor) {
+          const nuevoProducto = document.createElement('div');
+          nuevoProducto.className = 'producto-card';
+          nuevoProducto.dataset.id = nuevoId;
+          nuevoProducto.innerHTML = '<img src="images/placeholder.jpg"><h4>NUEVA EXTRACCIÓN</h4><div class="producto-precio">0€</div>';
+          contenedor.appendChild(nuevoProducto);
+        }
       } else if (seccion === 'hierbas') {
-        contenedor = document.querySelector('#panel-genero .subseccion:nth-child(2) .productos-grid');
-        nuevoProducto = document.createElement('div');
-        nuevoProducto.className = 'producto-card';
-        nuevoProducto.innerHTML = '<img src="images/placeholder.jpg"><h4>NUEVA HIERBA</h4><div class="producto-precio">0€</div>';
-      } else if (seccion === 'liados') {
-        contenedor = document.querySelector('#panel-genero .subseccion:nth-child(3) .productos-grid');
-        nuevoProducto = document.createElement('div');
-        nuevoProducto.className = 'producto-card sin-imagen';
-        nuevoProducto.innerHTML = '<h4>NUEVO LIADO</h4><div class="producto-precio">0€</div>';
+        contenedor = document.querySelector('#panel-genero #hierbas-grid');
+        if (contenedor) {
+          const nuevoProducto = document.createElement('div');
+          nuevoProducto.className = 'producto-card';
+          nuevoProducto.dataset.id = nuevoId;
+          nuevoProducto.innerHTML = '<img src="images/placeholder.jpg"><h4>NUEVA HIERBA</h4><div class="producto-precio">0€</div>';
+          contenedor.appendChild(nuevoProducto);
+        }
       }
       
-      if (contenedor && nuevoProducto) {
-        contenedor.appendChild(nuevoProducto);
-        cargarTodosLosDatos();
+      guardarEstadoCompleto();
+      cargarTodosLosDatos();
+    }
+
+    function anadirPeta() {
+      const contenedor = document.querySelector('#panel-petas #petas-grid');
+      const nuevoId = `petas-${Date.now()}`;
+      
+      if (contenedor) {
+        const nuevaPeta = document.createElement('div');
+        nuevaPeta.className = 'peta-card';
+        nuevaPeta.dataset.id = nuevoId;
+        nuevaPeta.innerHTML = `
+          <div class="peta-icon">🚬</div>
+          <h4>NUEVA PETA</h4>
+          <div class="peta-precio">0€</div>
+        `;
+        contenedor.appendChild(nuevaPeta);
       }
+      
+      guardarEstadoCompleto();
+      cargarTodosLosDatos();
     }
 
     function anadirMunchiEn(seccion) {
       let contenedor;
-      let nuevoMunchi;
+      let nuevoId = `${seccion}-${Date.now()}`;
       
       if (seccion === 'refrescos') {
-        contenedor = document.querySelector('#panel-munchies .munchies-categoria:first-child .items-lista');
-        nuevoMunchi = document.createElement('div');
-        nuevoMunchi.className = 'item-munchi';
-        nuevoMunchi.innerHTML = '<span class="item-nombre">NUEVO REFRESCO</span><span class="item-precio">0€</span>';
+        contenedor = document.querySelector('#panel-munchies #refrescos-lista');
+        if (contenedor) {
+          const nuevoMunchi = document.createElement('div');
+          nuevoMunchi.className = 'item-munchi';
+          nuevoMunchi.dataset.id = nuevoId;
+          nuevoMunchi.innerHTML = '<span class="item-nombre">NUEVO REFRESCO</span><span class="item-precio">0€</span>';
+          contenedor.appendChild(nuevoMunchi);
+        }
       } else {
-        contenedor = document.querySelector('#panel-munchies .munchies-categoria:nth-child(2) .items-lista');
-        nuevoMunchi = document.createElement('div');
-        nuevoMunchi.className = 'item-munchi';
-        nuevoMunchi.innerHTML = '<span class="item-nombre">NUEVO PRODUCTO</span><span class="item-precio">0€</span>';
+        contenedor = document.querySelector('#panel-munchies #picar-lista');
+        if (contenedor) {
+          const nuevoMunchi = document.createElement('div');
+          nuevoMunchi.className = 'item-munchi';
+          nuevoMunchi.dataset.id = nuevoId;
+          nuevoMunchi.innerHTML = '<span class="item-nombre">NUEVO PRODUCTO</span><span class="item-precio">0€</span>';
+          contenedor.appendChild(nuevoMunchi);
+        }
       }
       
-      if (contenedor && nuevoMunchi) {
-        contenedor.appendChild(nuevoMunchi);
-        cargarTodosLosDatos();
-      }
+      guardarEstadoCompleto();
+      cargarTodosLosDatos();
     }
 
     function anadirEvento() {
-      const contenedor = document.querySelector('#panel-eventos .eventos-grid');
-      const nuevoEvento = document.createElement('div');
-      nuevoEvento.className = 'evento-card';
-      nuevoEvento.innerHTML = '<img src="images/placeholder.jpg">';
+      const contenedor = document.querySelector('#panel-eventos #eventos-grid');
+      const nuevoId = `evento-${Date.now()}`;
       
       if (contenedor) {
+        const nuevoEvento = document.createElement('div');
+        nuevoEvento.className = 'evento-card';
+        nuevoEvento.dataset.id = nuevoId;
+        nuevoEvento.innerHTML = '<img src="images/placeholder.jpg">';
         contenedor.appendChild(nuevoEvento);
-        cargarTodosLosDatos();
       }
+      
+      guardarEstadoCompleto();
+      cargarTodosLosDatos();
     }
 
     // ===== ELIMINAR =====
     function eliminarProducto(seccion, index) {
       if (seccion === 'extract') {
-        document.querySelectorAll('#panel-genero .subseccion:first-child .producto-card')[index]?.remove();
+        document.querySelectorAll('#panel-genero #extract-grid .producto-card')[index]?.remove();
       } else if (seccion === 'hierbas') {
-        document.querySelectorAll('#panel-genero .subseccion:nth-child(2) .producto-card')[index]?.remove();
-      } else if (seccion === 'liados') {
-        document.querySelectorAll('#panel-genero .subseccion:nth-child(3) .producto-card')[index]?.remove();
+        document.querySelectorAll('#panel-genero #hierbas-grid .producto-card')[index]?.remove();
       }
+      guardarEstadoCompleto();
+      cargarTodosLosDatos();
+    }
+
+    function eliminarPeta(index) {
+      document.querySelectorAll('#panel-petas #petas-grid .peta-card')[index]?.remove();
+      guardarEstadoCompleto();
       cargarTodosLosDatos();
     }
 
     function eliminarMunchi(seccion, index) {
       if (seccion === 'refrescos') {
-        document.querySelectorAll('#panel-munchies .munchies-categoria:first-child .item-munchi')[index]?.remove();
+        document.querySelectorAll('#panel-munchies #refrescos-lista .item-munchi')[index]?.remove();
       } else {
-        document.querySelectorAll('#panel-munchies .munchies-categoria:nth-child(2) .item-munchi')[index]?.remove();
+        document.querySelectorAll('#panel-munchies #picar-lista .item-munchi')[index]?.remove();
       }
+      guardarEstadoCompleto();
       cargarTodosLosDatos();
     }
 
     function eliminarEvento(index) {
-      document.querySelectorAll('#panel-eventos .evento-card')[index]?.remove();
+      document.querySelectorAll('#panel-eventos #eventos-grid .evento-card')[index]?.remove();
+      guardarEstadoCompleto();
       cargarTodosLosDatos();
     }
 
-    // ===== GUARDAR =====
+    // ===== GUARDAR TODO =====
     function guardarTodo() {
-      // Guardar extracción
-      document.querySelectorAll('#panel-genero .subseccion:first-child .producto-card').forEach((card, index) => {
-        const nombre = document.getElementById(`extract-nombre-${index}`)?.value;
-        const precio = document.getElementById(`extract-precio-${index}`)?.value;
-        const img = document.getElementById(`preview-extract-${index}`)?.src;
-        if (nombre) card.querySelector('h4').textContent = nombre;
-        if (precio) card.querySelector('.producto-precio').textContent = precio;
-        if (img) card.querySelector('img').src = img;
-      });
-      
-      // Guardar hierbas
-      document.querySelectorAll('#panel-genero .subseccion:nth-child(2) .producto-card').forEach((card, index) => {
-        const nombre = document.getElementById(`hierbas-nombre-${index}`)?.value;
-        const precio = document.getElementById(`hierbas-precio-${index}`)?.value;
-        const img = document.getElementById(`preview-hierbas-${index}`)?.src;
-        if (nombre) card.querySelector('h4').textContent = nombre;
-        if (precio) card.querySelector('.producto-precio').textContent = precio;
-        if (img) card.querySelector('img').src = img;
-      });
-      
-      // Guardar liados
-      document.querySelectorAll('#panel-genero .subseccion:nth-child(3) .producto-card').forEach((card, index) => {
-        const nombre = document.getElementById(`liados-nombre-${index}`)?.value;
-        const precio = document.getElementById(`liados-precio-${index}`)?.value;
-        if (nombre) card.querySelector('h4').textContent = nombre;
-        if (precio) card.querySelector('.producto-precio').textContent = precio;
-      });
-      
-      // Guardar refrescos
-      document.querySelectorAll('#panel-munchies .munchies-categoria:first-child .item-munchi').forEach((item, index) => {
-        const nombre = document.getElementById(`refresco-nombre-${index}`)?.value;
-        const precio = document.getElementById(`refresco-precio-${index}`)?.value;
-        if (nombre) item.querySelector('.item-nombre').textContent = nombre;
-        if (precio) item.querySelector('.item-precio').textContent = precio;
-      });
-      
-      // Guardar picar
-      document.querySelectorAll('#panel-munchies .munchies-categoria:nth-child(2) .item-munchi').forEach((item, index) => {
-        const nombre = document.getElementById(`picar-nombre-${index}`)?.value;
-        const precio = document.getElementById(`picar-precio-${index}`)?.value;
-        if (nombre) item.querySelector('.item-nombre').textContent = nombre;
-        if (precio) item.querySelector('.item-precio').textContent = precio;
-      });
-      
-      // Guardar eventos
-      document.querySelectorAll('#panel-eventos .evento-card').forEach((card, index) => {
-        const img = document.getElementById(`evento-img-${index}`)?.src;
-        if (img) card.querySelector('img').src = img;
-      });
-      
-      // Guardar en localStorage
-      const datos = {
-        extract: [],
-        hierbas: [],
-        liados: [],
-        refrescos: [],
-        picar: []
-      };
-      
-      document.querySelectorAll('#panel-genero .subseccion:first-child .producto-precio').forEach(e => datos.extract.push(e.textContent));
-      document.querySelectorAll('#panel-genero .subseccion:nth-child(2) .producto-precio').forEach(e => datos.hierbas.push(e.textContent));
-      document.querySelectorAll('#panel-genero .subseccion:nth-child(3) .producto-precio').forEach(e => datos.liados.push(e.textContent));
-      document.querySelectorAll('#panel-munchies .munchies-categoria:first-child .item-precio').forEach(e => datos.refrescos.push(e.textContent));
-      document.querySelectorAll('#panel-munchies .munchies-categoria:nth-child(2) .item-precio').forEach(e => datos.picar.push(e.textContent));
-      
-      localStorage.setItem('masquehigh_datos', JSON.stringify(datos));
-      
-      alert('✅ TODO GUARDADO CORRECTAMENTE');
+      actualizarVistaPrevia();
+      guardarEstadoCompleto();
+      alert('✅ TODOS LOS CAMBIOS GUARDADOS');
       cerrarAdmin();
     }
 
-    // ===== CARGAR DATOS GUARDADOS =====
-    function cargarDatosGuardados() {
-      const guardados = localStorage.getItem('masquehigh_datos');
-      if (guardados) {
-        const datos = JSON.parse(guardados);
-        
-        let index = 0;
-        document.querySelectorAll('#panel-genero .subseccion:first-child .producto-precio').forEach(e => {
-          if (datos.extract[index]) e.textContent = datos.extract[index];
-          index++;
-        });
-        
-        index = 0;
-        document.querySelectorAll('#panel-genero .subseccion:nth-child(2) .producto-precio').forEach(e => {
-          if (datos.hierbas[index]) e.textContent = datos.hierbas[index];
-          index++;
-        });
-        
-        index = 0;
-        document.querySelectorAll('#panel-genero .subseccion:nth-child(3) .producto-precio').forEach(e => {
-          if (datos.liados[index]) e.textContent = datos.liados[index];
-          index++;
-        });
-        
-        index = 0;
-        document.querySelectorAll('#panel-munchies .munchies-categoria:first-child .item-precio').forEach(e => {
-          if (datos.refrescos[index]) e.textContent = datos.refrescos[index];
-          index++;
-        });
-        
-        index = 0;
-        document.querySelectorAll('#panel-munchies .munchies-categoria:nth-child(2) .item-precio').forEach(e => {
-          if (datos.picar[index]) e.textContent = datos.picar[index];
-          index++;
-        });
-      }
+    // ===== INICIALIZACIÓN =====
+    window.addEventListener('load', () => {
+      // Asignar IDs si no existen
+      document.querySelectorAll('#panel-genero .producto-card').forEach((card, index) => {
+        if (!card.dataset.id) {
+          const tipo = card.closest('#extract-grid') ? 'extract' : 'hierbas';
+          card.dataset.id = `${tipo}-${index}`;
+        }
+      });
       
-      const imagenes = localStorage.getItem('masquehigh_imagenes');
-      if (imagenes) {
-        const imgData = JSON.parse(imagenes);
-        
-        document.querySelectorAll('#panel-genero .subseccion:first-child .producto-card img').forEach((img, i) => {
-          if (imgData[`extract_${i}`]) img.src = imgData[`extract_${i}`];
-        });
-        
-        document.querySelectorAll('#panel-genero .subseccion:nth-child(2) .producto-card img').forEach((img, i) => {
-          if (imgData[`hierbas_${i}`]) img.src = imgData[`hierbas_${i}`];
-        });
-        
-        document.querySelectorAll('#panel-eventos .evento-card img').forEach((img, i) => {
-          if (imgData[`eventos_${i}`]) img.src = imgData[`eventos_${i}`];
-        });
-      }
-    }
+      document.querySelectorAll('#panel-petas .peta-card').forEach((card, index) => {
+        if (!card.dataset.id) {
+          card.dataset.id = `petas-${index}`;
+        }
+      });
+      
+      document.querySelectorAll('#panel-munchies .item-munchi').forEach((item, index) => {
+        if (!item.dataset.id) {
+          const tipo = item.closest('#refrescos-lista') ? 'refresco' : 'picar';
+          item.dataset.id = `${tipo}-${index}`;
+        }
+      });
+      
+      document.querySelectorAll('#panel-eventos .evento-card').forEach((card, index) => {
+        if (!card.dataset.id) {
+          card.dataset.id = `evento-${index}`;
+        }
+      });
 
-    window.addEventListener('load', cargarDatosGuardados);
+      cargarEstadoGuardado();
+    });
   </script>
 </body>
 </html>
