@@ -1,19 +1,21 @@
 {
   "name": "Masquehigh Club",
   "short_name": "Masquehigh",
-  "start_url": "/masquehigh-club/",
-  "scope": "/masquehigh-club/",
+  "description": "Catálogo oficial de Masquehigh Club",
+  "start_url": "index.html",
+  "scope": ".",
   "display": "standalone",
   "background_color": "#0b0c14",
   "theme_color": "#0b0c14",
+  "orientation": "portrait",
   "icons": [
     {
-      "src": "icons/icon-192.png",
+      "src": "images/icon-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "icons/icon-512.png",
+      "src": "images/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
