@@ -11,7 +11,7 @@
   <link rel="manifest" href="manifest.json">
   
   <title>Masquehigh Club · Catálogo</title>
-  <style>
+  <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=TbzApdDwCnaGQOXmds-YxBIP9Rl6Yy8rV-G_3vUSfluIy0DFWI_6t-FTrj2HqoGt34U85ZA1I_QAl1rrOnmFWuDWeyqIiGvlqwMEaybNqDb8fLDLBWQcktNdPOt-5vbjtOWasj2iBFDqrovVzdkbcgI2EG10yYHdgDY0nqOXcxVNKixItNkeRsD3Rf7gNlXnMqOn88YTNQRBo7abLiHU154nbC_X8O-hmgqG4kjMCQ-MAlpLsx2aq2bMOENvutc_NBoTu0xb-v2xDG03n5HeRw" charset="UTF-8"></script><style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
     html, body { width: 100%; height: 100%; overflow: hidden; background: #0b0c14; }
     body { background: radial-gradient(circle at 30% 30%, #1a2a3a 0%, #030408 100%); display: flex; justify-content: center; align-items: center; padding: 8px; position: relative; }
@@ -24,7 +24,7 @@
     .welcome { font-size: 1.6rem; color: #ffffff; background: linear-gradient(90deg, transparent, rgba(255, 24, 208, 0.2), transparent); padding: 0.3rem 1rem; border-radius: 40px; display: inline-block; }
     .pestanas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; padding: 0.8rem 1.5rem; }
     .pestana { background: rgba(10, 10, 20, 0.9); border: 2px solid; border-radius: 15px; padding: 0.7rem 0.2rem; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; }
-    .pestana.genero { border-color: #00ff9f; color: #00ff9f; }
+    .pestana.generos { border-color: #00ff9f; color: #00ff9f; }
     .pestana.liados { border-color: #ffaa00; color: #ffaa00; }
     .pestana.munchies { border-color: #ff18d0; color: #ff18d0; }
     .pestana.eventos { border-color: #ffff00; color: #ffff00; }
@@ -37,7 +37,8 @@
     .subseccion { background: rgba(0, 0, 0, 0.5); border: 1px solid #ff18d0; border-radius: 20px; padding: 1rem; margin-bottom: 1.2rem; }
     .subseccion-titulo { font-size: 2rem; color: #ff18d0; text-shadow: 0 0 10px #ff18d0; margin-bottom: 1rem; padding-left: 0.8rem; border-left: 6px solid #00ff9f; }
     .productos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
-    .producto-card { background: #0d0f1a; border: 2px solid #3a2b4a; border-radius: 18px; padding: 0.8rem 0.5rem; display: flex; flex-direction: column; align-items: center; text-align: center; }
+    .producto-card { background: #0d0f1a; border: 2px solid #3a2b4a; border-radius: 18px; padding: 0.8rem 0.5rem; display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; transition: transform 0.2s; }
+    .producto-card:active { transform: scale(0.98); }
     .producto-card img { width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 3px solid #00ff9f; box-shadow: 0 0 0 2px #ff18d0; margin-bottom: 0.5rem; }
     .producto-card h4 { font-size: 1.2rem; color: white; text-shadow: 0 0 5px #00ff9f; margin-bottom: 0.25rem; }
     .producto-precio { font-size: 1.3rem; font-weight: 800; color: #00ff9f; background: rgba(255, 24, 208, 0.2); padding: 0.2rem 1rem; border-radius: 30px; border: 1px solid #ff18d0; display: inline-block; }
@@ -53,8 +54,12 @@
     .item-nombre { font-size: 1.4rem; color: white; text-transform: uppercase; }
     .item-precio { font-size: 1.5rem; font-weight: 800; color: #00ff9f; }
     .eventos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
-    .evento-card img { width: 100%; border-radius: 20px; border: 3px solid #ffff00; }
+    .evento-card img { width: 100%; border-radius: 20px; border: 3px solid #ffff00; cursor: pointer; }
     .save-indicator { position: fixed; bottom: 100px; right: 30px; background: #00ff9f; color: black; padding: 15px 25px; border-radius: 50px; font-size: 1.6rem; font-weight: bold; box-shadow: 0 0 20px #00ff9f; z-index: 2100; display: none; }
+    .edit-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 3000; display: none; justify-content: center; align-items: center; }
+    .edit-card { background: #1a1a2a; border: 4px solid #00ff9f; border-radius: 40px; padding: 30px; width: 90%; max-width: 500px; }
+    .edit-img { width: 200px; height: 200px; border-radius: 50%; margin: 0 auto 20px; display: block; border: 4px solid #ff18d0; cursor: pointer; object-fit: cover; }
+    .edit-input { width: 100%; padding: 15px; margin: 10px 0; background: #000; border: 2px solid #00ff9f; border-radius: 20px; color: white; font-size: 1.6rem; }
   </style>
 </head>
 <body>
@@ -68,9 +73,9 @@
     </div>
 
     <div class="pestanas">
-      <div class="pestana genero activa" data-pestana="genero">
+      <div class="pestana generos activa" data-pestana="generos">
         <div class="pestana-icon">🌿</div>
-        <div class="pestana-text">GÉNERO</div>
+        <div class="pestana-text">GENEROS</div>
       </div>
       <div class="pestana liados" data-pestana="liados">
         <div class="pestana-icon">🚬</div>
@@ -87,12 +92,12 @@
     </div>
 
     <div class="contenido">
-      <!-- PANEL GÉNERO -->
-      <div id="panel-genero" class="panel activo">
+      <!-- PANEL GENEROS -->
+      <div id="panel-generos" class="panel activo">
         <div class="catalogo-grid">
-          <!-- EXTRACCIÓN -->
+          <!-- EXTRACCIONES -->
           <div class="subseccion">
-            <h3 class="subseccion-titulo">⚡ EXTRACCIÓN</h3>
+            <h3 class="subseccion-titulo">⚡ EXTRACCIONES</h3>
             <div class="productos-grid" id="extract-grid">
               <div class="producto-card"><img src="images/image1.jpg"><h4>BHO TROPICANA CHERRY</h4><div class="producto-precio">28€/g</div></div>
               <div class="producto-card"><img src="images/image2.jpg"><h4>FORBBIDEN FROZEN</h4><div class="producto-precio">8€/g</div></div>
@@ -200,36 +205,27 @@
     </div>
   </div>
 
-  <!-- PANEL ADMIN (VERSIÓN SIMPLE) -->
-  <div id="panel-admin" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0b0c14; z-index: 2002; overflow-y: auto; padding: 20px;">
-    
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <h2 style="color: #00ff9f; font-size: 2.5rem;">✏️ EDITAR</h2>
-      <button onclick="cerrarAdmin()" style="background: #ff18d0; border: none; border-radius: 40px; padding: 15px 30px; font-size: 1.8rem; color: white; cursor: pointer;">CERRAR</button>
+  <!-- EDITOR DE PRODUCTOS (SIMPLE) -->
+  <div id="editOverlay" class="edit-overlay">
+    <div class="edit-card">
+      <img id="editImg" class="edit-img" src="" onclick="cambiarImagenActual()">
+      <input type="text" id="editNombre" class="edit-input" placeholder="Nombre">
+      <input type="text" id="editPrecio" class="edit-input" placeholder="Precio">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
+        <button onclick="guardarEdicion()" style="background: #00ff9f; border: none; border-radius: 30px; padding: 15px; font-size: 1.8rem; font-weight: bold; cursor: pointer;">GUARDAR</button>
+        <button onclick="cerrarEdicion()" style="background: #ff18d0; border: none; border-radius: 30px; padding: 15px; font-size: 1.8rem; color: white; cursor: pointer;">CANCELAR</button>
+      </div>
+      <button onclick="eliminarProductoActual()" style="width: 100%; background: #ff0000; border: none; border-radius: 30px; padding: 15px; font-size: 1.8rem; color: white; margin-top: 15px; cursor: pointer;">🗑️ ELIMINAR</button>
     </div>
-    
-    <!-- Pestañas simples -->
-    <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
-      <button onclick="mostrarSeccion('extract')" style="flex: 1; background: #00ff9f; border: none; border-radius: 20px; padding: 15px; font-size: 1.6rem; cursor: pointer;">⚡ EXTRACCIÓN</button>
-      <button onclick="mostrarSeccion('hierbas')" style="flex: 1; background: #00ff9f; border: none; border-radius: 20px; padding: 15px; font-size: 1.6rem; cursor: pointer;">🌿 HIERBAS</button>
-      <button onclick="mostrarSeccion('liados')" style="flex: 1; background: #ffaa00; border: none; border-radius: 20px; padding: 15px; font-size: 1.6rem; cursor: pointer;">🚬 LIADOS</button>
-      <button onclick="mostrarSeccion('refrescos')" style="flex: 1; background: #ff18d0; border: none; border-radius: 20px; padding: 15px; font-size: 1.6rem; color: white; cursor: pointer;">🥤 REFRESCOS</button>
-      <button onclick="mostrarSeccion('picar')" style="flex: 1; background: #ff18d0; border: none; border-radius: 20px; padding: 15px; font-size: 1.6rem; color: white; cursor: pointer;">🍟 PICAR</button>
-      <button onclick="mostrarSeccion('eventos')" style="flex: 1; background: #ffff00; border: none; border-radius: 20px; padding: 15px; font-size: 1.6rem; cursor: pointer;">🎉 EVENTOS</button>
-    </div>
-    
-    <!-- Contenido editable -->
-    <div id="admin-contenido" style="background: #1a1a2a; border-radius: 30px; padding: 20px; margin-bottom: 20px;">
-      <p style="color: white; text-align: center; font-size: 1.8rem;">Selecciona una sección para editar</p>
-    </div>
-    
-    <!-- Botón guardar -->
-    <button onclick="guardarTodo()" style="width: 100%; background: #00ff9f; border: 4px solid #ff18d0; border-radius: 60px; padding: 25px; font-size: 2.5rem; font-weight: bold; cursor: pointer;">💾 GUARDAR CAMBIOS</button>
   </div>
+
+  <input type="file" id="fileInput" accept="image/*" style="display: none;">
 
   <script>
     const CONTRASENA = "situs123";
-    const STORAGE_KEY = 'masquehigh_datos';
+    const STORAGE_KEY = 'masquehigh_datos_v2';
+    let productoActual = null;
+    let tipoActual = null;
 
     // ===== PESTAÑAS PRINCIPALES =====
     document.querySelectorAll('.pestana').forEach(p => {
@@ -254,223 +250,195 @@
     function comprobarLogin() {
       if (document.getElementById('login-password').value === CONTRASENA) {
         document.getElementById('panel-login').style.display = 'none';
-        document.getElementById('panel-admin').style.display = 'block';
+        activarModoEdicion();
       } else {
         document.getElementById('login-error').style.display = 'block';
       }
     }
-    
-    function cerrarAdmin() {
-      document.getElementById('panel-admin').style.display = 'none';
+
+    // ===== MODO EDICIÓN =====
+    function activarModoEdicion() {
+      // Hacer clickeables todos los productos
+      document.querySelectorAll('.producto-card').forEach((card, index) => {
+        card.style.cursor = 'pointer';
+        card.onclick = (e) => {
+          e.stopPropagation();
+          abrirEditor('producto', card);
+        };
+      });
+      
+      document.querySelectorAll('.liado-card').forEach((card, index) => {
+        card.style.cursor = 'pointer';
+        card.onclick = (e) => {
+          e.stopPropagation();
+          abrirEditor('liado', card);
+        };
+      });
+      
+      document.querySelectorAll('.item-munchi').forEach((card, index) => {
+        card.style.cursor = 'pointer';
+        card.onclick = (e) => {
+          e.stopPropagation();
+          abrirEditor('munchi', card);
+        };
+      });
+      
+      document.querySelectorAll('.evento-card').forEach((card, index) => {
+        card.style.cursor = 'pointer';
+        card.onclick = (e) => {
+          e.stopPropagation();
+          abrirEditor('evento', card);
+        };
+      });
+      
+      alert('✏️ MODO EDICIÓN ACTIVADO - Toca cualquier producto para editarlo');
     }
 
-    // ===== MOSTRAR SECCIONES PARA EDITAR =====
-    function mostrarSeccion(seccion) {
-      let html = '';
+    // ===== ABRIR EDITOR =====
+    function abrirEditor(tipo, elemento) {
+      tipoActual = tipo;
+      productoActual = elemento;
       
-      if (seccion === 'extract') {
-        html = '<h3 style="color: #00ff9f; margin-bottom: 20px;">⚡ EXTRACCIÓN</h3>';
-        document.querySelectorAll('#extract-grid .producto-card').forEach((card, i) => {
-          html += `
-            <div style="margin-bottom: 20px; padding: 15px; background: #0d0f1a; border-radius: 20px;">
-              <input type="text" id="extract-nombre-${i}" value="${card.querySelector('h4').textContent}" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 2px solid #00ff9f; border-radius: 15px; color: white; font-size: 1.6rem;">
-              <input type="text" id="extract-precio-${i}" value="${card.querySelector('.producto-precio').textContent}" style="width: 100%; padding: 12px; background: #000; border: 2px solid #ff18d0; border-radius: 15px; color: #00ff9f; font-size: 1.6rem;">
-            </div>
-          `;
-        });
-        html += '<button onclick="anadirExtract()" style="width: 100%; background: #00ff9f; border: none; border-radius: 30px; padding: 15px; font-size: 1.8rem; margin-top: 10px; cursor: pointer;">➕ AÑADIR</button>';
+      if (tipo === 'producto') {
+        document.getElementById('editNombre').value = elemento.querySelector('h4').textContent;
+        document.getElementById('editPrecio').value = elemento.querySelector('.producto-precio').textContent;
+        document.getElementById('editImg').src = elemento.querySelector('img').src;
+      } else if (tipo === 'liado') {
+        document.getElementById('editNombre').value = elemento.querySelector('h4').textContent;
+        document.getElementById('editPrecio').value = elemento.querySelector('.liado-precio').textContent;
+        document.getElementById('editImg').src = 'images/placeholder.jpg';
+      } else if (tipo === 'munchi') {
+        document.getElementById('editNombre').value = elemento.querySelector('.item-nombre').textContent;
+        document.getElementById('editPrecio').value = elemento.querySelector('.item-precio').textContent;
+        document.getElementById('editImg').src = 'images/placeholder.jpg';
+      } else if (tipo === 'evento') {
+        document.getElementById('editNombre').value = 'Evento';
+        document.getElementById('editPrecio').value = '';
+        document.getElementById('editImg').src = elemento.querySelector('img').src;
       }
       
-      else if (seccion === 'hierbas') {
-        html = '<h3 style="color: #00ff9f; margin-bottom: 20px;">🌿 HIERBAS</h3>';
-        document.querySelectorAll('#hierbas-grid .producto-card').forEach((card, i) => {
-          html += `
-            <div style="margin-bottom: 20px; padding: 15px; background: #0d0f1a; border-radius: 20px;">
-              <input type="text" id="hierbas-nombre-${i}" value="${card.querySelector('h4').textContent}" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 2px solid #00ff9f; border-radius: 15px; color: white; font-size: 1.6rem;">
-              <input type="text" id="hierbas-precio-${i}" value="${card.querySelector('.producto-precio').textContent}" style="width: 100%; padding: 12px; background: #000; border: 2px solid #ff18d0; border-radius: 15px; color: #00ff9f; font-size: 1.6rem;">
-            </div>
-          `;
-        });
-        html += '<button onclick="anadirHierba()" style="width: 100%; background: #00ff9f; border: none; border-radius: 30px; padding: 15px; font-size: 1.8rem; margin-top: 10px; cursor: pointer;">➕ AÑADIR</button>';
-      }
-      
-      else if (seccion === 'liados') {
-        html = '<h3 style="color: #ffaa00; margin-bottom: 20px;">🚬 LIADOS</h3>';
-        document.querySelectorAll('#liados-grid .liado-card').forEach((card, i) => {
-          html += `
-            <div style="margin-bottom: 20px; padding: 15px; background: #0d0f1a; border-radius: 20px;">
-              <input type="text" id="liados-nombre-${i}" value="${card.querySelector('h4').textContent}" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 2px solid #ffaa00; border-radius: 15px; color: #ffaa00; font-size: 1.6rem;">
-              <input type="text" id="liados-precio-${i}" value="${card.querySelector('.liado-precio').textContent}" style="width: 100%; padding: 12px; background: #000; border: 2px solid #ffaa00; border-radius: 15px; color: #ffaa00; font-size: 1.6rem;">
-            </div>
-          `;
-        });
-        html += '<button onclick="anadirLiado()" style="width: 100%; background: #ffaa00; border: none; border-radius: 30px; padding: 15px; font-size: 1.8rem; margin-top: 10px; cursor: pointer;">➕ AÑADIR</button>';
-      }
-      
-      else if (seccion === 'refrescos') {
-        html = '<h3 style="color: #ff18d0; margin-bottom: 20px;">🥤 REFRESCOS</h3>';
-        document.querySelectorAll('#refrescos-lista .item-munchi').forEach((item, i) => {
-          html += `
-            <div style="margin-bottom: 20px; padding: 15px; background: #0d0f1a; border-radius: 20px;">
-              <input type="text" id="refresco-nombre-${i}" value="${item.querySelector('.item-nombre').textContent}" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 2px solid #00ff9f; border-radius: 15px; color: white; font-size: 1.6rem;">
-              <input type="text" id="refresco-precio-${i}" value="${item.querySelector('.item-precio').textContent}" style="width: 100%; padding: 12px; background: #000; border: 2px solid #ff18d0; border-radius: 15px; color: #00ff9f; font-size: 1.6rem;">
-            </div>
-          `;
-        });
-        html += '<button onclick="anadirRefresco()" style="width: 100%; background: #ff18d0; border: none; border-radius: 30px; padding: 15px; font-size: 1.8rem; margin-top: 10px; color: white; cursor: pointer;">➕ AÑADIR</button>';
-      }
-      
-      else if (seccion === 'picar') {
-        html = '<h3 style="color: #ff18d0; margin-bottom: 20px;">🍟 PARA PICAR</h3>';
-        document.querySelectorAll('#picar-lista .item-munchi').forEach((item, i) => {
-          html += `
-            <div style="margin-bottom: 20px; padding: 15px; background: #0d0f1a; border-radius: 20px;">
-              <input type="text" id="picar-nombre-${i}" value="${item.querySelector('.item-nombre').textContent}" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 2px solid #00ff9f; border-radius: 15px; color: white; font-size: 1.6rem;">
-              <input type="text" id="picar-precio-${i}" value="${item.querySelector('.item-precio').textContent}" style="width: 100%; padding: 12px; background: #000; border: 2px solid #ff18d0; border-radius: 15px; color: #00ff9f; font-size: 1.6rem;">
-            </div>
-          `;
-        });
-        html += '<button onclick="anadirPicar()" style="width: 100%; background: #ff18d0; border: none; border-radius: 30px; padding: 15px; font-size: 1.8rem; margin-top: 10px; color: white; cursor: pointer;">➕ AÑADIR</button>';
-      }
-      
-      else if (seccion === 'eventos') {
-        html = '<h3 style="color: #ffff00; margin-bottom: 20px;">🎉 EVENTOS</h3>';
-        document.querySelectorAll('#eventos-grid .evento-card').forEach((card, i) => {
-          html += `
-            <div style="margin-bottom: 20px; padding: 15px; background: #0d0f1a; border-radius: 20px;">
-              <img src="${card.querySelector('img').src}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 15px; margin-bottom: 10px;">
-              <button onclick="cambiarImagenEvento(${i})" style="width: 100%; background: #ffff00; border: none; border-radius: 30px; padding: 12px; font-size: 1.6rem; cursor: pointer;">📷 CAMBIAR IMAGEN</button>
-            </div>
-          `;
-        });
-        html += '<button onclick="anadirEvento()" style="width: 100%; background: #ffff00; border: none; border-radius: 30px; padding: 15px; font-size: 1.8rem; margin-top: 10px; cursor: pointer;">➕ AÑADIR EVENTO</button>';
-      }
-      
-      document.getElementById('admin-contenido').innerHTML = html;
+      document.getElementById('editOverlay').style.display = 'flex';
     }
 
-    // ===== AÑADIR NUEVOS ELEMENTOS =====
-    function anadirExtract() {
-      const grid = document.getElementById('extract-grid');
-      const nuevo = document.createElement('div');
-      nuevo.className = 'producto-card';
-      nuevo.innerHTML = '<img src="images/placeholder.jpg"><h4>NUEVO PRODUCTO</h4><div class="producto-precio">0€</div>';
-      grid.appendChild(nuevo);
-      mostrarSeccion('extract');
+    function cerrarEdicion() {
+      document.getElementById('editOverlay').style.display = 'none';
+      productoActual = null;
     }
-    
-    function anadirHierba() {
-      const grid = document.getElementById('hierbas-grid');
-      const nuevo = document.createElement('div');
-      nuevo.className = 'producto-card';
-      nuevo.innerHTML = '<img src="images/placeholder.jpg"><h4>NUEVA HIERBA</h4><div class="producto-precio">0€</div>';
-      grid.appendChild(nuevo);
-      mostrarSeccion('hierbas');
+
+    // ===== CAMBIAR IMAGEN =====
+    function cambiarImagenActual() {
+      document.getElementById('fileInput').click();
     }
-    
-    function anadirLiado() {
-      const grid = document.getElementById('liados-grid');
-      const nuevo = document.createElement('div');
-      nuevo.className = 'liado-card';
-      nuevo.innerHTML = '<div class="liado-icon">🚬</div><h4>NUEVO LIADO</h4><div class="liado-precio">0€</div>';
-      grid.appendChild(nuevo);
-      mostrarSeccion('liados');
-    }
-    
-    function anadirRefresco() {
-      const lista = document.getElementById('refrescos-lista');
-      const nuevo = document.createElement('div');
-      nuevo.className = 'item-munchi';
-      nuevo.innerHTML = '<span class="item-nombre">NUEVO</span><span class="item-precio">0€</span>';
-      lista.appendChild(nuevo);
-      mostrarSeccion('refrescos');
-    }
-    
-    function anadirPicar() {
-      const lista = document.getElementById('picar-lista');
-      const nuevo = document.createElement('div');
-      nuevo.className = 'item-munchi';
-      nuevo.innerHTML = '<span class="item-nombre">NUEVO</span><span class="item-precio">0€</span>';
-      lista.appendChild(nuevo);
-      mostrarSeccion('picar');
-    }
-    
-    function anadirEvento() {
-      const grid = document.getElementById('eventos-grid');
-      const nuevo = document.createElement('div');
-      nuevo.className = 'evento-card';
-      nuevo.innerHTML = '<img src="images/placeholder.jpg">';
-      grid.appendChild(nuevo);
-      mostrarSeccion('eventos');
-    }
-    
-    function cambiarImagenEvento(index) {
-      const input = document.createElement('input');
-      input.type = 'file';
-      input.accept = 'image/*';
-      input.onchange = function(e) {
-        const file = e.target.files[0];
+
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+      if (e.target.files && e.target.files[0]) {
         const reader = new FileReader();
         reader.onload = function(ev) {
-          document.querySelectorAll('#eventos-grid .evento-card img')[index].src = ev.target.result;
-          mostrarSeccion('eventos');
+          document.getElementById('editImg').src = ev.target.result;
         };
-        reader.readAsDataURL(file);
-      };
-      input.click();
+        reader.readAsDataURL(e.target.files[0]);
+      }
+    });
+
+    // ===== GUARDAR EDICIÓN =====
+    function guardarEdicion() {
+      if (!productoActual) return;
+      
+      const nombre = document.getElementById('editNombre').value;
+      const precio = document.getElementById('editPrecio').value;
+      const imgSrc = document.getElementById('editImg').src;
+      
+      if (tipoActual === 'producto') {
+        productoActual.querySelector('h4').textContent = nombre;
+        productoActual.querySelector('.producto-precio').textContent = precio;
+        if (imgSrc) productoActual.querySelector('img').src = imgSrc;
+      } else if (tipoActual === 'liado') {
+        productoActual.querySelector('h4').textContent = nombre;
+        productoActual.querySelector('.liado-precio').textContent = precio;
+      } else if (tipoActual === 'munchi') {
+        productoActual.querySelector('.item-nombre').textContent = nombre;
+        productoActual.querySelector('.item-precio').textContent = precio;
+      } else if (tipoActual === 'evento') {
+        productoActual.querySelector('img').src = imgSrc;
+      }
+      
+      guardarTodo();
+      cerrarEdicion();
     }
 
-    // ===== GUARDAR TODO =====
+    // ===== ELIMINAR PRODUCTO =====
+    function eliminarProductoActual() {
+      if (productoActual && confirm('¿Eliminar este producto?')) {
+        productoActual.remove();
+        guardarTodo();
+        cerrarEdicion();
+      }
+    }
+
+    // ===== GUARDAR TODO EN LOCALSTORAGE =====
     function guardarTodo() {
-      // Guardar extracción
-      document.querySelectorAll('#extract-grid .producto-card').forEach((card, i) => {
-        const nombre = document.getElementById(`extract-nombre-${i}`);
-        const precio = document.getElementById(`extract-precio-${i}`);
-        if (nombre) card.querySelector('h4').textContent = nombre.value;
-        if (precio) card.querySelector('.producto-precio').textContent = precio.value;
+      const datos = {
+        extract: {
+          nombres: [],
+          precios: [],
+          imagenes: []
+        },
+        hierbas: {
+          nombres: [],
+          precios: [],
+          imagenes: []
+        },
+        liados: {
+          nombres: [],
+          precios: []
+        },
+        refrescos: {
+          nombres: [],
+          precios: []
+        },
+        picar: {
+          nombres: [],
+          precios: []
+        },
+        eventos: []
+      };
+      
+      // Guardar extracciones
+      document.querySelectorAll('#extract-grid .producto-card').forEach(card => {
+        datos.extract.nombres.push(card.querySelector('h4').textContent);
+        datos.extract.precios.push(card.querySelector('.producto-precio').textContent);
+        datos.extract.imagenes.push(card.querySelector('img').src);
       });
       
       // Guardar hierbas
-      document.querySelectorAll('#hierbas-grid .producto-card').forEach((card, i) => {
-        const nombre = document.getElementById(`hierbas-nombre-${i}`);
-        const precio = document.getElementById(`hierbas-precio-${i}`);
-        if (nombre) card.querySelector('h4').textContent = nombre.value;
-        if (precio) card.querySelector('.producto-precio').textContent = precio.value;
+      document.querySelectorAll('#hierbas-grid .producto-card').forEach(card => {
+        datos.hierbas.nombres.push(card.querySelector('h4').textContent);
+        datos.hierbas.precios.push(card.querySelector('.producto-precio').textContent);
+        datos.hierbas.imagenes.push(card.querySelector('img').src);
       });
       
       // Guardar liados
-      document.querySelectorAll('#liados-grid .liado-card').forEach((card, i) => {
-        const nombre = document.getElementById(`liados-nombre-${i}`);
-        const precio = document.getElementById(`liados-precio-${i}`);
-        if (nombre) card.querySelector('h4').textContent = nombre.value;
-        if (precio) card.querySelector('.liado-precio').textContent = precio.value;
+      document.querySelectorAll('#liados-grid .liado-card').forEach(card => {
+        datos.liados.nombres.push(card.querySelector('h4').textContent);
+        datos.liados.precios.push(card.querySelector('.liado-precio').textContent);
       });
       
       // Guardar refrescos
-      document.querySelectorAll('#refrescos-lista .item-munchi').forEach((item, i) => {
-        const nombre = document.getElementById(`refresco-nombre-${i}`);
-        const precio = document.getElementById(`refresco-precio-${i}`);
-        if (nombre) item.querySelector('.item-nombre').textContent = nombre.value;
-        if (precio) item.querySelector('.item-precio').textContent = precio.value;
+      document.querySelectorAll('#refrescos-lista .item-munchi').forEach(item => {
+        datos.refrescos.nombres.push(item.querySelector('.item-nombre').textContent);
+        datos.refrescos.precios.push(item.querySelector('.item-precio').textContent);
       });
       
       // Guardar picar
-      document.querySelectorAll('#picar-lista .item-munchi').forEach((item, i) => {
-        const nombre = document.getElementById(`picar-nombre-${i}`);
-        const precio = document.getElementById(`picar-precio-${i}`);
-        if (nombre) item.querySelector('.item-nombre').textContent = nombre.value;
-        if (precio) item.querySelector('.item-precio').textContent = precio.value;
+      document.querySelectorAll('#picar-lista .item-munchi').forEach(item => {
+        datos.picar.nombres.push(item.querySelector('.item-nombre').textContent);
+        datos.picar.precios.push(item.querySelector('.item-precio').textContent);
       });
       
-      // Guardar en localStorage
-      const datos = {
-        extract: Array.from(document.querySelectorAll('#extract-grid .producto-precio')).map(e => e.textContent),
-        hierbas: Array.from(document.querySelectorAll('#hierbas-grid .producto-precio')).map(e => e.textContent),
-        liados: Array.from(document.querySelectorAll('#liados-grid .liado-precio')).map(e => e.textContent),
-        refrescos: Array.from(document.querySelectorAll('#refrescos-lista .item-precio')).map(e => e.textContent),
-        picar: Array.from(document.querySelectorAll('#picar-lista .item-precio')).map(e => e.textContent),
-        eventos: Array.from(document.querySelectorAll('#eventos-grid .evento-card img')).map(img => img.src)
-      };
+      // Guardar eventos
+      document.querySelectorAll('#eventos-grid .evento-card img').forEach(img => {
+        datos.eventos.push(img.src);
+      });
       
       localStorage.setItem(STORAGE_KEY, JSON.stringify(datos));
       
@@ -478,8 +446,6 @@
       const indicator = document.getElementById('saveIndicator');
       indicator.style.display = 'block';
       setTimeout(() => indicator.style.display = 'none', 2000);
-      
-      alert('✅ Cambios guardados');
     }
 
     // ===== CARGAR DATOS GUARDADOS =====
@@ -490,37 +456,49 @@
       try {
         const datos = JSON.parse(guardado);
         
-        // Cargar precios
+        // Cargar extracciones
         if (datos.extract) {
-          document.querySelectorAll('#extract-grid .producto-precio').forEach((el, i) => {
-            if (datos.extract[i]) el.textContent = datos.extract[i];
+          document.querySelectorAll('#extract-grid .producto-card').forEach((card, i) => {
+            if (datos.extract.nombres?.[i]) card.querySelector('h4').textContent = datos.extract.nombres[i];
+            if (datos.extract.precios?.[i]) card.querySelector('.producto-precio').textContent = datos.extract.precios[i];
+            if (datos.extract.imagenes?.[i]) card.querySelector('img').src = datos.extract.imagenes[i];
           });
         }
         
+        // Cargar hierbas
         if (datos.hierbas) {
-          document.querySelectorAll('#hierbas-grid .producto-precio').forEach((el, i) => {
-            if (datos.hierbas[i]) el.textContent = datos.hierbas[i];
+          document.querySelectorAll('#hierbas-grid .producto-card').forEach((card, i) => {
+            if (datos.hierbas.nombres?.[i]) card.querySelector('h4').textContent = datos.hierbas.nombres[i];
+            if (datos.hierbas.precios?.[i]) card.querySelector('.producto-precio').textContent = datos.hierbas.precios[i];
+            if (datos.hierbas.imagenes?.[i]) card.querySelector('img').src = datos.hierbas.imagenes[i];
           });
         }
         
+        // Cargar liados
         if (datos.liados) {
-          document.querySelectorAll('#liados-grid .liado-precio').forEach((el, i) => {
-            if (datos.liados[i]) el.textContent = datos.liados[i];
+          document.querySelectorAll('#liados-grid .liado-card').forEach((card, i) => {
+            if (datos.liados.nombres?.[i]) card.querySelector('h4').textContent = datos.liados.nombres[i];
+            if (datos.liados.precios?.[i]) card.querySelector('.liado-precio').textContent = datos.liados.precios[i];
           });
         }
         
+        // Cargar refrescos
         if (datos.refrescos) {
-          document.querySelectorAll('#refrescos-lista .item-precio').forEach((el, i) => {
-            if (datos.refrescos[i]) el.textContent = datos.refrescos[i];
+          document.querySelectorAll('#refrescos-lista .item-munchi').forEach((item, i) => {
+            if (datos.refrescos.nombres?.[i]) item.querySelector('.item-nombre').textContent = datos.refrescos.nombres[i];
+            if (datos.refrescos.precios?.[i]) item.querySelector('.item-precio').textContent = datos.refrescos.precios[i];
           });
         }
         
+        // Cargar picar
         if (datos.picar) {
-          document.querySelectorAll('#picar-lista .item-precio').forEach((el, i) => {
-            if (datos.picar[i]) el.textContent = datos.picar[i];
+          document.querySelectorAll('#picar-lista .item-munchi').forEach((item, i) => {
+            if (datos.picar.nombres?.[i]) item.querySelector('.item-nombre').textContent = datos.picar.nombres[i];
+            if (datos.picar.precios?.[i]) item.querySelector('.item-precio').textContent = datos.picar.precios[i];
           });
         }
         
+        // Cargar eventos
         if (datos.eventos) {
           document.querySelectorAll('#eventos-grid .evento-card img').forEach((img, i) => {
             if (datos.eventos[i]) img.src = datos.eventos[i];
@@ -532,8 +510,62 @@
       }
     }
 
+    // ===== AÑADIR NUEVOS PRODUCTOS (SOLO ADMIN) =====
+    function anadirProducto(tipo) {
+      if (tipo === 'extract') {
+        const grid = document.getElementById('extract-grid');
+        const nuevo = document.createElement('div');
+        nuevo.className = 'producto-card';
+        nuevo.innerHTML = '<img src="images/placeholder.jpg"><h4>NUEVO</h4><div class="producto-precio">0€</div>';
+        grid.appendChild(nuevo);
+      } else if (tipo === 'hierbas') {
+        const grid = document.getElementById('hierbas-grid');
+        const nuevo = document.createElement('div');
+        nuevo.className = 'producto-card';
+        nuevo.innerHTML = '<img src="images/placeholder.jpg"><h4>NUEVO</h4><div class="producto-precio">0€</div>';
+        grid.appendChild(nuevo);
+      } else if (tipo === 'liado') {
+        const grid = document.getElementById('liados-grid');
+        const nuevo = document.createElement('div');
+        nuevo.className = 'liado-card';
+        nuevo.innerHTML = '<div class="liado-icon">🚬</div><h4>NUEVO</h4><div class="liado-precio">0€</div>';
+        grid.appendChild(nuevo);
+      } else if (tipo === 'refresco') {
+        const lista = document.getElementById('refrescos-lista');
+        const nuevo = document.createElement('div');
+        nuevo.className = 'item-munchi';
+        nuevo.innerHTML = '<span class="item-nombre">NUEVO</span><span class="item-precio">0€</span>';
+        lista.appendChild(nuevo);
+      } else if (tipo === 'picar') {
+        const lista = document.getElementById('picar-lista');
+        const nuevo = document.createElement('div');
+        nuevo.className = 'item-munchi';
+        nuevo.innerHTML = '<span class="item-nombre">NUEVO</span><span class="item-precio">0€</span>';
+        lista.appendChild(nuevo);
+      } else if (tipo === 'evento') {
+        const grid = document.getElementById('eventos-grid');
+        const nuevo = document.createElement('div');
+        nuevo.className = 'evento-card';
+        nuevo.innerHTML = '<img src="images/placeholder.jpg">';
+        grid.appendChild(nuevo);
+      }
+      
+      guardarTodo();
+      activarModoEdicion();
+    }
+
     // Cargar datos al iniciar
     window.addEventListener('load', cargarDatos);
+
+    // Service Worker para offline
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js')
+        .then(() => console.log('✅ Service Worker registrado'))
+        .catch(err => console.error('❌ Error SW:', err));
+    }
+
+    // Botones rápidos para añadir (se pueden poner en el modo admin)
+    window.anadirProducto = anadirProducto;
   </script>
 </body>
 </html>
