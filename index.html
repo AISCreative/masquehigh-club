@@ -175,10 +175,7 @@
       <!-- PANEL EVENTOS -->
       <div id="panel-eventos" class="panel">
         <div class="eventos-grid" id="eventos-grid">
-          <div class="evento-card"><img src="images/image14.jpg"></div>
-          <div class="evento-card"><img src="images/image15.jpg"></div>
-          <div class="evento-card"><img src="images/image16.jpg"></div>
-          <div class="evento-card"><img src="images/image17.jpg"></div>
+          <!-- Los eventos se cargarán dinámicamente desde localStorage -->
         </div>
       </div>
     </div>
@@ -352,10 +349,13 @@
       else if (seccion === 'eventos') {
         html = '<h3 style="color: #ffff00; margin-bottom: 20px;">🎉 EVENTOS</h3>';
         document.querySelectorAll('#eventos-grid .evento-card').forEach((card, i) => {
+          const imgSrc = card.querySelector('img').src;
           html += `
             <div style="margin-bottom: 20px; padding: 15px; background: #0d0f1a; border-radius: 20px;">
-              <img src="${card.querySelector('img').src}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 15px; margin-bottom: 10px;">
-              <button onclick="cambiarImagenEvento(${i})" style="width: 100%; background: #ffff00; border: none; border-radius: 30px; padding: 12px; font-size: 1.6rem; cursor: pointer;">📷 CAMBIAR IMAGEN</button>
+              <img src="${imgSrc}" id="evento-img-${i}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 15px; margin-bottom: 10px;">
+              <input type="file" id="evento-file-${i}" accept="image/*" style="display: none;" onchange="previsualizarImagenEvento(${i})">
+              <button onclick="document.getElementById('evento-file-${i}').click()" style="width: 100%; background: #ffff00; border: none; border-radius: 30px; padding: 12px; font-size: 1.6rem; cursor: pointer; margin-bottom: 10px;">📷 CAMBIAR IMAGEN</button>
+              <button onclick="eliminarEvento(${i})" style="width: 100%; background: #ff18d0; border: none; border-radius: 30px; padding: 12px; font-size: 1.6rem; color: white; cursor: pointer;">🗑️ ELIMINAR</button>
             </div>
           `;
         });
@@ -373,6 +373,7 @@
       nuevo.innerHTML = '<img src="images/placeholder.jpg"><h4>NUEVO PRODUCTO</h4><div class="producto-precio">0€</div>';
       grid.appendChild(nuevo);
       mostrarSeccion('extract');
+      guardarTodo();
     }
     
     function anadirHierba() {
@@ -382,6 +383,7 @@
       nuevo.innerHTML = '<img src="images/placeholder.jpg"><h4>NUEVA HIERBA</h4><div class="producto-precio">0€</div>';
       grid.appendChild(nuevo);
       mostrarSeccion('hierbas');
+      guardarTodo();
     }
     
     function anadirLiado() {
@@ -391,6 +393,7 @@
       nuevo.innerHTML = '<div class="liado-icon">🚬</div><h4>NUEVO LIADO</h4><div class="liado-precio">0€</div>';
       grid.appendChild(nuevo);
       mostrarSeccion('liados');
+      guardarTodo();
     }
     
     function anadirRefresco() {
@@ -400,6 +403,7 @@
       nuevo.innerHTML = '<span class="item-nombre">NUEVO</span><span class="item-precio">0€</span>';
       lista.appendChild(nuevo);
       mostrarSeccion('refrescos');
+      guardarTodo();
     }
     
     function anadirPicar() {
@@ -409,6 +413,7 @@
       nuevo.innerHTML = '<span class="item-nombre">NUEVO</span><span class="item-precio">0€</span>';
       lista.appendChild(nuevo);
       mostrarSeccion('picar');
+      guardarTodo();
     }
     
     function anadirEvento() {
@@ -417,26 +422,52 @@
       nuevo.className = 'evento-card';
       nuevo.innerHTML = '<img src="images/placeholder.jpg">';
       grid.appendChild(nuevo);
+      guardarEventosEnStorage();
       mostrarSeccion('eventos');
     }
     
-    function cambiarImagenEvento(index) {
-      const input = document.createElement('input');
-      input.type = 'file';
-      input.accept = 'image/*';
-      input.onchange = function(e) {
-        const file = e.target.files[0];
+    // ===== FUNCIONES ESPECÍFICAS PARA EVENTOS =====
+    function previsualizarImagenEvento(index) {
+      const input = document.getElementById(`evento-file-${index}`);
+      if (input.files && input.files[0]) {
         const reader = new FileReader();
-        reader.onload = function(ev) {
-          document.querySelectorAll('#eventos-grid .evento-card img')[index].src = ev.target.result;
-          mostrarSeccion('eventos');
+        reader.onload = function(e) {
+          // Actualizar la vista previa en el panel de administración
+          document.getElementById(`evento-img-${index}`).src = e.target.result;
+          
+          // También actualizar la imagen en el panel principal
+          const eventosGrid = document.getElementById('eventos-grid');
+          if (eventosGrid && eventosGrid.children[index]) {
+            eventosGrid.children[index].querySelector('img').src = e.target.result;
+          }
+          
+          // Guardar automáticamente en localStorage
+          guardarEventosEnStorage();
         };
-        reader.readAsDataURL(file);
-      };
-      input.click();
+        reader.readAsDataURL(input.files[0]);
+      }
     }
 
-    // ===== GUARDAR TODO (MEJORADO) =====
+    function eliminarEvento(index) {
+      const eventosGrid = document.getElementById('eventos-grid');
+      if (eventosGrid.children.length > index) {
+        eventosGrid.removeChild(eventosGrid.children[index]);
+        guardarEventosEnStorage();
+        mostrarSeccion('eventos');
+      }
+    }
+
+    function guardarEventosEnStorage() {
+      const datosGuardados = localStorage.getItem(STORAGE_KEY);
+      let datos = datosGuardados ? JSON.parse(datosGuardados) : {};
+      
+      // Guardar las imágenes de eventos
+      datos.eventos = Array.from(document.querySelectorAll('#eventos-grid .evento-card img')).map(img => img.src);
+      
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(datos));
+    }
+
+    // ===== GUARDAR TODO =====
     function guardarTodo() {
       // Guardar extracción
       document.querySelectorAll('#extract-grid .producto-card').forEach((card, i) => {
@@ -478,7 +509,7 @@
         if (precioInput) item.querySelector('.item-precio').textContent = precioInput.value;
       });
       
-      // Guardar en localStorage (incluyendo nombres)
+      // Guardar en localStorage
       const datos = {
         extractNombres: Array.from(document.querySelectorAll('#extract-grid h4')).map(el => el.textContent),
         extractPrecios: Array.from(document.querySelectorAll('#extract-grid .producto-precio')).map(el => el.textContent),
@@ -503,10 +534,14 @@
       alert('✅ Cambios guardados correctamente');
     }
 
-    // ===== CARGAR DATOS GUARDADOS (MEJORADO) =====
+    // ===== CARGAR DATOS GUARDADOS =====
     function cargarDatos() {
       const guardado = localStorage.getItem(STORAGE_KEY);
-      if (!guardado) return;
+      if (!guardado) {
+        // Si no hay datos guardados, inicializar con eventos por defecto
+        inicializarEventosPorDefecto();
+        return;
+      }
       
       try {
         const datos = JSON.parse(guardado);
@@ -572,15 +607,43 @@
         }
         
         // Cargar eventos
-        if (datos.eventos) {
-          document.querySelectorAll('#eventos-grid .evento-card img').forEach((img, i) => {
-            if (datos.eventos[i]) img.src = datos.eventos[i];
+        if (datos.eventos && Array.isArray(datos.eventos) && datos.eventos.length > 0) {
+          const eventosGrid = document.getElementById('eventos-grid');
+          eventosGrid.innerHTML = '';
+          
+          datos.eventos.forEach(src => {
+            const eventoCard = document.createElement('div');
+            eventoCard.className = 'evento-card';
+            eventoCard.innerHTML = `<img src="${src}">`;
+            eventosGrid.appendChild(eventoCard);
           });
+        } else {
+          inicializarEventosPorDefecto();
         }
         
       } catch (e) {
         console.error('Error al cargar:', e);
+        inicializarEventosPorDefecto();
       }
+    }
+
+    function inicializarEventosPorDefecto() {
+      const eventosGrid = document.getElementById('eventos-grid');
+      eventosGrid.innerHTML = '';
+      
+      const eventosPorDefecto = [
+        'images/image14.jpg',
+        'images/image15.jpg',
+        'images/image16.jpg',
+        'images/image17.jpg'
+      ];
+      
+      eventosPorDefecto.forEach(src => {
+        const eventoCard = document.createElement('div');
+        eventoCard.className = 'evento-card';
+        eventoCard.innerHTML = `<img src="${src}">`;
+        eventosGrid.appendChild(eventoCard);
+      });
     }
 
     // Cargar datos al iniciar
