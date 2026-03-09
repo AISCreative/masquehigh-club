@@ -53,28 +53,30 @@
     .item-nombre { font-size: 1.4rem; color: white; text-transform: uppercase; }
     .item-precio { font-size: 1.5rem; font-weight: 800; color: #00ff9f; }
     
-    /* ESTILOS PARA EVENTOS - DOS FILAS */
+    /* ESTILOS PARA EVENTOS - 2 FILAS DE 2 */
     .eventos-grid { 
       display: grid; 
-      grid-template-columns: repeat(2, 1fr); /* DOS COLUMNAS FIJAS */
-      gap: 1.5rem; 
+      grid-template-columns: repeat(2, 1fr); /* DOS COLUMNAS IGUALES */
+      gap: 2rem; /* Espacio entre tarjetas */
+      padding: 1rem 0;
     }
     
     .evento-card { 
       background: rgba(0, 0, 0, 0.7); 
       border-radius: 20px; 
-      padding: 1rem;
+      padding: 1.5rem;
       border: 3px solid #ffff00;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 1rem;
+      height: fit-content;
     }
     
     .evento-imagen {
       width: 100%;
       height: auto;
+      max-height: 300px; /* Tamaño equilibrado */
       min-height: 200px;
-      max-height: 300px;
       object-fit: contain;
       border-radius: 15px;
       border: 2px solid #00ff9f;
@@ -83,12 +85,13 @@
     
     .evento-texto {
       color: white;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       text-align: center;
       white-space: pre-line;
       background: rgba(0,0,0,0.5);
-      padding: 10px;
+      padding: 1rem;
       border-radius: 10px;
+      border-left: 4px solid #ff18d0;
     }
     
     .save-indicator { position: fixed; bottom: 100px; right: 30px; background: #00ff9f; color: black; padding: 15px 25px; border-radius: 50px; font-size: 1.6rem; font-weight: bold; box-shadow: 0 0 20px #00ff9f; z-index: 2100; display: none; }
@@ -128,6 +131,7 @@
       cursor: pointer;
       margin-bottom: 10px;
       width: 100%;
+      font-weight: bold;
     }
     .save-btn {
       background: #00ff9f;
@@ -137,6 +141,7 @@
       font-size: 1.4rem;
       cursor: pointer;
       flex: 2;
+      font-weight: bold;
     }
     .delete-btn {
       background: #ff18d0;
@@ -147,6 +152,7 @@
       color: white;
       cursor: pointer;
       flex: 1;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -323,7 +329,7 @@
 
   <script>
     const CONTRASENA = "situs123";
-    const STORAGE_KEY = 'masquehigh_datos_completo';
+    const STORAGE_KEY = 'masquehigh_datos_final';
 
     // Eventos iniciales con textos
     const EVENTOS_INICIALES = [
@@ -608,7 +614,7 @@
         reader.onload = async function(e) {
           try {
             // Comprimir la imagen
-            const imagenComprimida = await comprimirImagen(e.target.result, 0.6, 600);
+            const imagenComprimida = await comprimirImagen(e.target.result, 0.6, 800);
             
             // Actualizar vista previa
             const imgElement = document.getElementById(`evento-img-${index}`);
