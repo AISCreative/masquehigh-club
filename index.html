@@ -53,7 +53,7 @@
     .item-nombre { font-size: 1.4rem; color: white; text-transform: uppercase; }
     .item-precio { font-size: 1.5rem; font-weight: 800; color: #00ff9f; }
     
-    /* EVENTOS: SOLO IMÁGENES EN 2 COLUMNAS */
+    /* EVENTOS: 4 IMÁGENES EN 2 COLUMNAS */
     .eventos-grid { 
       display: grid; 
       grid-template-columns: repeat(2, 1fr);
@@ -80,6 +80,51 @@
     }
     
     .save-indicator { position: fixed; bottom: 100px; right: 30px; background: #00ff9f; color: black; padding: 15px 25px; border-radius: 50px; font-size: 1.6rem; font-weight: bold; box-shadow: 0 0 20px #00ff9f; z-index: 2100; display: none; }
+
+    /* Estilos para admin de productos */
+    .admin-input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 10px;
+      background: #000;
+      border: 2px solid #00ff9f;
+      border-radius: 15px;
+      color: white;
+      font-size: 1.6rem;
+    }
+    .admin-precio-input {
+      width: 100%;
+      padding: 12px;
+      background: #000;
+      border: 2px solid #ff18d0;
+      border-radius: 15px;
+      color: #00ff9f;
+      font-size: 1.6rem;
+    }
+    .admin-boton-add {
+      width: 100%;
+      background: #00ff9f;
+      border: none;
+      border-radius: 30px;
+      padding: 15px;
+      font-size: 1.8rem;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    .admin-seccion-botones {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .admin-boton-seccion {
+      flex: 1;
+      border: none;
+      border-radius: 20px;
+      padding: 15px;
+      font-size: 1.6rem;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -112,9 +157,10 @@
     </div>
 
     <div class="contenido">
-      <!-- PANEL GÉNERO (igual que antes) -->
+      <!-- PANEL GÉNERO -->
       <div id="panel-genero" class="panel activo">
         <div class="catalogo-grid">
+          <!-- EXTRACCIÓN -->
           <div class="subseccion">
             <h3 class="subseccion-titulo">⚡ EXTRACCIÓN</h3>
             <div class="productos-grid" id="extract-grid">
@@ -127,6 +173,7 @@
               <div class="producto-card"><img src="images/image4.jpg"><h4>COOKIES</h4><div class="producto-precio">5€/g</div></div>
             </div>
           </div>
+          <!-- HIERBAS -->
           <div class="subseccion">
             <h3 class="subseccion-titulo">🌿 HIERBAS</h3>
             <div class="productos-grid" id="hierbas-grid">
@@ -145,7 +192,7 @@
         </div>
       </div>
 
-      <!-- PANEL LIADOS (igual que antes) -->
+      <!-- PANEL LIADOS -->
       <div id="panel-liados" class="panel">
         <div class="subseccion" style="border-color: #ffaa00;">
           <h3 class="subseccion-titulo" style="color: #ffaa00; border-left-color: #ffaa00;">🚬 PORROS LIADOS</h3>
@@ -164,7 +211,7 @@
         </div>
       </div>
 
-      <!-- PANEL MUNCHIES (igual que antes) -->
+      <!-- PANEL MUNCHIES -->
       <div id="panel-munchies" class="panel">
         <div class="munchies-grid">
           <div class="munchies-categoria">
@@ -195,14 +242,17 @@
         </div>
       </div>
 
-      <!-- PANEL EVENTOS - SOLO LAS 4 IMÁGENES EN 2 COLUMNAS -->
+      <!-- PANEL EVENTOS - 4 IMÁGENES EN 2 COLUMNAS -->
       <div id="panel-eventos" class="panel">
         <div class="eventos-grid" id="eventos-grid">
-          <!-- Las imágenes se cargarán desde localStorage o por defecto -->
+          <!-- Las imágenes se cargarán aquí -->
         </div>
       </div>
     </div>
   </main>
+
+  <!-- Indicador de guardado -->
+  <div id="saveIndicator" class="save-indicator">💾 Guardado</div>
 
   <!-- Botón ADMIN -->
   <div style="position: fixed; bottom: 30px; right: 30px; z-index: 2000;">
@@ -222,54 +272,36 @@
     </div>
   </div>
 
-  <!-- PANEL ADMIN - SOLO PARA SUBIR LAS 4 IMÁGENES -->
+  <!-- PANEL ADMIN COMPLETO (editar productos + subir imágenes) -->
   <div id="panel-admin" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0b0c14; z-index: 2002; overflow-y: auto; padding: 20px;">
     
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <h2 style="color: #00ff9f; font-size: 2.5rem;">📸 SUBIR LAS 4 IMÁGENES</h2>
+      <h2 style="color: #00ff9f; font-size: 2.5rem;">✏️ EDITAR TODO</h2>
       <button onclick="cerrarAdmin()" style="background: #ff18d0; border: none; border-radius: 40px; padding: 15px 30px; font-size: 1.8rem; color: white; cursor: pointer;">CERRAR</button>
     </div>
     
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
-      <!-- Evento 1 -->
-      <div style="background: #1a1a2a; border-radius: 20px; padding: 15px; border: 3px solid #ffff00;">
-        <h3 style="color: #ffff00; margin-bottom: 10px;">Evento 1 - Sábados</h3>
-        <img id="preview-0" src="" style="width: 100%; height: 150px; object-fit: contain; background: #000; border-radius: 10px; margin-bottom: 10px; border: 2px solid #00ff9f;">
-        <input type="file" id="file-0" accept="image/*" style="display: none;" onchange="subirImagen(0)">
-        <button onclick="document.getElementById('file-0').click()" style="width: 100%; background: #ffff00; border: none; border-radius: 30px; padding: 12px; font-size: 1.4rem; cursor: pointer;">📷 SUBIR IMAGEN 1</button>
-      </div>
-      
-      <!-- Evento 2 -->
-      <div style="background: #1a1a2a; border-radius: 20px; padding: 15px; border: 3px solid #ffff00;">
-        <h3 style="color: #ffff00; margin-bottom: 10px;">Evento 2 - Cerveza</h3>
-        <img id="preview-1" src="" style="width: 100%; height: 150px; object-fit: contain; background: #000; border-radius: 10px; margin-bottom: 10px; border: 2px solid #00ff9f;">
-        <input type="file" id="file-1" accept="image/*" style="display: none;" onchange="subirImagen(1)">
-        <button onclick="document.getElementById('file-1').click()" style="width: 100%; background: #ffff00; border: none; border-radius: 30px; padding: 12px; font-size: 1.4rem; cursor: pointer;">📷 SUBIR IMAGEN 2</button>
-      </div>
-      
-      <!-- Evento 3 -->
-      <div style="background: #1a1a2a; border-radius: 20px; padding: 15px; border: 3px solid #ffff00;">
-        <h3 style="color: #ffff00; margin-bottom: 10px;">Evento 3 - Cine</h3>
-        <img id="preview-2" src="" style="width: 100%; height: 150px; object-fit: contain; background: #000; border-radius: 10px; margin-bottom: 10px; border: 2px solid #00ff9f;">
-        <input type="file" id="file-2" accept="image/*" style="display: none;" onchange="subirImagen(2)">
-        <button onclick="document.getElementById('file-2').click()" style="width: 100%; background: #ffff00; border: none; border-radius: 30px; padding: 12px; font-size: 1.4rem; cursor: pointer;">📷 SUBIR IMAGEN 3</button>
-      </div>
-      
-      <!-- Evento 4 -->
-      <div style="background: #1a1a2a; border-radius: 20px; padding: 15px; border: 3px solid #ffff00;">
-        <h3 style="color: #ffff00; margin-bottom: 10px;">Evento 4 - Consola</h3>
-        <img id="preview-3" src="" style="width: 100%; height: 150px; object-fit: contain; background: #000; border-radius: 10px; margin-bottom: 10px; border: 2px solid #00ff9f;">
-        <input type="file" id="file-3" accept="image/*" style="display: none;" onchange="subirImagen(3)">
-        <button onclick="document.getElementById('file-3').click()" style="width: 100%; background: #ffff00; border: none; border-radius: 30px; padding: 12px; font-size: 1.4rem; cursor: pointer;">📷 SUBIR IMAGEN 4</button>
-      </div>
+    <!-- Botones de secciones -->
+    <div class="admin-seccion-botones">
+      <button onclick="mostrarSeccion('extract')" style="background: #00ff9f;" class="admin-boton-seccion">⚡ EXTRACCIÓN</button>
+      <button onclick="mostrarSeccion('hierbas')" style="background: #00ff9f;" class="admin-boton-seccion">🌿 HIERBAS</button>
+      <button onclick="mostrarSeccion('liados')" style="background: #ffaa00;" class="admin-boton-seccion">🚬 LIADOS</button>
+      <button onclick="mostrarSeccion('refrescos')" style="background: #ff18d0; color: white;" class="admin-boton-seccion">🥤 BEBIDAS</button>
+      <button onclick="mostrarSeccion('picar')" style="background: #ff18d0; color: white;" class="admin-boton-seccion">🍿 PICAR</button>
+      <button onclick="mostrarSeccion('eventos')" style="background: #ffff00;" class="admin-boton-seccion">🎉 EVENTOS</button>
     </div>
     
-    <button onclick="guardarTodo()" style="width: 100%; background: #00ff9f; border: 4px solid #ff18d0; border-radius: 60px; padding: 20px; font-size: 2rem; font-weight: bold; cursor: pointer;">💾 GUARDAR TODAS LAS IMÁGENES</button>
+    <!-- Contenido editable -->
+    <div id="admin-contenido" style="background: #1a1a2a; border-radius: 30px; padding: 20px; margin-bottom: 20px;">
+      <p style="color: white; text-align: center; font-size: 1.8rem;">Selecciona una sección para editar</p>
+    </div>
+    
+    <button onclick="guardarTodo()" style="width: 100%; background: #00ff9f; border: 4px solid #ff18d0; border-radius: 60px; padding: 25px; font-size: 2.5rem; font-weight: bold; cursor: pointer;">💾 GUARDAR CAMBIOS</button>
   </div>
 
   <script>
     const CONTRASENA = "situs123";
-    const STORAGE_KEY = 'masquehigh_imagenes';
+    const STORAGE_KEY_PRODUCTOS = 'masquehigh_productos';
+    const STORAGE_KEY_IMAGENES = 'masquehigh_imagenes';
 
     // ===== PESTAÑAS PRINCIPALES =====
     document.querySelectorAll('.pestana').forEach(p => {
@@ -284,7 +316,6 @@
     // ===== LOGIN =====
     function mostrarLogin() {
       document.getElementById('panel-login').style.display = 'flex';
-      cargarPreviews();
     }
     
     function cerrarLogin() {
@@ -301,25 +332,16 @@
         document.getElementById('panel-login').style.display = 'none';
         document.getElementById('panel-admin').style.display = 'block';
         document.getElementById('login-error').style.display = 'none';
-        cargarPreviews();
+        // Mostrar sección de eventos por defecto
+        mostrarSeccion('eventos');
       } else {
         document.getElementById('login-error').style.display = 'block';
       }
     }
 
-    // ===== FUNCIONES PARA IMÁGENES =====
-    function cargarPreviews() {
-      const imagenes = obtenerImagenes();
-      for (let i = 0; i < 4; i++) {
-        const preview = document.getElementById(`preview-${i}`);
-        if (preview && imagenes[i]) {
-          preview.src = imagenes[i];
-        }
-      }
-    }
-
-    function obtenerImagenes() {
-      const guardado = localStorage.getItem(STORAGE_KEY);
+    // ===== FUNCIONES PARA IMÁGENES DE EVENTOS =====
+    function obtenerImagenesEventos() {
+      const guardado = localStorage.getItem(STORAGE_KEY_IMAGENES);
       if (guardado) {
         try {
           return JSON.parse(guardado);
@@ -330,33 +352,13 @@
       return ['', '', '', ''];
     }
 
-    function subirImagen(index) {
-      const input = document.getElementById(`file-${index}`);
-      if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          document.getElementById(`preview-${index}`).src = e.target.result;
-        };
-        reader.readAsDataURL(input.files[0]);
-      }
+    function guardarImagenesEventos(imagenes) {
+      localStorage.setItem(STORAGE_KEY_IMAGENES, JSON.stringify(imagenes));
+      actualizarVistaEventos();
     }
 
-    function guardarTodo() {
-      const imagenes = [];
-      for (let i = 0; i < 4; i++) {
-        const preview = document.getElementById(`preview-${i}`);
-        imagenes.push(preview.src || '');
-      }
-      
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(imagenes));
-      actualizarEventos();
-      
-      alert('✅ Imágenes guardadas');
-      cerrarAdmin();
-    }
-
-    function actualizarEventos() {
-      const imagenes = obtenerImagenes();
+    function actualizarVistaEventos() {
+      const imagenes = obtenerImagenesEventos();
       const grid = document.getElementById('eventos-grid');
       grid.innerHTML = '';
       
@@ -367,17 +369,321 @@
         if (imagenes[i]) {
           card.innerHTML = `<img src="${imagenes[i]}" class="evento-imagen" alt="Evento ${i+1}">`;
         } else {
-          card.innerHTML = `<div style="color: white; text-align: center; padding: 20px;">Subir imagen ${i+1}</div>`;
+          card.innerHTML = `<div style="color: #666; text-align: center; padding: 20px;">Sin imagen</div>`;
         }
         
         grid.appendChild(card);
       }
     }
 
+    // ===== MOSTRAR SECCIONES PARA EDITAR =====
+    function mostrarSeccion(seccion) {
+      let html = '';
+      
+      if (seccion === 'extract') {
+        html = '<h3 style="color: #00ff9f; margin-bottom: 20px;">⚡ EXTRACCIÓN</h3>';
+        document.querySelectorAll('#extract-grid .producto-card').forEach((card, i) => {
+          const nombre = card.querySelector('h4').textContent;
+          const precio = card.querySelector('.producto-precio').textContent;
+          html += `
+            <div style="margin-bottom: 20px; padding: 15px; background: #0d0f1a; border-radius: 20px;">
+              <input type="text" id="extract-nombre-${i}" value="${nombre.replace(/"/g, '&quot;')}" class="admin-input">
+              <input type="text" id="extract-precio-${i}" value="${precio.replace(/"/g, '&quot;')}" class="admin-precio-input">
+            </div>
+          `;
+        });
+        html += '<button onclick="anadirExtract()" class="admin-boton-add">➕ AÑADIR</button>';
+      }
+      
+      else if (seccion === 'hierbas') {
+        html = '<h3 style="color: #00ff9f; margin-bottom: 20px;">🌿 HIERBAS</h3>';
+        document.querySelectorAll('#hierbas-grid .producto-card').forEach((card, i) => {
+          const nombre = card.querySelector('h4').textContent;
+          const precio = card.querySelector('.producto-precio').textContent;
+          html += `
+            <div style="margin-bottom: 20px; padding: 15px; background: #0d0f1a; border-radius: 20px;">
+              <input type="text" id="hierbas-nombre-${i}" value="${nombre.replace(/"/g, '&quot;')}" class="admin-input">
+              <input type="text" id="hierbas-precio-${i}" value="${precio.replace(/"/g, '&quot;')}" class="admin-precio-input">
+            </div>
+          `;
+        });
+        html += '<button onclick="anadirHierba()" class="admin-boton-add">➕ AÑADIR</button>';
+      }
+      
+      else if (seccion === 'liados') {
+        html = '<h3 style="color: #ffaa00; margin-bottom: 20px;">🚬 LIADOS</h3>';
+        document.querySelectorAll('#liados-grid .liado-card').forEach((card, i) => {
+          const nombre = card.querySelector('h4').textContent;
+          const precio = card.querySelector('.liado-precio').textContent;
+          html += `
+            <div style="margin-bottom: 20px; padding: 15px; background: #0d0f1a; border-radius: 20px;">
+              <input type="text" id="liados-nombre-${i}" value="${nombre.replace(/"/g, '&quot;')}" style="width:100%; padding:12px; background:#000; border:2px solid #ffaa00; border-radius:15px; color:#ffaa00; font-size:1.6rem; margin-bottom:10px;">
+              <input type="text" id="liados-precio-${i}" value="${precio.replace(/"/g, '&quot;')}" style="width:100%; padding:12px; background:#000; border:2px solid #ffaa00; border-radius:15px; color:#ffaa00; font-size:1.6rem;">
+            </div>
+          `;
+        });
+        html += '<button onclick="anadirLiado()" style="width:100%; background:#ffaa00; border:none; border-radius:30px; padding:15px; font-size:1.8rem; margin-top:10px; cursor:pointer;">➕ AÑADIR</button>';
+      }
+      
+      else if (seccion === 'refrescos') {
+        html = '<h3 style="color: #ff18d0; margin-bottom: 20px;">🥤 BEBIDAS</h3>';
+        document.querySelectorAll('#refrescos-lista .item-munchi').forEach((item, i) => {
+          const nombre = item.querySelector('.item-nombre').textContent;
+          const precio = item.querySelector('.item-precio').textContent;
+          html += `
+            <div style="margin-bottom: 20px; padding: 15px; background: #0d0f1a; border-radius: 20px;">
+              <input type="text" id="refresco-nombre-${i}" value="${nombre.replace(/"/g, '&quot;')}" class="admin-input">
+              <input type="text" id="refresco-precio-${i}" value="${precio.replace(/"/g, '&quot;')}" class="admin-precio-input">
+            </div>
+          `;
+        });
+        html += '<button onclick="anadirRefresco()" style="width:100%; background:#ff18d0; border:none; border-radius:30px; padding:15px; font-size:1.8rem; margin-top:10px; color:white; cursor:pointer;">➕ AÑADIR</button>';
+      }
+      
+      else if (seccion === 'picar') {
+        html = '<h3 style="color: #ff18d0; margin-bottom: 20px;">🍿 PARA PICAR</h3>';
+        document.querySelectorAll('#picar-lista .item-munchi').forEach((item, i) => {
+          const nombre = item.querySelector('.item-nombre').textContent;
+          const precio = item.querySelector('.item-precio').textContent;
+          html += `
+            <div style="margin-bottom: 20px; padding: 15px; background: #0d0f1a; border-radius: 20px;">
+              <input type="text" id="picar-nombre-${i}" value="${nombre.replace(/"/g, '&quot;')}" class="admin-input">
+              <input type="text" id="picar-precio-${i}" value="${precio.replace(/"/g, '&quot;')}" class="admin-precio-input">
+            </div>
+          `;
+        });
+        html += '<button onclick="anadirPicar()" style="width:100%; background:#ff18d0; border:none; border-radius:30px; padding:15px; font-size:1.8rem; margin-top:10px; color:white; cursor:pointer;">➕ AÑADIR</button>';
+      }
+      
+      else if (seccion === 'eventos') {
+        const imagenes = obtenerImagenesEventos();
+        html = '<h3 style="color: #ffff00; margin-bottom: 20px;">🎉 4 EVENTOS (2 COLUMNAS)</h3>';
+        
+        for (let i = 0; i < 4; i++) {
+          html += `
+            <div style="margin-bottom: 20px; padding: 15px; background: #0d0f1a; border-radius: 20px; border: 2px solid #ffff00;">
+              <h4 style="color: #ffff00; margin-bottom: 10px;">Evento ${i+1}</h4>
+              <img id="evento-preview-${i}" src="${imagenes[i] || ''}" style="width: 100%; height: 150px; object-fit: contain; background: #000; border-radius: 10px; margin-bottom: 10px; border: 2px solid #00ff9f;">
+              <input type="file" id="evento-file-${i}" accept="image/*" style="display: none;" onchange="subirImagenEvento(${i})">
+              <button onclick="document.getElementById('evento-file-${i}').click()" style="width: 100%; background: #ffff00; border: none; border-radius: 30px; padding: 12px; font-size: 1.4rem; cursor: pointer;">📷 SUBIR IMAGEN ${i+1}</button>
+            </div>
+          `;
+        }
+      }
+      
+      document.getElementById('admin-contenido').innerHTML = html;
+    }
+
+    // ===== FUNCIONES PARA SUBIR IMÁGENES DE EVENTOS =====
+    function subirImagenEvento(index) {
+      const input = document.getElementById(`evento-file-${index}`);
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById(`evento-preview-${index}`).src = e.target.result;
+          
+          // Guardar automáticamente
+          const imagenes = obtenerImagenesEventos();
+          imagenes[index] = e.target.result;
+          guardarImagenesEventos(imagenes);
+          
+          // Mostrar indicador
+          const indicator = document.getElementById('saveIndicator');
+          indicator.style.display = 'block';
+          setTimeout(() => indicator.style.display = 'none', 2000);
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    // ===== FUNCIONES PARA AÑADIR PRODUCTOS =====
+    function anadirExtract() {
+      const grid = document.getElementById('extract-grid');
+      const nuevo = document.createElement('div');
+      nuevo.className = 'producto-card';
+      nuevo.innerHTML = '<img src="images/placeholder.jpg"><h4>NUEVO PRODUCTO</h4><div class="producto-precio">0€</div>';
+      grid.appendChild(nuevo);
+      guardarTodo();
+      mostrarSeccion('extract');
+    }
+    
+    function anadirHierba() {
+      const grid = document.getElementById('hierbas-grid');
+      const nuevo = document.createElement('div');
+      nuevo.className = 'producto-card';
+      nuevo.innerHTML = '<img src="images/placeholder.jpg"><h4>NUEVA HIERBA</h4><div class="producto-precio">0€</div>';
+      grid.appendChild(nuevo);
+      guardarTodo();
+      mostrarSeccion('hierbas');
+    }
+    
+    function anadirLiado() {
+      const grid = document.getElementById('liados-grid');
+      const nuevo = document.createElement('div');
+      nuevo.className = 'liado-card';
+      nuevo.innerHTML = '<div class="liado-icon">🚬</div><h4>NUEVO LIADO</h4><div class="liado-precio">0€</div>';
+      grid.appendChild(nuevo);
+      guardarTodo();
+      mostrarSeccion('liados');
+    }
+    
+    function anadirRefresco() {
+      const lista = document.getElementById('refrescos-lista');
+      const nuevo = document.createElement('div');
+      nuevo.className = 'item-munchi';
+      nuevo.innerHTML = '<span class="item-nombre">NUEVO</span><span class="item-precio">0€</span>';
+      lista.appendChild(nuevo);
+      guardarTodo();
+      mostrarSeccion('refrescos');
+    }
+    
+    function anadirPicar() {
+      const lista = document.getElementById('picar-lista');
+      const nuevo = document.createElement('div');
+      nuevo.className = 'item-munchi';
+      nuevo.innerHTML = '<span class="item-nombre">NUEVO</span><span class="item-precio">0€</span>';
+      lista.appendChild(nuevo);
+      guardarTodo();
+      mostrarSeccion('picar');
+    }
+
+    // ===== GUARDAR TODO =====
+    function guardarTodo() {
+      // Guardar extracción
+      document.querySelectorAll('#extract-grid .producto-card').forEach((card, i) => {
+        const nombreInput = document.getElementById(`extract-nombre-${i}`);
+        const precioInput = document.getElementById(`extract-precio-${i}`);
+        if (nombreInput) card.querySelector('h4').textContent = nombreInput.value;
+        if (precioInput) card.querySelector('.producto-precio').textContent = precioInput.value;
+      });
+      
+      // Guardar hierbas
+      document.querySelectorAll('#hierbas-grid .producto-card').forEach((card, i) => {
+        const nombreInput = document.getElementById(`hierbas-nombre-${i}`);
+        const precioInput = document.getElementById(`hierbas-precio-${i}`);
+        if (nombreInput) card.querySelector('h4').textContent = nombreInput.value;
+        if (precioInput) card.querySelector('.producto-precio').textContent = precioInput.value;
+      });
+      
+      // Guardar liados
+      document.querySelectorAll('#liados-grid .liado-card').forEach((card, i) => {
+        const nombreInput = document.getElementById(`liados-nombre-${i}`);
+        const precioInput = document.getElementById(`liados-precio-${i}`);
+        if (nombreInput) card.querySelector('h4').textContent = nombreInput.value;
+        if (precioInput) card.querySelector('.liado-precio').textContent = precioInput.value;
+      });
+      
+      // Guardar refrescos
+      document.querySelectorAll('#refrescos-lista .item-munchi').forEach((item, i) => {
+        const nombreInput = document.getElementById(`refresco-nombre-${i}`);
+        const precioInput = document.getElementById(`refresco-precio-${i}`);
+        if (nombreInput) item.querySelector('.item-nombre').textContent = nombreInput.value;
+        if (precioInput) item.querySelector('.item-precio').textContent = precioInput.value;
+      });
+      
+      // Guardar picar
+      document.querySelectorAll('#picar-lista .item-munchi').forEach((item, i) => {
+        const nombreInput = document.getElementById(`picar-nombre-${i}`);
+        const precioInput = document.getElementById(`picar-precio-${i}`);
+        if (nombreInput) item.querySelector('.item-nombre').textContent = nombreInput.value;
+        if (precioInput) item.querySelector('.item-precio').textContent = precioInput.value;
+      });
+      
+      // Guardar productos en localStorage
+      const datos = {
+        extractNombres: Array.from(document.querySelectorAll('#extract-grid h4')).map(el => el.textContent),
+        extractPrecios: Array.from(document.querySelectorAll('#extract-grid .producto-precio')).map(el => el.textContent),
+        hierbasNombres: Array.from(document.querySelectorAll('#hierbas-grid h4')).map(el => el.textContent),
+        hierbasPrecios: Array.from(document.querySelectorAll('#hierbas-grid .producto-precio')).map(el => el.textContent),
+        liadosNombres: Array.from(document.querySelectorAll('#liados-grid h4')).map(el => el.textContent),
+        liadosPrecios: Array.from(document.querySelectorAll('#liados-grid .liado-precio')).map(el => el.textContent),
+        refrescosNombres: Array.from(document.querySelectorAll('#refrescos-lista .item-nombre')).map(el => el.textContent),
+        refrescosPrecios: Array.from(document.querySelectorAll('#refrescos-lista .item-precio')).map(el => el.textContent),
+        picarNombres: Array.from(document.querySelectorAll('#picar-lista .item-nombre')).map(el => el.textContent),
+        picarPrecios: Array.from(document.querySelectorAll('#picar-lista .item-precio')).map(el => el.textContent)
+      };
+      
+      localStorage.setItem(STORAGE_KEY_PRODUCTOS, JSON.stringify(datos));
+      
+      // Mostrar indicador
+      const indicator = document.getElementById('saveIndicator');
+      indicator.style.display = 'block';
+      setTimeout(() => indicator.style.display = 'none', 2000);
+    }
+
+    // ===== CARGAR DATOS =====
+    function cargarDatos() {
+      // Cargar productos
+      const guardado = localStorage.getItem(STORAGE_KEY_PRODUCTOS);
+      if (guardado) {
+        try {
+          const datos = JSON.parse(guardado);
+          
+          if (datos.extractNombres) {
+            document.querySelectorAll('#extract-grid h4').forEach((el, i) => {
+              if (datos.extractNombres[i]) el.textContent = datos.extractNombres[i];
+            });
+          }
+          if (datos.extractPrecios) {
+            document.querySelectorAll('#extract-grid .producto-precio').forEach((el, i) => {
+              if (datos.extractPrecios[i]) el.textContent = datos.extractPrecios[i];
+            });
+          }
+          
+          if (datos.hierbasNombres) {
+            document.querySelectorAll('#hierbas-grid h4').forEach((el, i) => {
+              if (datos.hierbasNombres[i]) el.textContent = datos.hierbasNombres[i];
+            });
+          }
+          if (datos.hierbasPrecios) {
+            document.querySelectorAll('#hierbas-grid .producto-precio').forEach((el, i) => {
+              if (datos.hierbasPrecios[i]) el.textContent = datos.hierbasPrecios[i];
+            });
+          }
+          
+          if (datos.liadosNombres) {
+            document.querySelectorAll('#liados-grid h4').forEach((el, i) => {
+              if (datos.liadosNombres[i]) el.textContent = datos.liadosNombres[i];
+            });
+          }
+          if (datos.liadosPrecios) {
+            document.querySelectorAll('#liados-grid .liado-precio').forEach((el, i) => {
+              if (datos.liadosPrecios[i]) el.textContent = datos.liadosPrecios[i];
+            });
+          }
+          
+          if (datos.refrescosNombres) {
+            document.querySelectorAll('#refrescos-lista .item-nombre').forEach((el, i) => {
+              if (datos.refrescosNombres[i]) el.textContent = datos.refrescosNombres[i];
+            });
+          }
+          if (datos.refrescosPrecios) {
+            document.querySelectorAll('#refrescos-lista .item-precio').forEach((el, i) => {
+              if (datos.refrescosPrecios[i]) el.textContent = datos.refrescosPrecios[i];
+            });
+          }
+          
+          if (datos.picarNombres) {
+            document.querySelectorAll('#picar-lista .item-nombre').forEach((el, i) => {
+              if (datos.picarNombres[i]) el.textContent = datos.picarNombres[i];
+            });
+          }
+          if (datos.picarPrecios) {
+            document.querySelectorAll('#picar-lista .item-precio').forEach((el, i) => {
+              if (datos.picarPrecios[i]) el.textContent = datos.picarPrecios[i];
+            });
+          }
+        } catch (e) {
+          console.error('Error al cargar productos:', e);
+        }
+      }
+      
+      // Cargar eventos
+      actualizarVistaEventos();
+    }
+
     // Inicializar
-    window.addEventListener('load', () => {
-      actualizarEventos();
-    });
+    window.addEventListener('load', cargarDatos);
   </script>
 </body>
 </html>
