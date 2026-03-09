@@ -80,51 +80,6 @@
     }
     
     .save-indicator { position: fixed; bottom: 100px; right: 30px; background: #00ff9f; color: black; padding: 15px 25px; border-radius: 50px; font-size: 1.6rem; font-weight: bold; box-shadow: 0 0 20px #00ff9f; z-index: 2100; display: none; }
-
-    /* Estilos para admin de productos */
-    .admin-input {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 10px;
-      background: #000;
-      border: 2px solid #00ff9f;
-      border-radius: 15px;
-      color: white;
-      font-size: 1.6rem;
-    }
-    .admin-precio-input {
-      width: 100%;
-      padding: 12px;
-      background: #000;
-      border: 2px solid #ff18d0;
-      border-radius: 15px;
-      color: #00ff9f;
-      font-size: 1.6rem;
-    }
-    .admin-boton-add {
-      width: 100%;
-      background: #00ff9f;
-      border: none;
-      border-radius: 30px;
-      padding: 15px;
-      font-size: 1.8rem;
-      margin-top: 10px;
-      cursor: pointer;
-    }
-    .admin-seccion-botones {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-    .admin-boton-seccion {
-      flex: 1;
-      border: none;
-      border-radius: 20px;
-      padding: 15px;
-      font-size: 1.6rem;
-      cursor: pointer;
-    }
   </style>
 </head>
 <body>
@@ -272,22 +227,22 @@
     </div>
   </div>
 
-  <!-- PANEL ADMIN COMPLETO (editar productos + subir imágenes) -->
+  <!-- PANEL ADMIN - TU PANEL ORIGINAL (EL DE LAS PESTAÑAS DE COLORES) -->
   <div id="panel-admin" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0b0c14; z-index: 2002; overflow-y: auto; padding: 20px;">
     
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <h2 style="color: #00ff9f; font-size: 2.5rem;">✏️ EDITAR TODO</h2>
+      <h2 style="color: #00ff9f; font-size: 2.5rem;">✏️ EDITAR</h2>
       <button onclick="cerrarAdmin()" style="background: #ff18d0; border: none; border-radius: 40px; padding: 15px 30px; font-size: 1.8rem; color: white; cursor: pointer;">CERRAR</button>
     </div>
     
-    <!-- Botones de secciones -->
-    <div class="admin-seccion-botones">
-      <button onclick="mostrarSeccion('extract')" style="background: #00ff9f;" class="admin-boton-seccion">⚡ EXTRACCIÓN</button>
-      <button onclick="mostrarSeccion('hierbas')" style="background: #00ff9f;" class="admin-boton-seccion">🌿 HIERBAS</button>
-      <button onclick="mostrarSeccion('liados')" style="background: #ffaa00;" class="admin-boton-seccion">🚬 LIADOS</button>
-      <button onclick="mostrarSeccion('refrescos')" style="background: #ff18d0; color: white;" class="admin-boton-seccion">🥤 BEBIDAS</button>
-      <button onclick="mostrarSeccion('picar')" style="background: #ff18d0; color: white;" class="admin-boton-seccion">🍿 PICAR</button>
-      <button onclick="mostrarSeccion('eventos')" style="background: #ffff00;" class="admin-boton-seccion">🎉 EVENTOS</button>
+    <!-- Pestañas de colores - TU PANEL ORIGINAL -->
+    <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+      <button onclick="mostrarSeccion('extract')" style="flex: 1; background: #00ff9f; border: none; border-radius: 20px; padding: 15px; font-size: 1.6rem; cursor: pointer;">⚡ EXTRACCIÓN</button>
+      <button onclick="mostrarSeccion('hierbas')" style="flex: 1; background: #00ff9f; border: none; border-radius: 20px; padding: 15px; font-size: 1.6rem; cursor: pointer;">🌿 HIERBAS</button>
+      <button onclick="mostrarSeccion('liados')" style="flex: 1; background: #ffaa00; border: none; border-radius: 20px; padding: 15px; font-size: 1.6rem; cursor: pointer;">🚬 LIADOS</button>
+      <button onclick="mostrarSeccion('refrescos')" style="flex: 1; background: #ff18d0; border: none; border-radius: 20px; padding: 15px; font-size: 1.6rem; color: white; cursor: pointer;">🥤 REFRESCOS</button>
+      <button onclick="mostrarSeccion('picar')" style="flex: 1; background: #ff18d0; border: none; border-radius: 20px; padding: 15px; font-size: 1.6rem; color: white; cursor: pointer;">🍟 PICAR</button>
+      <button onclick="mostrarSeccion('eventos')" style="flex: 1; background: #ffff00; border: none; border-radius: 20px; padding: 15px; font-size: 1.6rem; cursor: pointer;">🎉 EVENTOS</button>
     </div>
     
     <!-- Contenido editable -->
@@ -300,7 +255,7 @@
 
   <script>
     const CONTRASENA = "situs123";
-    const STORAGE_KEY_PRODUCTOS = 'masquehigh_productos';
+    const STORAGE_KEY = 'masquehigh_datos';
     const STORAGE_KEY_IMAGENES = 'masquehigh_imagenes';
 
     // ===== PESTAÑAS PRINCIPALES =====
@@ -332,8 +287,6 @@
         document.getElementById('panel-login').style.display = 'none';
         document.getElementById('panel-admin').style.display = 'block';
         document.getElementById('login-error').style.display = 'none';
-        // Mostrar sección de eventos por defecto
-        mostrarSeccion('eventos');
       } else {
         document.getElementById('login-error').style.display = 'block';
       }
@@ -387,12 +340,12 @@
           const precio = card.querySelector('.producto-precio').textContent;
           html += `
             <div style="margin-bottom: 20px; padding: 15px; background: #0d0f1a; border-radius: 20px;">
-              <input type="text" id="extract-nombre-${i}" value="${nombre.replace(/"/g, '&quot;')}" class="admin-input">
-              <input type="text" id="extract-precio-${i}" value="${precio.replace(/"/g, '&quot;')}" class="admin-precio-input">
+              <input type="text" id="extract-nombre-${i}" value="${nombre.replace(/"/g, '&quot;')}" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 2px solid #00ff9f; border-radius: 15px; color: white; font-size: 1.6rem;">
+              <input type="text" id="extract-precio-${i}" value="${precio.replace(/"/g, '&quot;')}" style="width: 100%; padding: 12px; background: #000; border: 2px solid #ff18d0; border-radius: 15px; color: #00ff9f; font-size: 1.6rem;">
             </div>
           `;
         });
-        html += '<button onclick="anadirExtract()" class="admin-boton-add">➕ AÑADIR</button>';
+        html += '<button onclick="anadirExtract()" style="width: 100%; background: #00ff9f; border: none; border-radius: 30px; padding: 15px; font-size: 1.8rem; margin-top: 10px; cursor: pointer;">➕ AÑADIR</button>';
       }
       
       else if (seccion === 'hierbas') {
@@ -402,12 +355,12 @@
           const precio = card.querySelector('.producto-precio').textContent;
           html += `
             <div style="margin-bottom: 20px; padding: 15px; background: #0d0f1a; border-radius: 20px;">
-              <input type="text" id="hierbas-nombre-${i}" value="${nombre.replace(/"/g, '&quot;')}" class="admin-input">
-              <input type="text" id="hierbas-precio-${i}" value="${precio.replace(/"/g, '&quot;')}" class="admin-precio-input">
+              <input type="text" id="hierbas-nombre-${i}" value="${nombre.replace(/"/g, '&quot;')}" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 2px solid #00ff9f; border-radius: 15px; color: white; font-size: 1.6rem;">
+              <input type="text" id="hierbas-precio-${i}" value="${precio.replace(/"/g, '&quot;')}" style="width: 100%; padding: 12px; background: #000; border: 2px solid #ff18d0; border-radius: 15px; color: #00ff9f; font-size: 1.6rem;">
             </div>
           `;
         });
-        html += '<button onclick="anadirHierba()" class="admin-boton-add">➕ AÑADIR</button>';
+        html += '<button onclick="anadirHierba()" style="width: 100%; background: #00ff9f; border: none; border-radius: 30px; padding: 15px; font-size: 1.8rem; margin-top: 10px; cursor: pointer;">➕ AÑADIR</button>';
       }
       
       else if (seccion === 'liados') {
@@ -417,47 +370,47 @@
           const precio = card.querySelector('.liado-precio').textContent;
           html += `
             <div style="margin-bottom: 20px; padding: 15px; background: #0d0f1a; border-radius: 20px;">
-              <input type="text" id="liados-nombre-${i}" value="${nombre.replace(/"/g, '&quot;')}" style="width:100%; padding:12px; background:#000; border:2px solid #ffaa00; border-radius:15px; color:#ffaa00; font-size:1.6rem; margin-bottom:10px;">
-              <input type="text" id="liados-precio-${i}" value="${precio.replace(/"/g, '&quot;')}" style="width:100%; padding:12px; background:#000; border:2px solid #ffaa00; border-radius:15px; color:#ffaa00; font-size:1.6rem;">
+              <input type="text" id="liados-nombre-${i}" value="${nombre.replace(/"/g, '&quot;')}" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 2px solid #ffaa00; border-radius: 15px; color: #ffaa00; font-size: 1.6rem;">
+              <input type="text" id="liados-precio-${i}" value="${precio.replace(/"/g, '&quot;')}" style="width: 100%; padding: 12px; background: #000; border: 2px solid #ffaa00; border-radius: 15px; color: #ffaa00; font-size: 1.6rem;">
             </div>
           `;
         });
-        html += '<button onclick="anadirLiado()" style="width:100%; background:#ffaa00; border:none; border-radius:30px; padding:15px; font-size:1.8rem; margin-top:10px; cursor:pointer;">➕ AÑADIR</button>';
+        html += '<button onclick="anadirLiado()" style="width: 100%; background: #ffaa00; border: none; border-radius: 30px; padding: 15px; font-size: 1.8rem; margin-top: 10px; cursor: pointer;">➕ AÑADIR</button>';
       }
       
       else if (seccion === 'refrescos') {
-        html = '<h3 style="color: #ff18d0; margin-bottom: 20px;">🥤 BEBIDAS</h3>';
+        html = '<h3 style="color: #ff18d0; margin-bottom: 20px;">🥤 REFRESCOS</h3>';
         document.querySelectorAll('#refrescos-lista .item-munchi').forEach((item, i) => {
           const nombre = item.querySelector('.item-nombre').textContent;
           const precio = item.querySelector('.item-precio').textContent;
           html += `
             <div style="margin-bottom: 20px; padding: 15px; background: #0d0f1a; border-radius: 20px;">
-              <input type="text" id="refresco-nombre-${i}" value="${nombre.replace(/"/g, '&quot;')}" class="admin-input">
-              <input type="text" id="refresco-precio-${i}" value="${precio.replace(/"/g, '&quot;')}" class="admin-precio-input">
+              <input type="text" id="refresco-nombre-${i}" value="${nombre.replace(/"/g, '&quot;')}" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 2px solid #00ff9f; border-radius: 15px; color: white; font-size: 1.6rem;">
+              <input type="text" id="refresco-precio-${i}" value="${precio.replace(/"/g, '&quot;')}" style="width: 100%; padding: 12px; background: #000; border: 2px solid #ff18d0; border-radius: 15px; color: #00ff9f; font-size: 1.6rem;">
             </div>
           `;
         });
-        html += '<button onclick="anadirRefresco()" style="width:100%; background:#ff18d0; border:none; border-radius:30px; padding:15px; font-size:1.8rem; margin-top:10px; color:white; cursor:pointer;">➕ AÑADIR</button>';
+        html += '<button onclick="anadirRefresco()" style="width: 100%; background: #ff18d0; border: none; border-radius: 30px; padding: 15px; font-size: 1.8rem; margin-top: 10px; color: white; cursor: pointer;">➕ AÑADIR</button>';
       }
       
       else if (seccion === 'picar') {
-        html = '<h3 style="color: #ff18d0; margin-bottom: 20px;">🍿 PARA PICAR</h3>';
+        html = '<h3 style="color: #ff18d0; margin-bottom: 20px;">🍟 PARA PICAR</h3>';
         document.querySelectorAll('#picar-lista .item-munchi').forEach((item, i) => {
           const nombre = item.querySelector('.item-nombre').textContent;
           const precio = item.querySelector('.item-precio').textContent;
           html += `
             <div style="margin-bottom: 20px; padding: 15px; background: #0d0f1a; border-radius: 20px;">
-              <input type="text" id="picar-nombre-${i}" value="${nombre.replace(/"/g, '&quot;')}" class="admin-input">
-              <input type="text" id="picar-precio-${i}" value="${precio.replace(/"/g, '&quot;')}" class="admin-precio-input">
+              <input type="text" id="picar-nombre-${i}" value="${nombre.replace(/"/g, '&quot;')}" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 2px solid #00ff9f; border-radius: 15px; color: white; font-size: 1.6rem;">
+              <input type="text" id="picar-precio-${i}" value="${precio.replace(/"/g, '&quot;')}" style="width: 100%; padding: 12px; background: #000; border: 2px solid #ff18d0; border-radius: 15px; color: #00ff9f; font-size: 1.6rem;">
             </div>
           `;
         });
-        html += '<button onclick="anadirPicar()" style="width:100%; background:#ff18d0; border:none; border-radius:30px; padding:15px; font-size:1.8rem; margin-top:10px; color:white; cursor:pointer;">➕ AÑADIR</button>';
+        html += '<button onclick="anadirPicar()" style="width: 100%; background: #ff18d0; border: none; border-radius: 30px; padding: 15px; font-size: 1.8rem; margin-top: 10px; color: white; cursor: pointer;">➕ AÑADIR</button>';
       }
       
       else if (seccion === 'eventos') {
         const imagenes = obtenerImagenesEventos();
-        html = '<h3 style="color: #ffff00; margin-bottom: 20px;">🎉 4 EVENTOS (2 COLUMNAS)</h3>';
+        html = '<h3 style="color: #ffff00; margin-bottom: 20px;">🎉 EVENTOS (4 IMÁGENES)</h3>';
         
         for (let i = 0; i < 4; i++) {
           html += `
@@ -603,7 +556,7 @@
         picarPrecios: Array.from(document.querySelectorAll('#picar-lista .item-precio')).map(el => el.textContent)
       };
       
-      localStorage.setItem(STORAGE_KEY_PRODUCTOS, JSON.stringify(datos));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(datos));
       
       // Mostrar indicador
       const indicator = document.getElementById('saveIndicator');
@@ -614,7 +567,7 @@
     // ===== CARGAR DATOS =====
     function cargarDatos() {
       // Cargar productos
-      const guardado = localStorage.getItem(STORAGE_KEY_PRODUCTOS);
+      const guardado = localStorage.getItem(STORAGE_KEY);
       if (guardado) {
         try {
           const datos = JSON.parse(guardado);
