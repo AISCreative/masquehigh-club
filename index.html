@@ -52,9 +52,55 @@
     .item-munchi { display: flex; justify-content: space-between; align-items: center; background: rgba(0, 0, 0, 0.6); padding: 0.8rem 1.2rem; border-radius: 60px; border: 1px solid #00ff9f; }
     .item-nombre { font-size: 1.4rem; color: white; text-transform: uppercase; }
     .item-precio { font-size: 1.5rem; font-weight: 800; color: #00ff9f; }
-    .eventos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
-    .evento-card img { width: 100%; border-radius: 20px; border: 3px solid #ffff00; }
+    .eventos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+    .evento-card { 
+      background: rgba(0, 0, 0, 0.7); 
+      border-radius: 20px; 
+      padding: 1rem;
+      border: 3px solid #ffff00;
+    }
+    .evento-card img { 
+      width: 100%; 
+      border-radius: 15px; 
+      border: 2px solid #00ff9f;
+      margin-bottom: 10px;
+    }
+    .evento-texto {
+      color: white;
+      font-size: 1.2rem;
+      text-align: center;
+      white-space: pre-line;
+      background: rgba(0,0,0,0.5);
+      padding: 10px;
+      border-radius: 10px;
+    }
     .save-indicator { position: fixed; bottom: 100px; right: 30px; background: #00ff9f; color: black; padding: 15px 25px; border-radius: 50px; font-size: 1.6rem; font-weight: bold; box-shadow: 0 0 20px #00ff9f; z-index: 2100; display: none; }
+    .evento-admin-card {
+      background: #0d0f1a;
+      border-radius: 20px;
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 2px solid #ffff00;
+    }
+    .evento-admin-img {
+      width: 100%;
+      height: 200px;
+      object-fit: contain;
+      border-radius: 15px;
+      margin-bottom: 10px;
+      background: #000;
+    }
+    .evento-admin-textarea {
+      width: 100%;
+      padding: 12px;
+      background: #000;
+      border: 2px solid #00ff9f;
+      border-radius: 15px;
+      color: white;
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+      font-family: monospace;
+    }
   </style>
 </head>
 <body>
@@ -175,7 +221,7 @@
       <!-- PANEL EVENTOS -->
       <div id="panel-eventos" class="panel">
         <div class="eventos-grid" id="eventos-grid">
-          <!-- Los eventos se cargarán dinámicamente desde localStorage -->
+          <!-- Los eventos se cargarán dinámicamente -->
         </div>
       </div>
     </div>
@@ -202,7 +248,7 @@
     </div>
   </div>
 
-  <!-- PANEL ADMIN (VERSIÓN MEJORADA) -->
+  <!-- PANEL ADMIN MEJORADO -->
   <div id="panel-admin" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0b0c14; z-index: 2002; overflow-y: auto; padding: 20px;">
     
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
@@ -220,18 +266,37 @@
       <button onclick="mostrarSeccion('eventos')" style="flex: 1; background: #ffff00; border: none; border-radius: 20px; padding: 15px; font-size: 1.6rem; cursor: pointer;">🎉 EVENTOS</button>
     </div>
     
-    <!-- Contenido editable dinámico -->
+    <!-- Contenido editable -->
     <div id="admin-contenido" style="background: #1a1a2a; border-radius: 30px; padding: 20px; margin-bottom: 20px;">
       <p style="color: white; text-align: center; font-size: 1.8rem;">Selecciona una sección para editar</p>
     </div>
     
-    <!-- Botón guardar -->
     <button onclick="guardarTodo()" style="width: 100%; background: #00ff9f; border: 4px solid #ff18d0; border-radius: 60px; padding: 25px; font-size: 2.5rem; font-weight: bold; cursor: pointer;">💾 GUARDAR CAMBIOS</button>
   </div>
 
   <script>
     const CONTRASENA = "situs123";
-    const STORAGE_KEY = 'masquehigh_datos';
+    const STORAGE_KEY = 'masquehigh_datos_completo';
+
+    // Eventos por defecto con los textos que me pasaste
+    const EVENTOS_POR_DEFECTO = [
+      {
+        imagen: "",
+        texto: "¡OFERTA ESPECIAL!\n\n¡SÁBADOS!\n\nCon una consumición mínima de 10€...\n¡PARTIDA GRATIS!\nAL BILLAR\n\n¡NO TE LO PIERDAS!"
+      },
+      {
+        imagen: "",
+        texto: "¡OFERTA ESPECIAL!\n\n¡VIERNES Y SABADOS\nPOR LA TARDE!\n\n¡LA CERVEZA A\n¡SOLO 1 EURO!\n\n¡NO TE LO PIERDAS!"
+      },
+      {
+        imagen: "",
+        texto: "¡Cine\nlos Domingos\npor la Tarde!\n\nOFERTA COMBO:\nPalomitas + Bebida\n5€"
+      },
+      {
+        imagen: "",
+        texto: "Zona de Consola\n\nSe necesita\nconsumición mínima\n\nTiempo Máximo:\n1h 30min de juego"
+      }
+    ];
 
     // ===== PESTAÑAS PRINCIPALES =====
     document.querySelectorAll('.pestana').forEach(p => {
@@ -278,8 +343,8 @@
           const precio = card.querySelector('.producto-precio').textContent;
           html += `
             <div style="margin-bottom: 20px; padding: 15px; background: #0d0f1a; border-radius: 20px;">
-              <input type="text" id="extract-nombre-${i}" value="${nombre}" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 2px solid #00ff9f; border-radius: 15px; color: white; font-size: 1.6rem;">
-              <input type="text" id="extract-precio-${i}" value="${precio}" style="width: 100%; padding: 12px; background: #000; border: 2px solid #ff18d0; border-radius: 15px; color: #00ff9f; font-size: 1.6rem;">
+              <input type="text" id="extract-nombre-${i}" value="${nombre.replace(/"/g, '&quot;')}" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 2px solid #00ff9f; border-radius: 15px; color: white; font-size: 1.6rem;">
+              <input type="text" id="extract-precio-${i}" value="${precio.replace(/"/g, '&quot;')}" style="width: 100%; padding: 12px; background: #000; border: 2px solid #ff18d0; border-radius: 15px; color: #00ff9f; font-size: 1.6rem;">
             </div>
           `;
         });
@@ -293,8 +358,8 @@
           const precio = card.querySelector('.producto-precio').textContent;
           html += `
             <div style="margin-bottom: 20px; padding: 15px; background: #0d0f1a; border-radius: 20px;">
-              <input type="text" id="hierbas-nombre-${i}" value="${nombre}" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 2px solid #00ff9f; border-radius: 15px; color: white; font-size: 1.6rem;">
-              <input type="text" id="hierbas-precio-${i}" value="${precio}" style="width: 100%; padding: 12px; background: #000; border: 2px solid #ff18d0; border-radius: 15px; color: #00ff9f; font-size: 1.6rem;">
+              <input type="text" id="hierbas-nombre-${i}" value="${nombre.replace(/"/g, '&quot;')}" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 2px solid #00ff9f; border-radius: 15px; color: white; font-size: 1.6rem;">
+              <input type="text" id="hierbas-precio-${i}" value="${precio.replace(/"/g, '&quot;')}" style="width: 100%; padding: 12px; background: #000; border: 2px solid #ff18d0; border-radius: 15px; color: #00ff9f; font-size: 1.6rem;">
             </div>
           `;
         });
@@ -308,8 +373,8 @@
           const precio = card.querySelector('.liado-precio').textContent;
           html += `
             <div style="margin-bottom: 20px; padding: 15px; background: #0d0f1a; border-radius: 20px;">
-              <input type="text" id="liados-nombre-${i}" value="${nombre}" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 2px solid #ffaa00; border-radius: 15px; color: #ffaa00; font-size: 1.6rem;">
-              <input type="text" id="liados-precio-${i}" value="${precio}" style="width: 100%; padding: 12px; background: #000; border: 2px solid #ffaa00; border-radius: 15px; color: #ffaa00; font-size: 1.6rem;">
+              <input type="text" id="liados-nombre-${i}" value="${nombre.replace(/"/g, '&quot;')}" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 2px solid #ffaa00; border-radius: 15px; color: #ffaa00; font-size: 1.6rem;">
+              <input type="text" id="liados-precio-${i}" value="${precio.replace(/"/g, '&quot;')}" style="width: 100%; padding: 12px; background: #000; border: 2px solid #ffaa00; border-radius: 15px; color: #ffaa00; font-size: 1.6rem;">
             </div>
           `;
         });
@@ -323,8 +388,8 @@
           const precio = item.querySelector('.item-precio').textContent;
           html += `
             <div style="margin-bottom: 20px; padding: 15px; background: #0d0f1a; border-radius: 20px;">
-              <input type="text" id="refresco-nombre-${i}" value="${nombre}" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 2px solid #00ff9f; border-radius: 15px; color: white; font-size: 1.6rem;">
-              <input type="text" id="refresco-precio-${i}" value="${precio}" style="width: 100%; padding: 12px; background: #000; border: 2px solid #ff18d0; border-radius: 15px; color: #00ff9f; font-size: 1.6rem;">
+              <input type="text" id="refresco-nombre-${i}" value="${nombre.replace(/"/g, '&quot;')}" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 2px solid #00ff9f; border-radius: 15px; color: white; font-size: 1.6rem;">
+              <input type="text" id="refresco-precio-${i}" value="${precio.replace(/"/g, '&quot;')}" style="width: 100%; padding: 12px; background: #000; border: 2px solid #ff18d0; border-radius: 15px; color: #00ff9f; font-size: 1.6rem;">
             </div>
           `;
         });
@@ -338,8 +403,8 @@
           const precio = item.querySelector('.item-precio').textContent;
           html += `
             <div style="margin-bottom: 20px; padding: 15px; background: #0d0f1a; border-radius: 20px;">
-              <input type="text" id="picar-nombre-${i}" value="${nombre}" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 2px solid #00ff9f; border-radius: 15px; color: white; font-size: 1.6rem;">
-              <input type="text" id="picar-precio-${i}" value="${precio}" style="width: 100%; padding: 12px; background: #000; border: 2px solid #ff18d0; border-radius: 15px; color: #00ff9f; font-size: 1.6rem;">
+              <input type="text" id="picar-nombre-${i}" value="${nombre.replace(/"/g, '&quot;')}" style="width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 2px solid #00ff9f; border-radius: 15px; color: white; font-size: 1.6rem;">
+              <input type="text" id="picar-precio-${i}" value="${precio.replace(/"/g, '&quot;')}" style="width: 100%; padding: 12px; background: #000; border: 2px solid #ff18d0; border-radius: 15px; color: #00ff9f; font-size: 1.6rem;">
             </div>
           `;
         });
@@ -347,33 +412,41 @@
       }
       
       else if (seccion === 'eventos') {
+        const eventos = obtenerEventos();
         html = '<h3 style="color: #ffff00; margin-bottom: 20px;">🎉 EVENTOS</h3>';
-        document.querySelectorAll('#eventos-grid .evento-card').forEach((card, i) => {
-          const imgSrc = card.querySelector('img').src;
+        
+        eventos.forEach((evento, i) => {
           html += `
-            <div style="margin-bottom: 20px; padding: 15px; background: #0d0f1a; border-radius: 20px;">
-              <img src="${imgSrc}" id="evento-img-${i}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 15px; margin-bottom: 10px;">
-              <input type="file" id="evento-file-${i}" accept="image/*" style="display: none;" onchange="previsualizarImagenEvento(${i})">
-              <button onclick="document.getElementById('evento-file-${i}').click()" style="width: 100%; background: #ffff00; border: none; border-radius: 30px; padding: 12px; font-size: 1.6rem; cursor: pointer; margin-bottom: 10px;">📷 CAMBIAR IMAGEN</button>
-              <button onclick="eliminarEvento(${i})" style="width: 100%; background: #ff18d0; border: none; border-radius: 30px; padding: 12px; font-size: 1.6rem; color: white; cursor: pointer;">🗑️ ELIMINAR</button>
+            <div class="evento-admin-card">
+              <img src="${evento.imagen || 'images/placeholder.jpg'}" id="evento-img-${i}" class="evento-admin-img">
+              <input type="file" id="evento-file-${i}" accept="image/*" style="display: none;" onchange="cargarImagenEvento(${i})">
+              <button onclick="document.getElementById('evento-file-${i}').click()" style="width: 100%; background: #ffff00; border: none; border-radius: 30px; padding: 12px; font-size: 1.6rem; cursor: pointer; margin-bottom: 10px;">📷 SUBIR IMAGEN</button>
+              
+              <textarea id="evento-texto-${i}" class="evento-admin-textarea" rows="8">${evento.texto || ''}</textarea>
+              
+              <div style="display: flex; gap: 10px;">
+                <button onclick="guardarEventoIndividual(${i})" style="flex: 2; background: #00ff9f; border: none; border-radius: 30px; padding: 12px; font-size: 1.4rem; cursor: pointer;">💾 GUARDAR</button>
+                <button onclick="eliminarEvento(${i})" style="flex: 1; background: #ff18d0; border: none; border-radius: 30px; padding: 12px; font-size: 1.4rem; color: white; cursor: pointer;">🗑️</button>
+              </div>
             </div>
           `;
         });
+        
         html += '<button onclick="anadirEvento()" style="width: 100%; background: #ffff00; border: none; border-radius: 30px; padding: 15px; font-size: 1.8rem; margin-top: 10px; cursor: pointer;">➕ AÑADIR EVENTO</button>';
       }
       
       document.getElementById('admin-contenido').innerHTML = html;
     }
 
-    // ===== AÑADIR NUEVOS ELEMENTOS =====
+    // ===== FUNCIONES PARA AÑADIR ELEMENTOS =====
     function anadirExtract() {
       const grid = document.getElementById('extract-grid');
       const nuevo = document.createElement('div');
       nuevo.className = 'producto-card';
       nuevo.innerHTML = '<img src="images/placeholder.jpg"><h4>NUEVO PRODUCTO</h4><div class="producto-precio">0€</div>';
       grid.appendChild(nuevo);
-      mostrarSeccion('extract');
       guardarTodo();
+      mostrarSeccion('extract');
     }
     
     function anadirHierba() {
@@ -382,8 +455,8 @@
       nuevo.className = 'producto-card';
       nuevo.innerHTML = '<img src="images/placeholder.jpg"><h4>NUEVA HIERBA</h4><div class="producto-precio">0€</div>';
       grid.appendChild(nuevo);
-      mostrarSeccion('hierbas');
       guardarTodo();
+      mostrarSeccion('hierbas');
     }
     
     function anadirLiado() {
@@ -392,8 +465,8 @@
       nuevo.className = 'liado-card';
       nuevo.innerHTML = '<div class="liado-icon">🚬</div><h4>NUEVO LIADO</h4><div class="liado-precio">0€</div>';
       grid.appendChild(nuevo);
-      mostrarSeccion('liados');
       guardarTodo();
+      mostrarSeccion('liados');
     }
     
     function anadirRefresco() {
@@ -402,8 +475,8 @@
       nuevo.className = 'item-munchi';
       nuevo.innerHTML = '<span class="item-nombre">NUEVO</span><span class="item-precio">0€</span>';
       lista.appendChild(nuevo);
-      mostrarSeccion('refrescos');
       guardarTodo();
+      mostrarSeccion('refrescos');
     }
     
     function anadirPicar() {
@@ -412,59 +485,97 @@
       nuevo.className = 'item-munchi';
       nuevo.innerHTML = '<span class="item-nombre">NUEVO</span><span class="item-precio">0€</span>';
       lista.appendChild(nuevo);
-      mostrarSeccion('picar');
       guardarTodo();
+      mostrarSeccion('picar');
     }
     
     function anadirEvento() {
-      const grid = document.getElementById('eventos-grid');
-      const nuevo = document.createElement('div');
-      nuevo.className = 'evento-card';
-      nuevo.innerHTML = '<img src="images/placeholder.jpg">';
-      grid.appendChild(nuevo);
-      guardarEventosEnStorage();
+      const eventos = obtenerEventos();
+      eventos.push({
+        imagen: "",
+        texto: "NUEVO EVENTO\n\nEscribe aquí la información"
+      });
+      guardarEventos(eventos);
       mostrarSeccion('eventos');
     }
     
-    // ===== FUNCIONES ESPECÍFICAS PARA EVENTOS =====
-    function previsualizarImagenEvento(index) {
+    function eliminarEvento(index) {
+      const eventos = obtenerEventos();
+      eventos.splice(index, 1);
+      guardarEventos(eventos);
+      mostrarSeccion('eventos');
+    }
+    
+    function cargarImagenEvento(index) {
       const input = document.getElementById(`evento-file-${index}`);
       if (input.files && input.files[0]) {
         const reader = new FileReader();
         reader.onload = function(e) {
-          // Actualizar la vista previa en el panel de administración
           document.getElementById(`evento-img-${index}`).src = e.target.result;
-          
-          // También actualizar la imagen en el panel principal
-          const eventosGrid = document.getElementById('eventos-grid');
-          if (eventosGrid && eventosGrid.children[index]) {
-            eventosGrid.children[index].querySelector('img').src = e.target.result;
-          }
-          
-          // Guardar automáticamente en localStorage
-          guardarEventosEnStorage();
+          guardarEventoIndividual(index);
         };
         reader.readAsDataURL(input.files[0]);
       }
     }
-
-    function eliminarEvento(index) {
-      const eventosGrid = document.getElementById('eventos-grid');
-      if (eventosGrid.children.length > index) {
-        eventosGrid.removeChild(eventosGrid.children[index]);
-        guardarEventosEnStorage();
-        mostrarSeccion('eventos');
-      }
+    
+    function guardarEventoIndividual(index) {
+      const eventos = obtenerEventos();
+      const imgElement = document.getElementById(`evento-img-${index}`);
+      const textoElement = document.getElementById(`evento-texto-${index}`);
+      
+      if (imgElement) eventos[index].imagen = imgElement.src;
+      if (textoElement) eventos[index].texto = textoElement.value;
+      
+      guardarEventos(eventos);
+      
+      // Mostrar indicador
+      const indicator = document.getElementById('saveIndicator');
+      indicator.style.display = 'block';
+      setTimeout(() => indicator.style.display = 'none', 2000);
     }
 
-    function guardarEventosEnStorage() {
-      const datosGuardados = localStorage.getItem(STORAGE_KEY);
-      let datos = datosGuardados ? JSON.parse(datosGuardados) : {};
-      
-      // Guardar las imágenes de eventos
-      datos.eventos = Array.from(document.querySelectorAll('#eventos-grid .evento-card img')).map(img => img.src);
-      
+    // ===== FUNCIONES PARA MANEJAR EVENTOS =====
+    function obtenerEventos() {
+      const guardado = localStorage.getItem(STORAGE_KEY);
+      if (guardado) {
+        try {
+          const datos = JSON.parse(guardado);
+          return datos.eventos || EVENTOS_POR_DEFECTO;
+        } catch {
+          return EVENTOS_POR_DEFECTO;
+        }
+      }
+      return EVENTOS_POR_DEFECTO;
+    }
+    
+    function guardarEventos(eventos) {
+      const guardado = localStorage.getItem(STORAGE_KEY);
+      let datos = guardado ? JSON.parse(guardado) : {};
+      datos.eventos = eventos;
       localStorage.setItem(STORAGE_KEY, JSON.stringify(datos));
+      actualizarVistaEventos();
+    }
+    
+    function actualizarVistaEventos() {
+      const eventos = obtenerEventos();
+      const grid = document.getElementById('eventos-grid');
+      grid.innerHTML = '';
+      
+      eventos.forEach(evento => {
+        const card = document.createElement('div');
+        card.className = 'evento-card';
+        
+        let html = '';
+        if (evento.imagen) {
+          html += `<img src="${evento.imagen}" alt="Evento">`;
+        }
+        if (evento.texto) {
+          html += `<div class="evento-texto">${evento.texto.replace(/\n/g, '<br>')}</div>`;
+        }
+        
+        card.innerHTML = html;
+        grid.appendChild(card);
+      });
     }
 
     // ===== GUARDAR TODO =====
@@ -509,7 +620,7 @@
         if (precioInput) item.querySelector('.item-precio').textContent = precioInput.value;
       });
       
-      // Guardar en localStorage
+      // Guardar todos los datos
       const datos = {
         extractNombres: Array.from(document.querySelectorAll('#extract-grid h4')).map(el => el.textContent),
         extractPrecios: Array.from(document.querySelectorAll('#extract-grid .producto-precio')).map(el => el.textContent),
@@ -521,12 +632,11 @@
         refrescosPrecios: Array.from(document.querySelectorAll('#refrescos-lista .item-precio')).map(el => el.textContent),
         picarNombres: Array.from(document.querySelectorAll('#picar-lista .item-nombre')).map(el => el.textContent),
         picarPrecios: Array.from(document.querySelectorAll('#picar-lista .item-precio')).map(el => el.textContent),
-        eventos: Array.from(document.querySelectorAll('#eventos-grid .evento-card img')).map(img => img.src)
+        eventos: obtenerEventos()
       };
       
       localStorage.setItem(STORAGE_KEY, JSON.stringify(datos));
       
-      // Mostrar indicador
       const indicator = document.getElementById('saveIndicator');
       indicator.style.display = 'block';
       setTimeout(() => indicator.style.display = 'none', 2000);
@@ -534,119 +644,93 @@
       alert('✅ Cambios guardados correctamente');
     }
 
-    // ===== CARGAR DATOS GUARDADOS =====
+    // ===== CARGAR DATOS =====
     function cargarDatos() {
       const guardado = localStorage.getItem(STORAGE_KEY);
-      if (!guardado) {
-        // Si no hay datos guardados, inicializar con eventos por defecto
-        inicializarEventosPorDefecto();
-        return;
-      }
       
-      try {
-        const datos = JSON.parse(guardado);
-        
-        // Cargar nombres y precios de extracción
-        if (datos.extractNombres) {
-          document.querySelectorAll('#extract-grid h4').forEach((el, i) => {
-            if (datos.extractNombres[i]) el.textContent = datos.extractNombres[i];
-          });
-        }
-        if (datos.extractPrecios) {
-          document.querySelectorAll('#extract-grid .producto-precio').forEach((el, i) => {
-            if (datos.extractPrecios[i]) el.textContent = datos.extractPrecios[i];
-          });
-        }
-        
-        // Cargar hierbas
-        if (datos.hierbasNombres) {
-          document.querySelectorAll('#hierbas-grid h4').forEach((el, i) => {
-            if (datos.hierbasNombres[i]) el.textContent = datos.hierbasNombres[i];
-          });
-        }
-        if (datos.hierbasPrecios) {
-          document.querySelectorAll('#hierbas-grid .producto-precio').forEach((el, i) => {
-            if (datos.hierbasPrecios[i]) el.textContent = datos.hierbasPrecios[i];
-          });
-        }
-        
-        // Cargar liados
-        if (datos.liadosNombres) {
-          document.querySelectorAll('#liados-grid h4').forEach((el, i) => {
-            if (datos.liadosNombres[i]) el.textContent = datos.liadosNombres[i];
-          });
-        }
-        if (datos.liadosPrecios) {
-          document.querySelectorAll('#liados-grid .liado-precio').forEach((el, i) => {
-            if (datos.liadosPrecios[i]) el.textContent = datos.liadosPrecios[i];
-          });
-        }
-        
-        // Cargar refrescos
-        if (datos.refrescosNombres) {
-          document.querySelectorAll('#refrescos-lista .item-nombre').forEach((el, i) => {
-            if (datos.refrescosNombres[i]) el.textContent = datos.refrescosNombres[i];
-          });
-        }
-        if (datos.refrescosPrecios) {
-          document.querySelectorAll('#refrescos-lista .item-precio').forEach((el, i) => {
-            if (datos.refrescosPrecios[i]) el.textContent = datos.refrescosPrecios[i];
-          });
-        }
-        
-        // Cargar picar
-        if (datos.picarNombres) {
-          document.querySelectorAll('#picar-lista .item-nombre').forEach((el, i) => {
-            if (datos.picarNombres[i]) el.textContent = datos.picarNombres[i];
-          });
-        }
-        if (datos.picarPrecios) {
-          document.querySelectorAll('#picar-lista .item-precio').forEach((el, i) => {
-            if (datos.picarPrecios[i]) el.textContent = datos.picarPrecios[i];
-          });
-        }
-        
-        // Cargar eventos
-        if (datos.eventos && Array.isArray(datos.eventos) && datos.eventos.length > 0) {
-          const eventosGrid = document.getElementById('eventos-grid');
-          eventosGrid.innerHTML = '';
+      if (guardado) {
+        try {
+          const datos = JSON.parse(guardado);
           
-          datos.eventos.forEach(src => {
-            const eventoCard = document.createElement('div');
-            eventoCard.className = 'evento-card';
-            eventoCard.innerHTML = `<img src="${src}">`;
-            eventosGrid.appendChild(eventoCard);
-          });
-        } else {
-          inicializarEventosPorDefecto();
+          // Cargar extracción
+          if (datos.extractNombres) {
+            document.querySelectorAll('#extract-grid h4').forEach((el, i) => {
+              if (datos.extractNombres[i]) el.textContent = datos.extractNombres[i];
+            });
+          }
+          if (datos.extractPrecios) {
+            document.querySelectorAll('#extract-grid .producto-precio').forEach((el, i) => {
+              if (datos.extractPrecios[i]) el.textContent = datos.extractPrecios[i];
+            });
+          }
+          
+          // Cargar hierbas
+          if (datos.hierbasNombres) {
+            document.querySelectorAll('#hierbas-grid h4').forEach((el, i) => {
+              if (datos.hierbasNombres[i]) el.textContent = datos.hierbasNombres[i];
+            });
+          }
+          if (datos.hierbasPrecios) {
+            document.querySelectorAll('#hierbas-grid .producto-precio').forEach((el, i) => {
+              if (datos.hierbasPrecios[i]) el.textContent = datos.hierbasPrecios[i];
+            });
+          }
+          
+          // Cargar liados
+          if (datos.liadosNombres) {
+            document.querySelectorAll('#liados-grid h4').forEach((el, i) => {
+              if (datos.liadosNombres[i]) el.textContent = datos.liadosNombres[i];
+            });
+          }
+          if (datos.liadosPrecios) {
+            document.querySelectorAll('#liados-grid .liado-precio').forEach((el, i) => {
+              if (datos.liadosPrecios[i]) el.textContent = datos.liadosPrecios[i];
+            });
+          }
+          
+          // Cargar refrescos
+          if (datos.refrescosNombres) {
+            document.querySelectorAll('#refrescos-lista .item-nombre').forEach((el, i) => {
+              if (datos.refrescosNombres[i]) el.textContent = datos.refrescosNombres[i];
+            });
+          }
+          if (datos.refrescosPrecios) {
+            document.querySelectorAll('#refrescos-lista .item-precio').forEach((el, i) => {
+              if (datos.refrescosPrecios[i]) el.textContent = datos.refrescosPrecios[i];
+            });
+          }
+          
+          // Cargar picar
+          if (datos.picarNombres) {
+            document.querySelectorAll('#picar-lista .item-nombre').forEach((el, i) => {
+              if (datos.picarNombres[i]) el.textContent = datos.picarNombres[i];
+            });
+          }
+          if (datos.picarPrecios) {
+            document.querySelectorAll('#picar-lista .item-precio').forEach((el, i) => {
+              if (datos.picarPrecios[i]) el.textContent = datos.picarPrecios[i];
+            });
+          }
+          
+          // Si hay eventos guardados, usarlos
+          if (datos.eventos) {
+            guardarEventos(datos.eventos);
+          } else {
+            guardarEventos(EVENTOS_POR_DEFECTO);
+          }
+          
+        } catch (e) {
+          console.error('Error al cargar:', e);
+          guardarEventos(EVENTOS_POR_DEFECTO);
         }
-        
-      } catch (e) {
-        console.error('Error al cargar:', e);
-        inicializarEventosPorDefecto();
+      } else {
+        guardarEventos(EVENTOS_POR_DEFECTO);
       }
+      
+      actualizarVistaEventos();
     }
 
-    function inicializarEventosPorDefecto() {
-      const eventosGrid = document.getElementById('eventos-grid');
-      eventosGrid.innerHTML = '';
-      
-      const eventosPorDefecto = [
-        'images/image14.jpg',
-        'images/image15.jpg',
-        'images/image16.jpg',
-        'images/image17.jpg'
-      ];
-      
-      eventosPorDefecto.forEach(src => {
-        const eventoCard = document.createElement('div');
-        eventoCard.className = 'evento-card';
-        eventoCard.innerHTML = `<img src="${src}">`;
-        eventosGrid.appendChild(eventoCard);
-      });
-    }
-
-    // Cargar datos al iniciar
+    // Inicializar
     window.addEventListener('load', cargarDatos);
   </script>
 </body>
