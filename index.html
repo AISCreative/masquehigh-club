@@ -273,7 +273,7 @@
     const CONTRASENA = "situs123";
     const STORAGE_KEY = 'masquehigh_datos_final';
 
-    // ===== DATOS POR DEFECTO =====
+    // ===== DATOS POR DEFECTO CON TODOS TUS PRODUCTOS =====
     const DATOS_POR_DEFECTO = {
       extract: [
         { img: 'images/image1.jpg', nombre: 'BHO TROPICANA CHERRY', precio: '28€/g' },
@@ -352,7 +352,6 @@
         document.getElementById('panel-login').style.display = 'none';
         document.getElementById('panel-admin').style.display = 'block';
         document.getElementById('login-error').style.display = 'none';
-        // Mostrar primera sección por defecto
         mostrarSeccion('extract');
       } else {
         document.getElementById('login-error').style.display = 'block';
@@ -402,6 +401,13 @@
       if (guardado) {
         try {
           datos = JSON.parse(guardado);
+          // Asegurar que todas las secciones existen
+          datos.extract = datos.extract || DATOS_POR_DEFECTO.extract;
+          datos.hierbas = datos.hierbas || DATOS_POR_DEFECTO.hierbas;
+          datos.liados = datos.liados || DATOS_POR_DEFECTO.liados;
+          datos.refrescos = datos.refrescos || DATOS_POR_DEFECTO.refrescos;
+          datos.picar = datos.picar || DATOS_POR_DEFECTO.picar;
+          datos.eventos = datos.eventos || DATOS_POR_DEFECTO.eventos;
         } catch (e) {
           console.error('Error al cargar datos, usando por defecto:', e);
           datos = DATOS_POR_DEFECTO;
@@ -411,12 +417,12 @@
       }
       
       // Renderizar todas las secciones
-      renderizarExtract(datos.extract || []);
-      renderizarHierbas(datos.hierbas || []);
-      renderizarLiados(datos.liados || []);
-      renderizarRefrescos(datos.refrescos || []);
-      renderizarPicar(datos.picar || []);
-      renderizarEventos(datos.eventos || []);
+      renderizarExtract(datos.extract);
+      renderizarHierbas(datos.hierbas);
+      renderizarLiados(datos.liados);
+      renderizarRefrescos(datos.refrescos);
+      renderizarPicar(datos.picar);
+      renderizarEventos(datos.eventos);
     }
 
     // ===== FUNCIONES DE RENDERIZADO =====
@@ -669,10 +675,8 @@
         reader.onload = async function(e) {
           const imgComprimida = await comprimirImagen(e.target.result);
           
-          // Actualizar vista previa
           document.getElementById(`${tipo}-img-admin-${index}`).src = imgComprimida;
           
-          // Actualizar imagen principal
           const imgPrincipal = document.getElementById(`${tipo}-img-${index}`);
           if (imgPrincipal) imgPrincipal.src = imgComprimida;
           
@@ -690,10 +694,8 @@
         reader.onload = async function(e) {
           const imgComprimida = await comprimirImagen(e.target.result);
           
-          // Actualizar vista previa
           document.getElementById(`evento-img-admin-${index}`).src = imgComprimida;
           
-          // Actualizar imagen principal
           const imgPrincipal = document.getElementById(`evento-img-${index}`);
           if (imgPrincipal) imgPrincipal.src = imgComprimida;
           
