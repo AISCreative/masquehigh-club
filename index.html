@@ -438,7 +438,7 @@
         div.className = 'liado-card';
         div.innerHTML = `
           <div class="liado-icon">🚬</div>
-          <h4 id="lias-nombre-${i}">${item.nombre}</h4>
+          <h4 id="liados-nombre-${i}">${item.nombre}</h4>
           <div class="liado-precio" id="lias-precio-${i}">${item.precio}</div>
         `;
         grid.appendChild(div);
@@ -574,8 +574,8 @@
         html += '</div><button onclick="anadirProducto(\'hash\')" style="width:100%; background:#b87333; border:none; border-radius:30px; padding:15px; font-size:1.8rem; margin-top:10px; cursor:pointer;">➕ AÑADIR HASH</button>';
       }
       
-      else if (seccion === 'lias') {
-        html = '<h3 style="color: #ffaa00; margin-bottom: 20px;">🚬 LÍAS</h3><div class="admin-grid">';
+      else if (seccion === 'liados') {
+        html = '<h3 style="color: #ffaa00; margin-bottom: 20px;">🚬 LIADOS</h3><div class="admin-grid">';
         datos.lias.forEach((item, i) => {
           html += `
             <div class="admin-card" style="border-color: #ffaa00;">
@@ -782,4 +782,5 @@
   </script>
 </body>
 </html>
+
 
