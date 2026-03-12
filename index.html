@@ -91,7 +91,7 @@
       <div class="welcome">✨ Bienvenido a Masquehigh Club ✨</div>
     </div>
 
-    <!-- PESTAÑAS: Extracciones, Hierbas, Hash, Lías, Munchies, Eventos -->
+    <!-- PESTAÑAS PRINCIPALES -->
     <div class="pestanas">
       <div class="pestana extracciones activa" data-pestana="extracciones">
         <div class="pestana-icon">⚡</div>
@@ -107,7 +107,7 @@
       </div>
       <div class="pestana lias" data-pestana="lias">
         <div class="pestana-icon">🚬</div>
-        <div class="pestana-text">LIADOS</div>
+        <div class="pestana-text">LÍAS</div>
       </div>
       <div class="pestana munchies" data-pestana="munchies">
         <div class="pestana-icon">🍕</div>
@@ -147,7 +147,7 @@
       <!-- PANEL LÍAS -->
       <div id="panel-lias" class="panel">
         <div class="subseccion" style="border-color: #ffaa00;">
-          <h3 class="subseccion-titulo" style="color: #ffaa00; border-left-color: #ffaa00;">🚬  LIADOS</h3>
+          <h3 class="subseccion-titulo" style="color: #ffaa00; border-left-color: #ffaa00;">🚬 PORROS LIADOS</h3>
           <div class="liados-grid" id="lias-grid"></div>
         </div>
       </div>
@@ -223,39 +223,45 @@
 
   <script>
     const CONTRASENA = "situs123";
-    const STORAGE_KEY = 'masquehigh_datos_final_v2';
+    const STORAGE_KEY = 'masquehigh_datos_final_v3';
 
-    // ===== DATOS POR DEFECTO CON NUEVAS SECCIONES =====
+    // ===== DATOS POR DEFECTO CON TODOS LOS PRODUCTOS ACTUALIZADOS =====
     const DATOS_POR_DEFECTO = {
       extracciones: [
-        { img: 'images/image1.jpg', nombre: 'BHO TROPICANA CHERRY', precio: '28€/g' },
-        { img: 'images/placeholder.jpg', nombre: 'PIATELLA', precio: '24€/g' },
-        { img: 'images/image2.jpg', nombre: 'FORBBIDEN FROZEN', precio: '8€/g' },
-        { img: 'images/gorila.jpg', nombre: 'GORILA', precio: '6€/g' },
-        { img: 'images/placeholder.jpg', nombre: 'OG DRY', precio: '6€/g' },
-        { img: 'images/placeholder.jpg', nombre: 'RUNTZ', precio: '5€/g' },
-        { img: 'images/image4.jpg', nombre: 'COOKIES', precio: '5€/g' }
+        { img: 'images/placeholder.jpg', nombre: 'BHO TROPICANA CHERRY', precio: '28€/g' },
+        { img: 'images/placeholder.jpg', nombre: 'TAITELLA', precio: '24€/g' },
+        { img: 'images/placeholder.jpg', nombre: 'BHO AMNESIA PLUS', precio: '24€/g' },
+        { img: 'images/placeholder.jpg', nombre: 'BHO AMNESIA', precio: '20€/g' },
+        { img: 'images/placeholder.jpg', nombre: 'ICE MAC1 PLUS', precio: '18€/g' },
+        { img: 'images/placeholder.jpg', nombre: 'ICE MAC1', precio: '10€/g' },
+        { img: 'images/placeholder.jpg', nombre: 'ICE AMNESIA', precio: '15€/g' },
+        { img: 'images/placeholder.jpg', nombre: 'FORBBIDEN FROZEN', precio: '8€/g' }
       ],
       hierbas: [
-        { img: 'images/image5.jpg', nombre: 'LONDON CAKE', precio: '8€/g' },
-        { img: 'images/image6.jpg', nombre: 'CREAM CARAMEL', precio: '6€/g' },
-        { img: 'images/image7.jpg', nombre: 'AMNESIA', precio: '4€/g' },
-        { img: 'images/image8.jpg', nombre: 'TANGIE', precio: '7€/g' },
-        { img: 'images/image9.jpg', nombre: 'DANCE HALL', precio: '6€/g' },
-        { img: 'images/image10.jpg', nombre: 'MELON', precio: '5€/g' },
-        { img: 'images/image11.jpg', nombre: 'TROPICANA CHERRY', precio: '8€/g' },
-        { img: 'images/image12.jpg', nombre: 'GELATO X PURPLE', precio: '7€/g' },
-        { img: 'images/image13.jpg', nombre: 'JEALOUSY', precio: '7€/g' },
-        { img: 'images/placeholder.jpg', nombre: 'PINE LINK', precio: '7€/g' }
+        { img: 'images/placeholder.jpg', nombre: 'LONDON CAKE', precio: '8€/g' },
+        { img: 'images/placeholder.jpg', nombre: 'CREAM CARAMEL', precio: '6€/g' },
+        { img: 'images/placeholder.jpg', nombre: 'AMNESIA', precio: '4€/g' },
+        { img: 'images/placeholder.jpg', nombre: 'TANGIE', precio: '7€/g' },
+        { img: 'images/placeholder.jpg', nombre: 'DANCE HALL', precio: '6€/g' },
+        { img: 'images/placeholder.jpg', nombre: 'MELON', precio: '5€/g' },
+        { img: 'images/placeholder.jpg', nombre: 'TROPICANA CHERRY', precio: '8€/g' },
+        { img: 'images/placeholder.jpg', nombre: 'GELATO X PURPLE', precio: '7€/g' },
+        { img: 'images/placeholder.jpg', nombre: 'JEALOUSY', precio: '7€/g' },
+        { img: 'images/placeholder.jpg', nombre: 'PINE LINK', precio: '7€/g' },
+        { img: 'images/placeholder.jpg', nombre: 'SIDERAL', precio: '7€/g' }
       ],
       hash: [
-        { img: 'images/placeholder.jpg', nombre: 'MARROQUÍ', precio: '10€/g' },
-        { img: 'images/placeholder.jpg', nombre: 'AFGÁN', precio: '12€/g' },
-        { img: 'images/placeholder.jpg', nombre: 'FROZEN', precio: '15€/g' }
+        { img: 'images/placeholder.jpg', nombre: 'GORILA', precio: '6€/g' },
+        { img: 'images/placeholder.jpg', nombre: 'OG DRY', precio: '6€/g' },
+        { img: 'images/placeholder.jpg', nombre: 'RUNTZ', precio: '5€/g' },
+        { img: 'images/placeholder.jpg', nombre: 'BANANA', precio: '6€/g' },
+        { img: 'images/placeholder.jpg', nombre: 'WONKA', precio: '5€/g' }
       ],
       lias: [
         { nombre: 'CRITICAL X GORILA', precio: '1x3€ | 2x5€' },
-        { nombre: 'MAC 1', precio: '1x3€ | 2x5€' }
+        { nombre: 'AMNESIA', precio: '1x3€ | 2x5€' },
+        { nombre: 'TROPICANA', precio: '1x3€ | 2x5€' },
+        { nombre: 'CANDY', precio: '1x3€ | 2x5€' }
       ],
       refrescos: [
         { nombre: 'AQUARIUS', precio: '2€' },
@@ -277,10 +283,10 @@
         { nombre: 'PALOMITAS', precio: '1.20€' }
       ],
       eventos: [
-        'images/image14.jpg',
-        'images/image15.jpg',
-        'images/image16.jpg',
-        'images/image17.jpg'
+        'images/placeholder.jpg',
+        'images/placeholder.jpg',
+        'images/placeholder.jpg',
+        'images/placeholder.jpg'
       ]
     };
 
@@ -574,8 +580,8 @@
         html += '</div><button onclick="anadirProducto(\'hash\')" style="width:100%; background:#b87333; border:none; border-radius:30px; padding:15px; font-size:1.8rem; margin-top:10px; cursor:pointer;">➕ AÑADIR HASH</button>';
       }
       
-      else if (seccion === 'liados') {
-        html = '<h3 style="color: #ffaa00; margin-bottom: 20px;">🚬 LIADOS</h3><div class="admin-grid">';
+      else if (seccion === 'lias') {
+        html = '<h3 style="color: #ffaa00; margin-bottom: 20px;">🚬 LÍAS</h3><div class="admin-grid">';
         datos.lias.forEach((item, i) => {
           html += `
             <div class="admin-card" style="border-color: #ffaa00;">
@@ -620,7 +626,7 @@
       else if (seccion === 'eventos') {
         html = '<h3 style="color: #ffff00; margin-bottom: 20px;">🎉 EVENTOS (4 IMÁGENES)</h3><div class="admin-grid">';
         for (let i = 0; i < 4; i++) {
-          const imgSrc = datos.eventos[i] || '';
+          const imgSrc = datos.eventos[i] || 'images/placeholder.jpg';
           html += `
             <div class="admin-card" style="border-color: #ffff00;">
               <img src="${imgSrc}" id="evento-img-admin-${i}" class="admin-img">
@@ -782,4 +788,3 @@
   </script>
 </body>
 </html>
-
