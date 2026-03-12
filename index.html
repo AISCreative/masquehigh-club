@@ -29,7 +29,7 @@
     .pestana.extracciones { border-color: #00ff9f; color: #00ff9f; }
     .pestana.hierbas { border-color: #7cfc00; color: #7cfc00; }
     .pestana.hash { border-color: #b87333; color: #b87333; }
-    .pestana.lias { border-color: #ffaa00; color: #ffaa00; }
+    .pestana.liados { border-color: #ffaa00; color: #ffaa00; }
     .pestana.munchies { border-color: #ff18d0; color: #ff18d0; }
     .pestana.eventos { border-color: #ffff00; color: #ffff00; }
     .pestana.activa { transform: scale(1.02); box-shadow: 0 0 20px currentColor; border-width: 3px; background: rgba(30, 30, 40, 0.95); }
@@ -64,8 +64,10 @@
     
     /* Eventos: 4 imágenes en 2 columnas */
     .eventos-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; padding: 0.5rem; }
-    .evento-card { background: transparent; border: 3px solid #ffff00; border-radius: 20px; overflow: hidden; aspect-ratio: 1/1.2; }
+    .evento-card { background: transparent; border: 3px solid #ffff00; border-radius: 20px; overflow: hidden; aspect-ratio: 1/1.2; position: relative; }
     .evento-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .evento-delete { position: absolute; top: 5px; right: 5px; background: #ff18d0; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; font-size: 20px; cursor: pointer; display: none; z-index: 100; }
+    .admin-mode .evento-delete { display: block; }
     
     .save-indicator { position: fixed; bottom: 100px; right: 30px; background: #00ff9f; color: black; padding: 15px 25px; border-radius: 50px; font-size: 1.6rem; font-weight: bold; box-shadow: 0 0 20px #00ff9f; z-index: 2100; display: none; }
 
@@ -79,6 +81,7 @@
     .admin-btn { width: 100%; padding: 10px; border: none; border-radius: 30px; font-size: 1.4rem; cursor: pointer; margin-bottom: 5px; font-weight: bold; }
     .btn-upload { background: #00ff9f; }
     .btn-delete { background: #ff18d0; color: white; }
+    .btn-add { background: #ffff00; color: black; }
   </style>
 </head>
 <body>
@@ -105,9 +108,9 @@
         <div class="pestana-icon">🟫</div>
         <div class="pestana-text">HASH</div>
       </div>
-      <div class="pestana lias" data-pestana="lias">
+      <div class="pestana liados" data-pestana="liados">
         <div class="pestana-icon">🚬</div>
-        <div class="pestana-text">LÍAS</div>
+        <div class="pestana-text">LIADOS</div>
       </div>
       <div class="pestana munchies" data-pestana="munchies">
         <div class="pestana-icon">🍕</div>
@@ -144,11 +147,11 @@
         </div>
       </div>
 
-      <!-- PANEL LÍAS -->
-      <div id="panel-lias" class="panel">
+      <!-- PANEL LIADOS -->
+      <div id="panel-liados" class="panel">
         <div class="subseccion" style="border-color: #ffaa00;">
           <h3 class="subseccion-titulo" style="color: #ffaa00; border-left-color: #ffaa00;">🚬 PORROS LIADOS</h3>
-          <div class="liados-grid" id="lias-grid"></div>
+          <div class="liados-grid" id="liados-grid"></div>
         </div>
       </div>
 
@@ -204,7 +207,7 @@
       <button onclick="mostrarSeccion('extracciones')" style="flex:1; background:#00ff9f; border:none; border-radius:20px; padding:15px; font-size:1.4rem; cursor:pointer;">⚡ EXTRACCIONES</button>
       <button onclick="mostrarSeccion('hierbas')" style="flex:1; background:#7cfc00; border:none; border-radius:20px; padding:15px; font-size:1.4rem; cursor:pointer;">🌿 HIERBAS</button>
       <button onclick="mostrarSeccion('hash')" style="flex:1; background:#b87333; border:none; border-radius:20px; padding:15px; font-size:1.4rem; cursor:pointer;">🟫 HASH</button>
-      <button onclick="mostrarSeccion('lias')" style="flex:1; background:#ffaa00; border:none; border-radius:20px; padding:15px; font-size:1.4rem; cursor:pointer;">🚬 LÍAS</button>
+      <button onclick="mostrarSeccion('liados')" style="flex:1; background:#ffaa00; border:none; border-radius:20px; padding:15px; font-size:1.4rem; cursor:pointer;">🚬 LIADOS</button>
       <button onclick="mostrarSeccion('refrescos')" style="flex:1; background:#ff18d0; border:none; border-radius:20px; padding:15px; font-size:1.4rem; color:white; cursor:pointer;">🥤 BEBIDAS</button>
       <button onclick="mostrarSeccion('picar')" style="flex:1; background:#ff18d0; border:none; border-radius:20px; padding:15px; font-size:1.4rem; color:white; cursor:pointer;">🍿 PICAR</button>
       <button onclick="mostrarSeccion('eventos')" style="flex:1; background:#ffff00; border:none; border-radius:20px; padding:15px; font-size:1.4rem; cursor:pointer;">🎉 EVENTOS</button>
@@ -223,7 +226,7 @@
 
   <script>
     const CONTRASENA = "situs123";
-    const STORAGE_KEY = 'masquehigh_datos_final_v3';
+    const STORAGE_KEY = 'masquehigh_datos_final_v4';
 
     // ===== DATOS POR DEFECTO CON TODOS LOS PRODUCTOS ACTUALIZADOS =====
     const DATOS_POR_DEFECTO = {
@@ -257,7 +260,7 @@
         { img: 'images/placeholder.jpg', nombre: 'BANANA', precio: '6€/g' },
         { img: 'images/placeholder.jpg', nombre: 'WONKA', precio: '5€/g' }
       ],
-      lias: [
+      liados: [
         { nombre: 'CRITICAL X GORILA', precio: '1x3€ | 2x5€' },
         { nombre: 'AMNESIA', precio: '1x3€ | 2x5€' },
         { nombre: 'TROPICANA', precio: '1x3€ | 2x5€' },
@@ -368,7 +371,7 @@
           datos.extracciones = datos.extracciones || DATOS_POR_DEFECTO.extracciones;
           datos.hierbas = datos.hierbas || DATOS_POR_DEFECTO.hierbas;
           datos.hash = datos.hash || DATOS_POR_DEFECTO.hash;
-          datos.lias = datos.lias || DATOS_POR_DEFECTO.lias;
+          datos.liados = datos.liados || DATOS_POR_DEFECTO.liados;
           datos.refrescos = datos.refrescos || DATOS_POR_DEFECTO.refrescos;
           datos.picar = datos.picar || DATOS_POR_DEFECTO.picar;
           datos.eventos = datos.eventos || DATOS_POR_DEFECTO.eventos;
@@ -384,7 +387,7 @@
       renderizarExtracciones(datos.extracciones);
       renderizarHierbas(datos.hierbas);
       renderizarHash(datos.hash);
-      renderizarLias(datos.lias);
+      renderizarLiados(datos.liados);
       renderizarRefrescos(datos.refrescos);
       renderizarPicar(datos.picar);
       renderizarEventos(datos.eventos);
@@ -436,16 +439,16 @@
       });
     }
 
-    function renderizarLias(items) {
-      const grid = document.getElementById('lias-grid');
+    function renderizarLiados(items) {
+      const grid = document.getElementById('liados-grid');
       grid.innerHTML = '';
       items.forEach((item, i) => {
         const div = document.createElement('div');
         div.className = 'liado-card';
         div.innerHTML = `
           <div class="liado-icon">🚬</div>
-          <h4 id="lias-nombre-${i}">${item.nombre}</h4>
-          <div class="liado-precio" id="lias-precio-${i}">${item.precio}</div>
+          <h4 id="liados-nombre-${i}">${item.nombre}</h4>
+          <div class="liado-precio" id="liados-precio-${i}">${item.precio}</div>
         `;
         grid.appendChild(div);
       });
@@ -485,7 +488,10 @@
       imagenes.forEach((img, i) => {
         const div = document.createElement('div');
         div.className = 'evento-card';
-        div.innerHTML = `<img src="${img}" id="evento-img-${i}">`;
+        div.innerHTML = `
+          <img src="${img}" id="evento-img-${i}">
+          <button class="evento-delete" onclick="eliminarEvento(${i})" style="display: ${document.getElementById('panel-admin')?.style.display === 'block' ? 'block' : 'none'}">✖</button>
+        `;
         grid.appendChild(div);
       });
     }
@@ -508,7 +514,7 @@
           nombre: card.querySelector('h4').textContent,
           precio: card.querySelector('.producto-precio').textContent
         })),
-        lias: Array.from(document.querySelectorAll('#lias-grid .liado-card')).map(card => ({
+        liados: Array.from(document.querySelectorAll('#liados-grid .liado-card')).map(card => ({
           nombre: card.querySelector('h4').textContent,
           precio: card.querySelector('.liado-precio').textContent
         })),
@@ -580,19 +586,19 @@
         html += '</div><button onclick="anadirProducto(\'hash\')" style="width:100%; background:#b87333; border:none; border-radius:30px; padding:15px; font-size:1.8rem; margin-top:10px; cursor:pointer;">➕ AÑADIR HASH</button>';
       }
       
-      else if (seccion === 'lias') {
-        html = '<h3 style="color: #ffaa00; margin-bottom: 20px;">🚬 LÍAS</h3><div class="admin-grid">';
-        datos.lias.forEach((item, i) => {
+      else if (seccion === 'liados') {
+        html = '<h3 style="color: #ffaa00; margin-bottom: 20px;">🚬 LIADOS</h3><div class="admin-grid">';
+        datos.liados.forEach((item, i) => {
           html += `
             <div class="admin-card" style="border-color: #ffaa00;">
               <div class="liado-icon" style="font-size: 5rem; text-align: center; margin-bottom: 10px;">🚬</div>
-              <input type="text" id="lias-nombre-${i}" value="${item.nombre.replace(/"/g, '&quot;')}" class="admin-input" placeholder="Nombre" style="border-color:#ffaa00; color:#ffaa00;" onchange="actualizarNombre('lias', ${i}, this.value)">
-              <input type="text" id="lias-precio-${i}" value="${item.precio.replace(/"/g, '&quot;')}" class="admin-precio" placeholder="Precio" style="border-color:#ffaa00; color:#ffaa00;" onchange="actualizarPrecio('lias', ${i}, this.value)">
-              <button onclick="eliminarProducto('lias', ${i})" class="admin-btn btn-delete">🗑️ ELIMINAR</button>
+              <input type="text" id="liados-nombre-${i}" value="${item.nombre.replace(/"/g, '&quot;')}" class="admin-input" placeholder="Nombre" style="border-color:#ffaa00; color:#ffaa00;" onchange="actualizarNombre('liados', ${i}, this.value)">
+              <input type="text" id="liados-precio-${i}" value="${item.precio.replace(/"/g, '&quot;')}" class="admin-precio" placeholder="Precio" style="border-color:#ffaa00; color:#ffaa00;" onchange="actualizarPrecio('liados', ${i}, this.value)">
+              <button onclick="eliminarProducto('liados', ${i})" class="admin-btn btn-delete">🗑️ ELIMINAR</button>
             </div>
           `;
         });
-        html += '</div><button onclick="anadirProducto(\'lias\')" style="width:100%; background:#ffaa00; border:none; border-radius:30px; padding:15px; font-size:1.8rem; margin-top:10px; cursor:pointer;">➕ AÑADIR LIADO</button>';
+        html += '</div><button onclick="anadirProducto(\'liados\')" style="width:100%; background:#ffaa00; border:none; border-radius:30px; padding:15px; font-size:1.8rem; margin-top:10px; cursor:pointer;">➕ AÑADIR LIADO</button>';
       }
       
       else if (seccion === 'refrescos') {
@@ -624,18 +630,19 @@
       }
       
       else if (seccion === 'eventos') {
-        html = '<h3 style="color: #ffff00; margin-bottom: 20px;">🎉 EVENTOS (4 IMÁGENES)</h3><div class="admin-grid">';
-        for (let i = 0; i < 4; i++) {
-          const imgSrc = datos.eventos[i] || 'images/placeholder.jpg';
+        html = '<h3 style="color: #ffff00; margin-bottom: 20px;">🎉 EVENTOS</h3><div class="admin-grid">';
+        datos.eventos.forEach((img, i) => {
           html += `
             <div class="admin-card" style="border-color: #ffff00;">
-              <img src="${imgSrc}" id="evento-img-admin-${i}" class="admin-img">
+              <img src="${img}" id="evento-img-admin-${i}" class="admin-img">
               <input type="file" id="evento-file-${i}" accept="image/*" class="admin-file-input" onchange="subirImagenEvento(${i})">
               <button onclick="document.getElementById('evento-file-${i}').click()" class="admin-btn btn-upload">📷 CAMBIAR FOTO ${i+1}</button>
+              <button onclick="eliminarEvento(${i})" class="admin-btn btn-delete">🗑️ ELIMINAR CARTEL</button>
             </div>
           `;
-        }
+        });
         html += '</div>';
+        html += '<button onclick="anadirEvento()" style="width:100%; background:#ffff00; border:none; border-radius:30px; padding:15px; font-size:1.8rem; margin-top:10px; cursor:pointer;">➕ AÑADIR NUEVO CARTEL</button>';
       }
       
       document.getElementById('admin-contenido').innerHTML = html;
@@ -697,7 +704,28 @@
       }
     }
 
-    // ===== FUNCIONES PARA AÑADIR/ELIMINAR =====
+    // ===== FUNCIONES PARA EVENTOS (CARTELES) =====
+    function anadirEvento() {
+      const datos = obtenerDatosActuales();
+      datos.eventos.push('images/placeholder.jpg');
+      renderizarEventos(datos.eventos);
+      guardarDatos(datos);
+      mostrarSeccion('eventos');
+      mostrarIndicator();
+    }
+
+    function eliminarEvento(index) {
+      if (!confirm('¿Eliminar este cartel?')) return;
+      
+      const datos = obtenerDatosActuales();
+      datos.eventos.splice(index, 1);
+      renderizarEventos(datos.eventos);
+      guardarDatos(datos);
+      mostrarSeccion('eventos');
+      mostrarIndicator();
+    }
+
+    // ===== FUNCIONES PARA AÑADIR/ELIMINAR PRODUCTOS =====
     function anadirProducto(tipo) {
       const datos = obtenerDatosActuales();
       
@@ -714,9 +742,9 @@
           datos.hash.push({ img: 'images/placeholder.jpg', nombre: 'NUEVO HASH', precio: '0€' });
           renderizarHash(datos.hash);
           break;
-        case 'lias':
-          datos.lias.push({ nombre: 'NUEVO LIADO', precio: '0€' });
-          renderizarLias(datos.lias);
+        case 'liados':
+          datos.liados.push({ nombre: 'NUEVO LIADO', precio: '0€' });
+          renderizarLiados(datos.liados);
           break;
         case 'refrescos':
           datos.refrescos.push({ nombre: 'NUEVA BEBIDA', precio: '0€' });
@@ -751,9 +779,9 @@
           datos.hash.splice(index, 1);
           renderizarHash(datos.hash);
           break;
-        case 'lias':
-          datos.lias.splice(index, 1);
-          renderizarLias(datos.lias);
+        case 'liados':
+          datos.liados.splice(index, 1);
+          renderizarLiados(datos.liados);
           break;
         case 'refrescos':
           datos.refrescos.splice(index, 1);
@@ -782,6 +810,18 @@
       indicator.style.display = 'block';
       setTimeout(() => indicator.style.display = 'none', 2000);
     }
+
+    // Mostrar botones de eliminar en eventos cuando el admin está abierto
+    function actualizarVisibilidadBotonesEventos() {
+      const adminAbierto = document.getElementById('panel-admin').style.display === 'block';
+      document.querySelectorAll('.evento-delete').forEach(btn => {
+        btn.style.display = adminAbierto ? 'block' : 'none';
+      });
+    }
+
+    // Observar cambios en el panel admin
+    const observer = new MutationObserver(actualizarVisibilidadBotonesEventos);
+    observer.observe(document.getElementById('panel-admin'), { attributes: true, attributeFilter: ['style'] });
 
     // Inicializar
     window.addEventListener('load', cargarDatos);
