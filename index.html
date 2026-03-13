@@ -226,7 +226,7 @@
 
   <script>
     const CONTRASENA = "situs123";
-    const STORAGE_KEY = 'masquehigh_datos_final_v4';
+    const STORAGE_KEY = 'masquehigh_datos_final_v5';
 
     // ===== DATOS POR DEFECTO CON TODOS LOS PRODUCTOS ACTUALIZADOS =====
     const DATOS_POR_DEFECTO = {
@@ -293,6 +293,9 @@
       ]
     };
 
+    // ===== VARIABLE GLOBAL PARA DATOS ACTUALES =====
+    let datosActuales = JSON.parse(JSON.stringify(DATOS_POR_DEFECTO));
+
     // ===== PESTAÑAS PRINCIPALES =====
     document.querySelectorAll('.pestana').forEach(p => {
       p.addEventListener('click', function() {
@@ -319,6 +322,7 @@
         document.getElementById('panel-admin').style.display = 'block';
         document.getElementById('login-error').style.display = 'none';
         mostrarSeccion('extracciones');
+        actualizarVisibilidadBotonesEventos();
       } else {
         document.getElementById('login-error').style.display = 'block';
       }
@@ -326,6 +330,7 @@
     
     function cerrarAdmin() {
       document.getElementById('panel-admin').style.display = 'none';
+      actualizarVisibilidadBotonesEventos();
     }
 
     // ===== FUNCIÓN PARA COMPRIMIR IMÁGENES =====
@@ -356,48 +361,51 @@
     }
 
     // ===== FUNCIONES PARA GUARDAR Y CARGAR =====
-    function guardarDatos(datos) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(datos));
+    function guardarDatos() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(datosActuales));
     }
 
     function cargarDatos() {
       const guardado = localStorage.getItem(STORAGE_KEY);
-      let datos;
       
       if (guardado) {
         try {
-          datos = JSON.parse(guardado);
+          datosActuales = JSON.parse(guardado);
           // Asegurar que todas las secciones existen
-          datos.extracciones = datos.extracciones || DATOS_POR_DEFECTO.extracciones;
-          datos.hierbas = datos.hierbas || DATOS_POR_DEFECTO.hierbas;
-          datos.hash = datos.hash || DATOS_POR_DEFECTO.hash;
-          datos.liados = datos.liados || DATOS_POR_DEFECTO.liados;
-          datos.refrescos = datos.refrescos || DATOS_POR_DEFECTO.refrescos;
-          datos.picar = datos.picar || DATOS_POR_DEFECTO.picar;
-          datos.eventos = datos.eventos || DATOS_POR_DEFECTO.eventos;
+          datosActuales.extracciones = datosActuales.extracciones || DATOS_POR_DEFECTO.extracciones;
+          datosActuales.hierbas = datosActuales.hierbas || DATOS_POR_DEFECTO.hierbas;
+          datosActuales.hash = datosActuales.hash || DATOS_POR_DEFECTO.hash;
+          datosActuales.liados = datosActuales.liados || DATOS_POR_DEFECTO.liados;
+          datosActuales.refrescos = datosActuales.refrescos || DATOS_POR_DEFECTO.refrescos;
+          datosActuales.picar = datosActuales.picar || DATOS_POR_DEFECTO.picar;
+          datosActuales.eventos = datosActuales.eventos || DATOS_POR_DEFECTO.eventos;
         } catch (e) {
           console.error('Error al cargar datos, usando por defecto:', e);
-          datos = DATOS_POR_DEFECTO;
+          datosActuales = JSON.parse(JSON.stringify(DATOS_POR_DEFECTO));
         }
       } else {
-        datos = DATOS_POR_DEFECTO;
+        datosActuales = JSON.parse(JSON.stringify(DATOS_POR_DEFECTO));
       }
       
       // Renderizar todas las secciones
-      renderizarExtracciones(datos.extracciones);
-      renderizarHierbas(datos.hierbas);
-      renderizarHash(datos.hash);
-      renderizarLiados(datos.liados);
-      renderizarRefrescos(datos.refrescos);
-      renderizarPicar(datos.picar);
-      renderizarEventos(datos.eventos);
+      renderizarTodo();
+    }
+
+    function renderizarTodo() {
+      renderizarExtracciones();
+      renderizarHierbas();
+      renderizarHash();
+      renderizarLiados();
+      renderizarRefrescos();
+      renderizarPicar();
+      renderizarEventos();
     }
 
     // ===== FUNCIONES DE RENDERIZADO =====
-    function renderizarExtracciones(items) {
+    function renderizarExtracciones() {
       const grid = document.getElementById('extracciones-grid');
       grid.innerHTML = '';
-      items.forEach((item, i) => {
+      datosActuales.extracciones.forEach((item, i) => {
         const div = document.createElement('div');
         div.className = 'producto-card';
         div.innerHTML = `
@@ -409,10 +417,10 @@
       });
     }
 
-    function renderizarHierbas(items) {
+    function renderizarHierbas() {
       const grid = document.getElementById('hierbas-grid');
       grid.innerHTML = '';
-      items.forEach((item, i) => {
+      datosActuales.hierbas.forEach((item, i) => {
         const div = document.createElement('div');
         div.className = 'producto-card';
         div.innerHTML = `
@@ -424,10 +432,10 @@
       });
     }
 
-    function renderizarHash(items) {
+    function renderizarHash() {
       const grid = document.getElementById('hash-grid');
       grid.innerHTML = '';
-      items.forEach((item, i) => {
+      datosActuales.hash.forEach((item, i) => {
         const div = document.createElement('div');
         div.className = 'producto-card';
         div.innerHTML = `
@@ -439,10 +447,10 @@
       });
     }
 
-    function renderizarLiados(items) {
+    function renderizarLiados() {
       const grid = document.getElementById('liados-grid');
       grid.innerHTML = '';
-      items.forEach((item, i) => {
+      datosActuales.liados.forEach((item, i) => {
         const div = document.createElement('div');
         div.className = 'liado-card';
         div.innerHTML = `
@@ -454,10 +462,10 @@
       });
     }
 
-    function renderizarRefrescos(items) {
+    function renderizarRefrescos() {
       const lista = document.getElementById('refrescos-lista');
       lista.innerHTML = '';
-      items.forEach((item, i) => {
+      datosActuales.refrescos.forEach((item, i) => {
         const div = document.createElement('div');
         div.className = 'item-munchi';
         div.innerHTML = `
@@ -468,10 +476,10 @@
       });
     }
 
-    function renderizarPicar(items) {
+    function renderizarPicar() {
       const lista = document.getElementById('picar-lista');
       lista.innerHTML = '';
-      items.forEach((item, i) => {
+      datosActuales.picar.forEach((item, i) => {
         const div = document.createElement('div');
         div.className = 'item-munchi';
         div.innerHTML = `
@@ -482,10 +490,10 @@
       });
     }
 
-    function renderizarEventos(imagenes) {
+    function renderizarEventos() {
       const grid = document.getElementById('eventos-grid');
       grid.innerHTML = '';
-      imagenes.forEach((img, i) => {
+      datosActuales.eventos.forEach((img, i) => {
         const div = document.createElement('div');
         div.className = 'evento-card';
         div.innerHTML = `
@@ -496,55 +504,88 @@
       });
     }
 
-    // ===== FUNCIÓN PARA OBTENER DATOS ACTUALES =====
-    function obtenerDatosActuales() {
-      return {
-        extracciones: Array.from(document.querySelectorAll('#extracciones-grid .producto-card')).map(card => ({
+    // ===== FUNCIÓN PARA OBTENER DATOS ACTUALES (desde el DOM) =====
+    function sincronizarDatosDesdeDOM() {
+      // Extracciones
+      const extraccionesCards = document.querySelectorAll('#extracciones-grid .producto-card');
+      if (extraccionesCards.length > 0) {
+        datosActuales.extracciones = Array.from(extraccionesCards).map(card => ({
           img: card.querySelector('img').src,
           nombre: card.querySelector('h4').textContent,
           precio: card.querySelector('.producto-precio').textContent
-        })),
-        hierbas: Array.from(document.querySelectorAll('#hierbas-grid .producto-card')).map(card => ({
+        }));
+      }
+
+      // Hierbas
+      const hierbasCards = document.querySelectorAll('#hierbas-grid .producto-card');
+      if (hierbasCards.length > 0) {
+        datosActuales.hierbas = Array.from(hierbasCards).map(card => ({
           img: card.querySelector('img').src,
           nombre: card.querySelector('h4').textContent,
           precio: card.querySelector('.producto-precio').textContent
-        })),
-        hash: Array.from(document.querySelectorAll('#hash-grid .producto-card')).map(card => ({
+        }));
+      }
+
+      // Hash
+      const hashCards = document.querySelectorAll('#hash-grid .producto-card');
+      if (hashCards.length > 0) {
+        datosActuales.hash = Array.from(hashCards).map(card => ({
           img: card.querySelector('img').src,
           nombre: card.querySelector('h4').textContent,
           precio: card.querySelector('.producto-precio').textContent
-        })),
-        liados: Array.from(document.querySelectorAll('#liados-grid .liado-card')).map(card => ({
+        }));
+      }
+
+      // Liados
+      const liadosCards = document.querySelectorAll('#liados-grid .liado-card');
+      if (liadosCards.length > 0) {
+        datosActuales.liados = Array.from(liadosCards).map(card => ({
           nombre: card.querySelector('h4').textContent,
           precio: card.querySelector('.liado-precio').textContent
-        })),
-        refrescos: Array.from(document.querySelectorAll('#refrescos-lista .item-munchi')).map(item => ({
+        }));
+      }
+
+      // Refrescos
+      const refrescosItems = document.querySelectorAll('#refrescos-lista .item-munchi');
+      if (refrescosItems.length > 0) {
+        datosActuales.refrescos = Array.from(refrescosItems).map(item => ({
           nombre: item.querySelector('.item-nombre').textContent,
           precio: item.querySelector('.item-precio').textContent
-        })),
-        picar: Array.from(document.querySelectorAll('#picar-lista .item-munchi')).map(item => ({
+        }));
+      }
+
+      // Picar
+      const picarItems = document.querySelectorAll('#picar-lista .item-munchi');
+      if (picarItems.length > 0) {
+        datosActuales.picar = Array.from(picarItems).map(item => ({
           nombre: item.querySelector('.item-nombre').textContent,
           precio: item.querySelector('.item-precio').textContent
-        })),
-        eventos: Array.from(document.querySelectorAll('#eventos-grid img')).map(img => img.src)
-      };
+        }));
+      }
+
+      // Eventos
+      const eventosImgs = document.querySelectorAll('#eventos-grid img');
+      if (eventosImgs.length > 0) {
+        datosActuales.eventos = Array.from(eventosImgs).map(img => img.src);
+      }
     }
 
     // ===== MOSTRAR SECCIONES PARA EDITAR =====
     function mostrarSeccion(seccion) {
+      sincronizarDatosDesdeDOM();
+      
       let html = '';
-      const datos = obtenerDatosActuales();
       
       if (seccion === 'extracciones') {
         html = '<h3 style="color: #00ff9f; margin-bottom: 20px;">⚡ EXTRACCIONES</h3><div class="admin-grid">';
-        datos.extracciones.forEach((item, i) => {
+        datosActuales.extracciones.forEach((item, i) => {
           html += `
             <div class="admin-card" style="border-color: #00ff9f;">
               <img src="${item.img}" id="extracciones-img-admin-${i}" class="admin-img">
-              <input type="file" id="extracciones-file-${i}" accept="image/*" class="admin-file-input" onchange="subirImagenGenero('extracciones', ${i})">
+              <input type="file" id="extracciones-file-${i}" accept="image/*" class="admin-file-input" onchange="subirImagen('extracciones', ${i})">
               <button onclick="document.getElementById('extracciones-file-${i}').click()" class="admin-btn btn-upload">📷 CAMBIAR FOTO</button>
-              <input type="text" id="extracciones-nombre-${i}" value="${item.nombre.replace(/"/g, '&quot;')}" class="admin-input" placeholder="Nombre" onchange="actualizarNombre('extracciones', ${i}, this.value)">
-              <input type="text" id="extracciones-precio-${i}" value="${item.precio.replace(/"/g, '&quot;')}" class="admin-precio" placeholder="Precio" onchange="actualizarPrecio('extracciones', ${i}, this.value)">
+              <input type="text" id="extracciones-nombre-${i}" value="${item.nombre.replace(/"/g, '&quot;')}" class="admin-input" placeholder="Nombre" onchange="actualizarCampo('extracciones', 'nombre', ${i}, this.value)">
+              <input type="text" id="extracciones-precio-${i}" value="${item.precio.replace(/"/g, '&quot;')}" class="admin-precio" placeholder="Precio" onchange="actualizarCampo('extracciones', 'precio', ${i}, this.value)">
               <button onclick="eliminarProducto('extracciones', ${i})" class="admin-btn btn-delete">🗑️ ELIMINAR</button>
             </div>
           `;
@@ -554,14 +595,14 @@
       
       else if (seccion === 'hierbas') {
         html = '<h3 style="color: #7cfc00; margin-bottom: 20px;">🌿 HIERBAS</h3><div class="admin-grid">';
-        datos.hierbas.forEach((item, i) => {
+        datosActuales.hierbas.forEach((item, i) => {
           html += `
             <div class="admin-card" style="border-color: #7cfc00;">
               <img src="${item.img}" id="hierbas-img-admin-${i}" class="admin-img">
-              <input type="file" id="hierbas-file-${i}" accept="image/*" class="admin-file-input" onchange="subirImagenGenero('hierbas', ${i})">
+              <input type="file" id="hierbas-file-${i}" accept="image/*" class="admin-file-input" onchange="subirImagen('hierbas', ${i})">
               <button onclick="document.getElementById('hierbas-file-${i}').click()" class="admin-btn btn-upload">📷 CAMBIAR FOTO</button>
-              <input type="text" id="hierbas-nombre-${i}" value="${item.nombre.replace(/"/g, '&quot;')}" class="admin-input" placeholder="Nombre" onchange="actualizarNombre('hierbas', ${i}, this.value)">
-              <input type="text" id="hierbas-precio-${i}" value="${item.precio.replace(/"/g, '&quot;')}" class="admin-precio" placeholder="Precio" onchange="actualizarPrecio('hierbas', ${i}, this.value)">
+              <input type="text" id="hierbas-nombre-${i}" value="${item.nombre.replace(/"/g, '&quot;')}" class="admin-input" placeholder="Nombre" onchange="actualizarCampo('hierbas', 'nombre', ${i}, this.value)">
+              <input type="text" id="hierbas-precio-${i}" value="${item.precio.replace(/"/g, '&quot;')}" class="admin-precio" placeholder="Precio" onchange="actualizarCampo('hierbas', 'precio', ${i}, this.value)">
               <button onclick="eliminarProducto('hierbas', ${i})" class="admin-btn btn-delete">🗑️ ELIMINAR</button>
             </div>
           `;
@@ -571,14 +612,14 @@
       
       else if (seccion === 'hash') {
         html = '<h3 style="color: #b87333; margin-bottom: 20px;">🟫 HASH</h3><div class="admin-grid">';
-        datos.hash.forEach((item, i) => {
+        datosActuales.hash.forEach((item, i) => {
           html += `
             <div class="admin-card" style="border-color: #b87333;">
               <img src="${item.img}" id="hash-img-admin-${i}" class="admin-img">
-              <input type="file" id="hash-file-${i}" accept="image/*" class="admin-file-input" onchange="subirImagenGenero('hash', ${i})">
+              <input type="file" id="hash-file-${i}" accept="image/*" class="admin-file-input" onchange="subirImagen('hash', ${i})">
               <button onclick="document.getElementById('hash-file-${i}').click()" class="admin-btn btn-upload">📷 CAMBIAR FOTO</button>
-              <input type="text" id="hash-nombre-${i}" value="${item.nombre.replace(/"/g, '&quot;')}" class="admin-input" placeholder="Nombre" onchange="actualizarNombre('hash', ${i}, this.value)">
-              <input type="text" id="hash-precio-${i}" value="${item.precio.replace(/"/g, '&quot;')}" class="admin-precio" placeholder="Precio" onchange="actualizarPrecio('hash', ${i}, this.value)">
+              <input type="text" id="hash-nombre-${i}" value="${item.nombre.replace(/"/g, '&quot;')}" class="admin-input" placeholder="Nombre" onchange="actualizarCampo('hash', 'nombre', ${i}, this.value)">
+              <input type="text" id="hash-precio-${i}" value="${item.precio.replace(/"/g, '&quot;')}" class="admin-precio" placeholder="Precio" onchange="actualizarCampo('hash', 'precio', ${i}, this.value)">
               <button onclick="eliminarProducto('hash', ${i})" class="admin-btn btn-delete">🗑️ ELIMINAR</button>
             </div>
           `;
@@ -588,12 +629,12 @@
       
       else if (seccion === 'liados') {
         html = '<h3 style="color: #ffaa00; margin-bottom: 20px;">🚬 LIADOS</h3><div class="admin-grid">';
-        datos.liados.forEach((item, i) => {
+        datosActuales.liados.forEach((item, i) => {
           html += `
             <div class="admin-card" style="border-color: #ffaa00;">
               <div class="liado-icon" style="font-size: 5rem; text-align: center; margin-bottom: 10px;">🚬</div>
-              <input type="text" id="liados-nombre-${i}" value="${item.nombre.replace(/"/g, '&quot;')}" class="admin-input" placeholder="Nombre" style="border-color:#ffaa00; color:#ffaa00;" onchange="actualizarNombre('liados', ${i}, this.value)">
-              <input type="text" id="liados-precio-${i}" value="${item.precio.replace(/"/g, '&quot;')}" class="admin-precio" placeholder="Precio" style="border-color:#ffaa00; color:#ffaa00;" onchange="actualizarPrecio('liados', ${i}, this.value)">
+              <input type="text" id="liados-nombre-${i}" value="${item.nombre.replace(/"/g, '&quot;')}" class="admin-input" placeholder="Nombre" style="border-color:#ffaa00; color:#ffaa00;" onchange="actualizarCampo('liados', 'nombre', ${i}, this.value)">
+              <input type="text" id="liados-precio-${i}" value="${item.precio.replace(/"/g, '&quot;')}" class="admin-precio" placeholder="Precio" style="border-color:#ffaa00; color:#ffaa00;" onchange="actualizarCampo('liados', 'precio', ${i}, this.value)">
               <button onclick="eliminarProducto('liados', ${i})" class="admin-btn btn-delete">🗑️ ELIMINAR</button>
             </div>
           `;
@@ -603,11 +644,11 @@
       
       else if (seccion === 'refrescos') {
         html = '<h3 style="color: #ff18d0; margin-bottom: 20px;">🥤 BEBIDAS</h3><div class="admin-grid">';
-        datos.refrescos.forEach((item, i) => {
+        datosActuales.refrescos.forEach((item, i) => {
           html += `
             <div class="admin-card" style="border-color: #ff18d0;">
-              <input type="text" id="refresco-nombre-${i}" value="${item.nombre.replace(/"/g, '&quot;')}" class="admin-input" placeholder="Nombre" onchange="actualizarNombre('refrescos', ${i}, this.value)">
-              <input type="text" id="refresco-precio-${i}" value="${item.precio.replace(/"/g, '&quot;')}" class="admin-precio" placeholder="Precio" onchange="actualizarPrecio('refrescos', ${i}, this.value)">
+              <input type="text" id="refresco-nombre-${i}" value="${item.nombre.replace(/"/g, '&quot;')}" class="admin-input" placeholder="Nombre" onchange="actualizarCampo('refrescos', 'nombre', ${i}, this.value)">
+              <input type="text" id="refresco-precio-${i}" value="${item.precio.replace(/"/g, '&quot;')}" class="admin-precio" placeholder="Precio" onchange="actualizarCampo('refrescos', 'precio', ${i}, this.value)">
               <button onclick="eliminarProducto('refrescos', ${i})" class="admin-btn btn-delete">🗑️ ELIMINAR</button>
             </div>
           `;
@@ -617,11 +658,11 @@
       
       else if (seccion === 'picar') {
         html = '<h3 style="color: #ff18d0; margin-bottom: 20px;">🍿 PARA PICAR</h3><div class="admin-grid">';
-        datos.picar.forEach((item, i) => {
+        datosActuales.picar.forEach((item, i) => {
           html += `
             <div class="admin-card" style="border-color: #ff18d0;">
-              <input type="text" id="picar-nombre-${i}" value="${item.nombre.replace(/"/g, '&quot;')}" class="admin-input" placeholder="Nombre" onchange="actualizarNombre('picar', ${i}, this.value)">
-              <input type="text" id="picar-precio-${i}" value="${item.precio.replace(/"/g, '&quot;')}" class="admin-precio" placeholder="Precio" onchange="actualizarPrecio('picar', ${i}, this.value)">
+              <input type="text" id="picar-nombre-${i}" value="${item.nombre.replace(/"/g, '&quot;')}" class="admin-input" placeholder="Nombre" onchange="actualizarCampo('picar', 'nombre', ${i}, this.value)">
+              <input type="text" id="picar-precio-${i}" value="${item.precio.replace(/"/g, '&quot;')}" class="admin-precio" placeholder="Precio" onchange="actualizarCampo('picar', 'precio', ${i}, this.value)">
               <button onclick="eliminarProducto('picar', ${i})" class="admin-btn btn-delete">🗑️ ELIMINAR</button>
             </div>
           `;
@@ -631,7 +672,7 @@
       
       else if (seccion === 'eventos') {
         html = '<h3 style="color: #ffff00; margin-bottom: 20px;">🎉 EVENTOS</h3><div class="admin-grid">';
-        datos.eventos.forEach((img, i) => {
+        datosActuales.eventos.forEach((img, i) => {
           html += `
             <div class="admin-card" style="border-color: #ffff00;">
               <img src="${img}" id="evento-img-admin-${i}" class="admin-img">
@@ -649,36 +690,43 @@
     }
 
     // ===== FUNCIONES PARA ACTUALIZAR CAMPOS =====
-    function actualizarNombre(tipo, index, valor) {
-      const elemento = document.getElementById(`${tipo}-nombre-${index}`);
-      if (elemento) {
-        elemento.textContent = valor;
-        guardarTodo();
+    function actualizarCampo(tipo, campo, index, valor) {
+      // Actualizar en datosActuales
+      if (campo === 'nombre') {
+        datosActuales[tipo][index].nombre = valor;
+        // Actualizar en el DOM
+        const elemento = document.getElementById(`${tipo}-nombre-${index}`);
+        if (elemento) elemento.textContent = valor;
+      } else if (campo === 'precio') {
+        datosActuales[tipo][index].precio = valor;
+        // Actualizar en el DOM
+        const elemento = document.getElementById(`${tipo}-precio-${index}`);
+        if (elemento) elemento.textContent = valor;
       }
-    }
-
-    function actualizarPrecio(tipo, index, valor) {
-      const elemento = document.getElementById(`${tipo}-precio-${index}`);
-      if (elemento) {
-        elemento.textContent = valor;
-        guardarTodo();
-      }
+      
+      guardarDatos();
+      mostrarIndicator();
     }
 
     // ===== FUNCIONES PARA SUBIR IMÁGENES =====
-    async function subirImagenGenero(tipo, index) {
+    async function subirImagen(tipo, index) {
       const input = document.getElementById(`${tipo}-file-${index}`);
       if (input.files && input.files[0]) {
         const reader = new FileReader();
         reader.onload = async function(e) {
           const imgComprimida = await comprimirImagen(e.target.result);
           
+          // Actualizar imagen en admin
           document.getElementById(`${tipo}-img-admin-${index}`).src = imgComprimida;
           
+          // Actualizar imagen principal
           const imgPrincipal = document.getElementById(`${tipo}-img-${index}`);
           if (imgPrincipal) imgPrincipal.src = imgComprimida;
           
-          guardarTodo();
+          // Actualizar en datosActuales
+          datosActuales[tipo][index].img = imgComprimida;
+          
+          guardarDatos();
           mostrarIndicator();
         };
         reader.readAsDataURL(input.files[0]);
@@ -692,12 +740,17 @@
         reader.onload = async function(e) {
           const imgComprimida = await comprimirImagen(e.target.result);
           
+          // Actualizar imagen en admin
           document.getElementById(`evento-img-admin-${index}`).src = imgComprimida;
           
+          // Actualizar imagen principal
           const imgPrincipal = document.getElementById(`evento-img-${index}`);
           if (imgPrincipal) imgPrincipal.src = imgComprimida;
           
-          guardarTodo();
+          // Actualizar en datosActuales
+          datosActuales.eventos[index] = imgComprimida;
+          
+          guardarDatos();
           mostrarIndicator();
         };
         reader.readAsDataURL(input.files[0]);
@@ -706,10 +759,9 @@
 
     // ===== FUNCIONES PARA EVENTOS (CARTELES) =====
     function anadirEvento() {
-      const datos = obtenerDatosActuales();
-      datos.eventos.push('images/placeholder.jpg');
-      renderizarEventos(datos.eventos);
-      guardarDatos(datos);
+      datosActuales.eventos.push('images/placeholder.jpg');
+      renderizarEventos();
+      guardarDatos();
       mostrarSeccion('eventos');
       mostrarIndicator();
     }
@@ -717,46 +769,43 @@
     function eliminarEvento(index) {
       if (!confirm('¿Eliminar este cartel?')) return;
       
-      const datos = obtenerDatosActuales();
-      datos.eventos.splice(index, 1);
-      renderizarEventos(datos.eventos);
-      guardarDatos(datos);
+      datosActuales.eventos.splice(index, 1);
+      renderizarEventos();
+      guardarDatos();
       mostrarSeccion('eventos');
       mostrarIndicator();
     }
 
     // ===== FUNCIONES PARA AÑADIR/ELIMINAR PRODUCTOS =====
     function anadirProducto(tipo) {
-      const datos = obtenerDatosActuales();
-      
       switch(tipo) {
         case 'extracciones':
-          datos.extracciones.push({ img: 'images/placeholder.jpg', nombre: 'NUEVA EXTRACCIÓN', precio: '0€' });
-          renderizarExtracciones(datos.extracciones);
+          datosActuales.extracciones.push({ img: 'images/placeholder.jpg', nombre: 'NUEVA EXTRACCIÓN', precio: '0€' });
+          renderizarExtracciones();
           break;
         case 'hierbas':
-          datos.hierbas.push({ img: 'images/placeholder.jpg', nombre: 'NUEVA HIERBA', precio: '0€' });
-          renderizarHierbas(datos.hierbas);
+          datosActuales.hierbas.push({ img: 'images/placeholder.jpg', nombre: 'NUEVA HIERBA', precio: '0€' });
+          renderizarHierbas();
           break;
         case 'hash':
-          datos.hash.push({ img: 'images/placeholder.jpg', nombre: 'NUEVO HASH', precio: '0€' });
-          renderizarHash(datos.hash);
+          datosActuales.hash.push({ img: 'images/placeholder.jpg', nombre: 'NUEVO HASH', precio: '0€' });
+          renderizarHash();
           break;
         case 'liados':
-          datos.liados.push({ nombre: 'NUEVO LIADO', precio: '0€' });
-          renderizarLiados(datos.liados);
+          datosActuales.liados.push({ nombre: 'NUEVO LIADO', precio: '0€' });
+          renderizarLiados();
           break;
         case 'refrescos':
-          datos.refrescos.push({ nombre: 'NUEVA BEBIDA', precio: '0€' });
-          renderizarRefrescos(datos.refrescos);
+          datosActuales.refrescos.push({ nombre: 'NUEVA BEBIDA', precio: '0€' });
+          renderizarRefrescos();
           break;
         case 'picar':
-          datos.picar.push({ nombre: 'NUEVO PRODUCTO', precio: '0€' });
-          renderizarPicar(datos.picar);
+          datosActuales.picar.push({ nombre: 'NUEVO PRODUCTO', precio: '0€' });
+          renderizarPicar();
           break;
       }
       
-      guardarDatos(datos);
+      guardarDatos();
       mostrarSeccion(tipo);
       mostrarIndicator();
     }
@@ -764,44 +813,38 @@
     function eliminarProducto(tipo, index) {
       if (!confirm('¿Eliminar este producto?')) return;
       
-      const datos = obtenerDatosActuales();
+      datosActuales[tipo].splice(index, 1);
       
       switch(tipo) {
         case 'extracciones':
-          datos.extracciones.splice(index, 1);
-          renderizarExtracciones(datos.extracciones);
+          renderizarExtracciones();
           break;
         case 'hierbas':
-          datos.hierbas.splice(index, 1);
-          renderizarHierbas(datos.hierbas);
+          renderizarHierbas();
           break;
         case 'hash':
-          datos.hash.splice(index, 1);
-          renderizarHash(datos.hash);
+          renderizarHash();
           break;
         case 'liados':
-          datos.liados.splice(index, 1);
-          renderizarLiados(datos.liados);
+          renderizarLiados();
           break;
         case 'refrescos':
-          datos.refrescos.splice(index, 1);
-          renderizarRefrescos(datos.refrescos);
+          renderizarRefrescos();
           break;
         case 'picar':
-          datos.picar.splice(index, 1);
-          renderizarPicar(datos.picar);
+          renderizarPicar();
           break;
       }
       
-      guardarDatos(datos);
+      guardarDatos();
       mostrarSeccion(tipo);
       mostrarIndicator();
     }
 
     // ===== GUARDAR TODO =====
     function guardarTodo() {
-      const datos = obtenerDatosActuales();
-      guardarDatos(datos);
+      sincronizarDatosDesdeDOM();
+      guardarDatos();
       mostrarIndicator();
     }
 
